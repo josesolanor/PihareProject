@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using WebPihare.Context;
+using WebPihare.Entities;
 
 namespace WebPihare
 {
@@ -34,6 +35,9 @@ namespace WebPihare
             });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            var connection = @"server=localhost;database=pihareii;user=root;password=P@ssw0rd94*";
+            services.AddDbContext<PihareiiContext>(options => options.UseMySQL(connection));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

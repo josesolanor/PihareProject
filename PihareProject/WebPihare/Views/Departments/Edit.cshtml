@@ -1,0 +1,64 @@
+﻿@model WebPihare.Entities.Department
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h2>Edit</h2>
+
+<h4>Department</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="DepartmentId" />
+            <div class="form-group">
+                <label asp-for="DepartmentCode" class="control-label"></label>
+                <input asp-for="DepartmentCode" class="form-control" />
+                <span asp-validation-for="DepartmentCode" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NumberFloor" class="control-label"></label>
+                <input asp-for="NumberFloor" class="form-control" />
+                <span asp-validation-for="NumberFloor" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NumberBedrooms" class="control-label"></label>
+                <input asp-for="NumberBedrooms" class="form-control" />
+                <span asp-validation-for="NumberBedrooms" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DepartmentDescription" class="control-label"></label>
+                <input asp-for="DepartmentDescription" class="form-control" />
+                <span asp-validation-for="DepartmentDescription" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DeparmentPrice" class="control-label"></label>
+                <input asp-for="DeparmentPrice" class="form-control" />
+                <span asp-validation-for="DeparmentPrice" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DepartmentTypeId" class="control-label"></label>
+                <select asp-for="DepartmentTypeId" class="form-control" asp-items="ViewBag.DepartmentTypeId"></select>
+                <span asp-validation-for="DepartmentTypeId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DepartmentStateId" class="control-label"></label>
+                <select asp-for="DepartmentStateId" class="form-control" asp-items="ViewBag.DepartmentStateId"></select>
+                <span asp-validation-for="DepartmentStateId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
