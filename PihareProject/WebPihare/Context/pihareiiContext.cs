@@ -23,13 +23,6 @@ namespace WebPihare.Context
         public virtual DbSet<Departmenttype> Departmenttype { get; set; }
         public virtual DbSet<Visitregistration> Visitregistration { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-                optionsBuilder.UseMySQL("server=localhost;database=pihareii;user=root;password=P@ssw0rd94*");
-            }
-        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
