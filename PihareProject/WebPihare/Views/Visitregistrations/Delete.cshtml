@@ -1,0 +1,63 @@
+﻿@model WebPihare.Entities.Visitregistration
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Visitregistration</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ReferencialPrice)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ReferencialPrice)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ClientRegister)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ClientRegister)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.VisitDay)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.VisitDay)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Observations)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Observations)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Client)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Client.FirstName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Commisioner)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Commisioner.CommisionerPassword)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Department)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Department.DepartmentDescription)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="VisitRegistrationId" />
+        <input type="submit" value="Delete" class="btn btn-default" /> |
+        <a asp-action="Index">Back to List</a>
+    </form>
+</div>

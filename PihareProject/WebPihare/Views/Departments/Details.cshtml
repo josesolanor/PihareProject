@@ -1,0 +1,60 @@
+﻿@model WebPihare.Entities.Department
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Department</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.DepartmentCode)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DepartmentCode)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.NumberFloor)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.NumberFloor)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.NumberBedrooms)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.NumberBedrooms)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DepartmentDescription)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DepartmentDescription)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DeparmentPrice)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DeparmentPrice)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DepartmentState)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DepartmentState.DepartmentStateDescription)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DepartmentType)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DepartmentType.DepartmentTypeDescription)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.DepartmentId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
