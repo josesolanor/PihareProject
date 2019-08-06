@@ -55,10 +55,10 @@
                 @Html.DisplayFor(modelItem => item.DeparmentPrice)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.DepartmentState.DepartmentStateDescription)
+                @Html.DisplayFor(modelItem => item.DepartmentState.DepartmentStateValue)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.DepartmentType.DepartmentTypeDescription)
+                @Html.DisplayFor(modelItem => item.DepartmentType.DepartmentTypeValue)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.DepartmentId">Edit</a> |

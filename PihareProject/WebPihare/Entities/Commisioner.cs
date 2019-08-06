@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace WebPihare.Entities
 {
@@ -11,11 +12,17 @@ namespace WebPihare.Entities
         }
 
         public int CommisionerId { get; set; }
+        [DisplayName("Nombre")]
         public string FirstName { get; set; }
+        [DisplayName("Primer Apellido")]
         public string LastName { get; set; }
+        [DisplayName("Segundo Apellido")]
         public string SecondLastName { get; set; }
+        [DisplayName("NIC")]
         public string Nic { get; set; }
+        [DisplayName("Numero de contrato")]
         public int ContractNumber { get; set; }
+        [DisplayName("Correo Electronico")]
         public string Email { get; set; }
         public string CommisionerPassword { get; set; }
 
