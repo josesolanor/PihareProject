@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using WebPihare.Context;
+using WebPihare.Core;
 using WebPihare.Entities;
 
 namespace WebPihare
@@ -35,7 +36,12 @@ namespace WebPihare
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+                .AddRazorPagesOptions(options =>
+                {
+                    options.Conventions.AddPageRoute("/Departments/Index", "");
+                });
 
             services.AddDbContext<PihareiiContext>(options => options.UseMySQL(Configuration.GetConnectionString("PihareConnection")));
 
@@ -45,6 +51,8 @@ namespace WebPihare
                     options.LoginPath = new PathString("/Login");
                     options.AccessDeniedPath = new PathString("/Login/Denied");
                 });
+
+            services.AddScoped<Hash>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -70,7 +78,7 @@ namespace WebPihare
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Departments}/{action=Index}/{id?}");
             });
         }
     }
