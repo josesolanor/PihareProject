@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebPihare.Context;
 using WebPihare.Entities;
+using WebPihare.Core;
 
 namespace WebPihare.Controllers
 {
@@ -15,19 +16,19 @@ namespace WebPihare.Controllers
     public class CommisionersController : Controller
     {
         private readonly PihareiiContext _context;
+        private readonly Hash _hash;
 
-        public CommisionersController(PihareiiContext context)
+        public CommisionersController(PihareiiContext context, Hash hash)
         {
             _context = context;
+            _hash = hash;
         }
-
-        // GET: Commisioners
+        
         public async Task<IActionResult> Index()
         {
             return View(await _context.Commisioner.ToListAsync());
         }
-
-        // GET: Commisioners/Details/5
+        
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -45,21 +46,18 @@ namespace WebPihare.Controllers
             return View(commisioner);
         }
 
-        // GET: Commisioners/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Commisioners/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("CommisionerId,FirstName,LastName,SecondLastName,Nic,ContractNumber,Email,CommisionerPassword")] Commisioner commisioner)
         {
             if (ModelState.IsValid)
             {
+                commisioner.CommisionerPassword = _hash.EncryptString(commisioner.CommisionerPassword);
                 _context.Add(commisioner);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -67,7 +65,6 @@ namespace WebPihare.Controllers
             return View(commisioner);
         }
 
-        // GET: Commisioners/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -83,9 +80,6 @@ namespace WebPihare.Controllers
             return View(commisioner);
         }
 
-        // POST: Commisioners/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("CommisionerId,FirstName,LastName,SecondLastName,Nic,ContractNumber,Email,CommisionerPassword")] Commisioner commisioner)
@@ -99,6 +93,7 @@ namespace WebPihare.Controllers
             {
                 try
                 {
+                    commisioner.CommisionerPassword = _hash.EncryptString(commisioner.CommisionerPassword);
                     _context.Update(commisioner);
                     await _context.SaveChangesAsync();
                 }
@@ -118,7 +113,6 @@ namespace WebPihare.Controllers
             return View(commisioner);
         }
 
-        // GET: Commisioners/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -136,7 +130,6 @@ namespace WebPihare.Controllers
             return View(commisioner);
         }
 
-        // POST: Commisioners/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

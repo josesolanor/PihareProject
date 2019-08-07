@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WebPihare.Context;
+using WebPihare.Core;
 using WebPihare.Models;
 
 namespace WebPihare.Controllers
@@ -18,10 +19,12 @@ namespace WebPihare.Controllers
     {
 
         private readonly PihareiiContext _context;
+        private readonly Hash _hash;
 
-        public LoginController(PihareiiContext context)
+        public LoginController(PihareiiContext context, Hash hash)
         {
             _context = context;
+            _hash = hash;
         }
         [AllowAnonymous]
         public ActionResult Index()
@@ -35,6 +38,7 @@ namespace WebPihare.Controllers
         {
             if (ModelState.IsValid)
             {
+                model.Input.Password = _hash.EncryptString(model.Input.Password);
                 var login = _context.Commisioner.Where(m => m.Email == model.Input.Email && m.CommisionerPassword == model.Input.Password).FirstOrDefault();
 
                 if (login is null)
@@ -57,7 +61,7 @@ namespace WebPihare.Controllers
                 await HttpContext.SignInAsync(principal);
 
             }
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Departments");
         }
 
         [HttpPost]
