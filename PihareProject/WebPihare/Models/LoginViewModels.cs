@@ -23,7 +23,7 @@ namespace WebPihare.Models
             public string Email { get; set; }
 
             [Required(ErrorMessage = "El campo contraseña es obligatorio.")]
-            [StringLength(100, ErrorMessage = "El número de caracteres del {0} debe ser al menos {2}.", MinimumLength = 6)]
+            //[StringLength(100, ErrorMessage = "El número de caracteres del {0} debe ser al menos {2}.", MinimumLength = 6)]
             [DataType(DataType.Password)]
             public string Password { get; set; }
 

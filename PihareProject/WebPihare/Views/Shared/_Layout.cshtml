@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -36,11 +37,24 @@
                     <li><a asp-area="" asp-controller="Departments" asp-action="Index">Departamentos</a></li>
                     <li><a asp-area="" asp-controller="Visitregistrations" asp-action="Index">Visitas</a></li>
                 </ul>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <form asp-controller="Login" asp-action="Logout" method="post">
+                        <ul class="nav navbar-nav navbar-right">
+                            <li>
+                                <a>Hola @User.FindFirst("FullName").Value</a>
+                            </li>
+                            <li>
+                                <button type="submit" class="btn btn-link navbar-btn navbar-link">Logout</button>
+                            </li>
+                        </ul>
+                    </form>
+                }
             </div>
         </div>
     </nav>
 
-    <partial name="_CookieConsentPartial" />
+    @*<partial name="_CookieConsentPartial" />*@
 
     <div class="container body-content">
         @RenderBody()
