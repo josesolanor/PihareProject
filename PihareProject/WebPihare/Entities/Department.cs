@@ -14,7 +14,7 @@ namespace WebPihare.Entities
         public int DepartmentId { get; set; }
         [DisplayName("Codigo Departamento")]
         public int DepartmentCode { get; set; }
-        [DisplayName("Numero de pisos")]
+        [DisplayName("Piso")]
         public int NumberFloor { get; set; }
         [DisplayName("Numero de dormitorios")]
         public int NumberBedrooms { get; set; }
