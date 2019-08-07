@@ -18,7 +18,7 @@ namespace WebPihare.Entities
         public string LastName { get; set; }
         [DisplayName("Segundo Apellido")]
         public string SecondLastName { get; set; }
-        [DisplayName("Observacion")]
+        [DisplayName("Observaciones")]
         public string Observation { get; set; }
 
         public ICollection<Visitregistration> Visitregistration { get; set; }
