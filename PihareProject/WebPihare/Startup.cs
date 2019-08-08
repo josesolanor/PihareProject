@@ -15,6 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using WebPihare.Context;
 using WebPihare.Core;
 using WebPihare.Entities;
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 
 namespace WebPihare
 {
@@ -44,7 +45,7 @@ namespace WebPihare
                     options.Conventions.AddPageRoute("/Departments/Index", "");
                 });
 
-            services.AddDbContext<PihareiiContext>(options => options.UseMySQL(Configuration.GetConnectionString("PihareConnection")));
+            services.AddDbContext<PihareiiContext>(options => options.UseMySql(Configuration.GetConnectionString("PihareConnection")));
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>

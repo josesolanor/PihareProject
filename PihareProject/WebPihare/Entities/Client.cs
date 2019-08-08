@@ -20,6 +20,8 @@ namespace WebPihare.Entities
         public string SecondLastName { get; set; }
         [DisplayName("Observaciones")]
         public string Observation { get; set; }
+        public string CI { get; set; }
+        public int Telefono { get; set; }
 
         public ICollection<Visitregistration> Visitregistration { get; set; }
     }

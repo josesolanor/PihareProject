@@ -24,6 +24,7 @@ namespace WebPihare.Entities
         public int ContractNumber { get; set; }
         [DisplayName("Correo Electronico")]
         public string Email { get; set; }
+        public int Telefono { get; set; }
         public string CommisionerPassword { get; set; }
 
         public ICollection<Visitregistration> Visitregistration { get; set; }
