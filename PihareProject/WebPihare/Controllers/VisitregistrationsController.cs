@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebPihare.Context;
 using WebPihare.Entities;
+using WebPihare.Models;
 
 namespace WebPihare.Controllers
 {
@@ -50,8 +51,15 @@ namespace WebPihare.Controllers
         }
 
         // GET: Visitregistrations/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create(int? id)
         {
+            RegisterViewModel model = new RegisterViewModel();
+
+            var idUser = int.Parse( User.Claims.FirstOrDefault(m => m.Type == "Id").Value);
+
+            model.Department = await _context.Department.Include(v => v.DepartmentState).Include(v => v.DepartmentType).FirstOrDefaultAsync(m => m.DepartmentId == id);
+            model.Commisioner = await _context.Commisioner.Include(v => v.Role).FirstOrDefaultAsync(m => m.CommisionerId == idUser);
+
             ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "FirstName");
             ViewData["CommisionerId"] = new SelectList(_context.Commisioner, "CommisionerId", "CommisionerPassword");
             ViewData["DepartmentId"] = new SelectList(_context.Department, "DepartmentId", "DepartmentDescription");

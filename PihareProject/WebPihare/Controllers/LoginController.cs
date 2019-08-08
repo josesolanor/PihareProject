@@ -51,6 +51,7 @@ namespace WebPihare.Controllers
                 {
                     new Claim(ClaimTypes.Name, login.Email),
                     new Claim("FullName", $"{login.FirstName} {login.LastName} {login.SecondLastName}"),
+                    new Claim("Id", login.CommisionerId.ToString()),
                     new Claim(ClaimTypes.Email, login.Email),
                     new Claim(ClaimTypes.Role, "Admin")
                 };
