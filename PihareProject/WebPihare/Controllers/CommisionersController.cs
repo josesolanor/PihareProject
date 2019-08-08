@@ -26,7 +26,8 @@ namespace WebPihare.Controllers
         
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Commisioner.ToListAsync());
+            var pihareiiContext = _context.Commisioner.Include(d => d.Role);
+            return View(await pihareiiContext.ToListAsync());
         }
         
         public async Task<IActionResult> Details(int? id)
@@ -48,6 +49,7 @@ namespace WebPihare.Controllers
 
         public IActionResult Create()
         {
+            ViewData["RoleId"] = new SelectList(_context.Role, "RoleId", "RoleValue");
             return View();
         }
 
@@ -77,6 +79,7 @@ namespace WebPihare.Controllers
             {
                 return NotFound();
             }
+            ViewData["RoleId"] = new SelectList(_context.Role, "RoleId", "RoleValue");
             return View(commisioner);
         }
 
