@@ -9,14 +9,15 @@ using WebPihare.Context;
 namespace WebPihare.Migrations
 {
     [DbContext(typeof(PihareiiContext))]
-    [Migration("20190808010328_Initial")]
-    partial class Initial
+    [Migration("20190808022322_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.11-servicing-32099");
+                .HasAnnotation("ProductVersion", "2.1.11-servicing-32099")
+                .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("WebPihare.Entities.Client", b =>
                 {
@@ -57,11 +58,15 @@ namespace WebPihare.Migrations
 
                     b.Property<string>("Nic");
 
+                    b.Property<int>("RoleId");
+
                     b.Property<string>("SecondLastName");
 
                     b.Property<int>("Telefono");
 
                     b.HasKey("CommisionerId");
+
+                    b.HasIndex("RoleId");
 
                     b.ToTable("Commisioner");
                 });
@@ -122,6 +127,20 @@ namespace WebPihare.Migrations
                     b.ToTable("Departmenttype");
                 });
 
+            modelBuilder.Entity("WebPihare.Entities.Role", b =>
+                {
+                    b.Property<int>("RoleId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("RoleDescription");
+
+                    b.Property<string>("RoleValue");
+
+                    b.HasKey("RoleId");
+
+                    b.ToTable("Role");
+                });
+
             modelBuilder.Entity("WebPihare.Entities.Visitregistration", b =>
                 {
                     b.Property<int>("VisitRegistrationId")
@@ -150,6 +169,14 @@ namespace WebPihare.Migrations
                     b.HasIndex("DepartmentId");
 
                     b.ToTable("Visitregistration");
+                });
+
+            modelBuilder.Entity("WebPihare.Entities.Commisioner", b =>
+                {
+                    b.HasOne("WebPihare.Entities.Role", "Role")
+                        .WithMany("Commisioner")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("WebPihare.Entities.Department", b =>

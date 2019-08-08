@@ -1,0 +1,33 @@
+﻿@model WebPihare.Entities.Departmenttype
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Departmenttype</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.DepartmentTypeValue)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DepartmentTypeValue)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DepartmentTypeDescription)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DepartmentTypeDescription)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="DepartmentTypeId" />
+        <input type="submit" value="Delete" class="btn btn-default" /> |
+        <a asp-action="Index">Back to List</a>
+    </form>
+</div>

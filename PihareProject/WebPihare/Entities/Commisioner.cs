@@ -26,6 +26,9 @@ namespace WebPihare.Entities
         public string Email { get; set; }
         public int Telefono { get; set; }
         public string CommisionerPassword { get; set; }
+        public int RoleId { get; set; }
+        [DisplayName("Role")]
+        public Role Role { get; set; }
 
         public ICollection<Visitregistration> Visitregistration { get; set; }
     }

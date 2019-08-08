@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -11,23 +10,22 @@ using WebPihare.Entities;
 
 namespace WebPihare.Controllers
 {
-    [Authorize]
-    public class ClientsController : Controller
+    public class RolesController : Controller
     {
         private readonly PihareiiContext _context;
 
-        public ClientsController(PihareiiContext context)
+        public RolesController(PihareiiContext context)
         {
             _context = context;
         }
 
-        // GET: Clients
+        // GET: Roles
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Client.ToListAsync());
+            return View(await _context.Role.ToListAsync());
         }
 
-        // GET: Clients/Details/5
+        // GET: Roles/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -35,39 +33,39 @@ namespace WebPihare.Controllers
                 return NotFound();
             }
 
-            var client = await _context.Client
-                .FirstOrDefaultAsync(m => m.ClientId == id);
-            if (client == null)
+            var role = await _context.Role
+                .FirstOrDefaultAsync(m => m.RoleId == id);
+            if (role == null)
             {
                 return NotFound();
             }
 
-            return View(client);
+            return View(role);
         }
 
-        // GET: Clients/Create
+        // GET: Roles/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Clients/Create
+        // POST: Roles/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ClientId,FirstName,LastName,SecondLastName,Observation,CI,Telefono")] Client client)
+        public async Task<IActionResult> Create([Bind("RoleId,RoleValue,RoleDescription")] Role role)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(client);
+                _context.Add(role);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(client);
+            return View(role);
         }
 
-        // GET: Clients/Edit/5
+        // GET: Roles/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -75,22 +73,22 @@ namespace WebPihare.Controllers
                 return NotFound();
             }
 
-            var client = await _context.Client.FindAsync(id);
-            if (client == null)
+            var role = await _context.Role.FindAsync(id);
+            if (role == null)
             {
                 return NotFound();
             }
-            return View(client);
+            return View(role);
         }
 
-        // POST: Clients/Edit/5
+        // POST: Roles/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ClientId,FirstName,LastName,SecondLastName,Observation,CI,Telefono")] Client client)
+        public async Task<IActionResult> Edit(int id, [Bind("RoleId,RoleValue,RoleDescription")] Role role)
         {
-            if (id != client.ClientId)
+            if (id != role.RoleId)
             {
                 return NotFound();
             }
@@ -99,12 +97,12 @@ namespace WebPihare.Controllers
             {
                 try
                 {
-                    _context.Update(client);
+                    _context.Update(role);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ClientExists(client.ClientId))
+                    if (!RoleExists(role.RoleId))
                     {
                         return NotFound();
                     }
@@ -115,10 +113,10 @@ namespace WebPihare.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(client);
+            return View(role);
         }
 
-        // GET: Clients/Delete/5
+        // GET: Roles/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -126,30 +124,30 @@ namespace WebPihare.Controllers
                 return NotFound();
             }
 
-            var client = await _context.Client
-                .FirstOrDefaultAsync(m => m.ClientId == id);
-            if (client == null)
+            var role = await _context.Role
+                .FirstOrDefaultAsync(m => m.RoleId == id);
+            if (role == null)
             {
                 return NotFound();
             }
 
-            return View(client);
+            return View(role);
         }
 
-        // POST: Clients/Delete/5
+        // POST: Roles/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var client = await _context.Client.FindAsync(id);
-            _context.Client.Remove(client);
+            var role = await _context.Role.FindAsync(id);
+            _context.Role.Remove(role);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ClientExists(int id)
+        private bool RoleExists(int id)
         {
-            return _context.Client.Any(e => e.ClientId == id);
+            return _context.Role.Any(e => e.RoleId == id);
         }
     }
 }

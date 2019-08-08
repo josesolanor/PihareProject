@@ -1,0 +1,30 @@
+﻿@model WebPihare.Entities.Departmenttype
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Departmenttype</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.DepartmentTypeValue)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DepartmentTypeValue)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DepartmentTypeDescription)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DepartmentTypeDescription)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.DepartmentTypeId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -11,23 +10,22 @@ using WebPihare.Entities;
 
 namespace WebPihare.Controllers
 {
-    [Authorize]
-    public class ClientsController : Controller
+    public class DepartmenttypesController : Controller
     {
         private readonly PihareiiContext _context;
 
-        public ClientsController(PihareiiContext context)
+        public DepartmenttypesController(PihareiiContext context)
         {
             _context = context;
         }
 
-        // GET: Clients
+        // GET: Departmenttypes
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Client.ToListAsync());
+            return View(await _context.Departmenttype.ToListAsync());
         }
 
-        // GET: Clients/Details/5
+        // GET: Departmenttypes/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -35,39 +33,39 @@ namespace WebPihare.Controllers
                 return NotFound();
             }
 
-            var client = await _context.Client
-                .FirstOrDefaultAsync(m => m.ClientId == id);
-            if (client == null)
+            var departmenttype = await _context.Departmenttype
+                .FirstOrDefaultAsync(m => m.DepartmentTypeId == id);
+            if (departmenttype == null)
             {
                 return NotFound();
             }
 
-            return View(client);
+            return View(departmenttype);
         }
 
-        // GET: Clients/Create
+        // GET: Departmenttypes/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Clients/Create
+        // POST: Departmenttypes/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ClientId,FirstName,LastName,SecondLastName,Observation,CI,Telefono")] Client client)
+        public async Task<IActionResult> Create([Bind("DepartmentTypeId,DepartmentTypeValue,DepartmentTypeDescription")] Departmenttype departmenttype)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(client);
+                _context.Add(departmenttype);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(client);
+            return View(departmenttype);
         }
 
-        // GET: Clients/Edit/5
+        // GET: Departmenttypes/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -75,22 +73,22 @@ namespace WebPihare.Controllers
                 return NotFound();
             }
 
-            var client = await _context.Client.FindAsync(id);
-            if (client == null)
+            var departmenttype = await _context.Departmenttype.FindAsync(id);
+            if (departmenttype == null)
             {
                 return NotFound();
             }
-            return View(client);
+            return View(departmenttype);
         }
 
-        // POST: Clients/Edit/5
+        // POST: Departmenttypes/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ClientId,FirstName,LastName,SecondLastName,Observation,CI,Telefono")] Client client)
+        public async Task<IActionResult> Edit(int id, [Bind("DepartmentTypeId,DepartmentTypeValue,DepartmentTypeDescription")] Departmenttype departmenttype)
         {
-            if (id != client.ClientId)
+            if (id != departmenttype.DepartmentTypeId)
             {
                 return NotFound();
             }
@@ -99,12 +97,12 @@ namespace WebPihare.Controllers
             {
                 try
                 {
-                    _context.Update(client);
+                    _context.Update(departmenttype);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ClientExists(client.ClientId))
+                    if (!DepartmenttypeExists(departmenttype.DepartmentTypeId))
                     {
                         return NotFound();
                     }
@@ -115,10 +113,10 @@ namespace WebPihare.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(client);
+            return View(departmenttype);
         }
 
-        // GET: Clients/Delete/5
+        // GET: Departmenttypes/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -126,30 +124,30 @@ namespace WebPihare.Controllers
                 return NotFound();
             }
 
-            var client = await _context.Client
-                .FirstOrDefaultAsync(m => m.ClientId == id);
-            if (client == null)
+            var departmenttype = await _context.Departmenttype
+                .FirstOrDefaultAsync(m => m.DepartmentTypeId == id);
+            if (departmenttype == null)
             {
                 return NotFound();
             }
 
-            return View(client);
+            return View(departmenttype);
         }
 
-        // POST: Clients/Delete/5
+        // POST: Departmenttypes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var client = await _context.Client.FindAsync(id);
-            _context.Client.Remove(client);
+            var departmenttype = await _context.Departmenttype.FindAsync(id);
+            _context.Departmenttype.Remove(departmenttype);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ClientExists(int id)
+        private bool DepartmenttypeExists(int id)
         {
-            return _context.Client.Any(e => e.ClientId == id);
+            return _context.Departmenttype.Any(e => e.DepartmentTypeId == id);
         }
     }
 }

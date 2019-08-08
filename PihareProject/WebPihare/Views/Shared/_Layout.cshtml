@@ -36,6 +36,14 @@
                     <li><a asp-area="" asp-controller="Commisioners" asp-action="Index">Comisionistas</a></li>
                     <li><a asp-area="" asp-controller="Departments" asp-action="Index">Departamentos</a></li>
                     <li><a asp-area="" asp-controller="Visitregistrations" asp-action="Index">Visitas</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Configuraciones<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a asp-area="" asp-controller="Departmenttypes" asp-action="Index">Tipo Departamento</a></li>
+                            <li><a asp-area="" asp-controller="Departmentstates" asp-action="Index">Estado Departamento</a></li>
+                            <li><a asp-area="" asp-controller="Roles" asp-action="Index">Roles</a></li>
+                        </ul>
+                    </li>
                 </ul>
                 @if (User.Identity.IsAuthenticated)
                 {

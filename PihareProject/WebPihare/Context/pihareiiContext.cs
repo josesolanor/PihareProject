@@ -22,6 +22,7 @@ namespace WebPihare.Context
         public virtual DbSet<Departmentstate> Departmentstate { get; set; }
         public virtual DbSet<Departmenttype> Departmenttype { get; set; }
         public virtual DbSet<Visitregistration> Visitregistration { get; set; }
+        public virtual DbSet<Role> Role { get; set; }
 
 
         //protected override void OnModelCreating(ModelBuilder modelBuilder)
