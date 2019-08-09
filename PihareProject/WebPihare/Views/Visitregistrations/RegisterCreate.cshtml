@@ -12,9 +12,9 @@
     <div class="col-md-12">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Client.ClientId" />
-            <input type="hidden" asp-for="Department.DepartmentId" />
-            <input type="hidden" asp-for="Commisioner.CommisionerId" />
+            <input type="hidden" asp-for="ClientId" />
+            <input type="hidden" asp-for="DepartmentId" id="DepartmentId" />
+            <input type="hidden" asp-for="CommisionerId" id="CommisionerId"/>
             <div class="col-xs-6">
                 <div class="form-group">
                     <label asp-for="VisitDay" class="control-label"></label>
@@ -29,11 +29,7 @@
                     <span asp-validation-for="Observations" class="text-danger"></span>
                 </div>
             </div>
-            <div class="col-xs-6">
-                <div class="form-group">
-                    <input type="submit" value="Crear" class="btn btn-default" />
-                </div>
-            </div>
+
             <div class="col-md-12">
                 <div class="col-md-4">
                     <div>
@@ -190,6 +186,12 @@
                             </dd>
                         </dl>
                     </div>
+                </div>
+            </div>
+
+            <div class="col-xs-6">
+                <div class="form-group">
+                    <input type="submit" value="Crear" class="btn btn-default" />
                 </div>
             </div>
         </form>

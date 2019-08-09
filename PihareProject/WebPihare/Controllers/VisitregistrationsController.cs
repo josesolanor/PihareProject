@@ -72,10 +72,13 @@ namespace WebPihare.Controllers
         {
             Visitregistration model = new Visitregistration
             {
-                Commisioner = _context.Commisioner.FirstOrDefault(m => m.CommisionerId == idCommisioner),
-                Client = _context.Client.FirstOrDefault(m => m.ClientId == idClient),
-                Department = _context.Department.FirstOrDefault(m => m.DepartmentId == idDepartment),
-                VisitDay = DateTime.Now
+                Commisioner = _context.Commisioner.Include(v => v.Role).FirstOrDefault(m => m.CommisionerId == idCommisioner),
+                Client = _context.Client.Include(v => v.Commisioner).FirstOrDefault(m => m.ClientId == idClient),
+                Department = _context.Department.Include(v => v.DepartmentState).Include(v => v.DepartmentType).FirstOrDefault(m => m.DepartmentId == idDepartment),
+                VisitDay = DateTime.Now,
+                ClientId = idClient,
+                DepartmentId = idDepartment,
+                CommisionerId = idCommisioner
             };
 
             return View(model);
@@ -83,7 +86,7 @@ namespace WebPihare.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("VisitRegistrationId,ReferencialPrice,ClientRegister,VisitDay,Observations,ClientId,DepartmentId,CommisionerId")] Visitregistration visitregistration)
+        public async Task<IActionResult> Create(Visitregistration visitregistration)
         {
             if (ModelState.IsValid)
             {
