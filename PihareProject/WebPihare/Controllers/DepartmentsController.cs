@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebPihare.Context;
 using WebPihare.Entities;
+using WebPihare.Models;
 
 namespace WebPihare.Controllers
 {
@@ -24,8 +25,11 @@ namespace WebPihare.Controllers
         // GET: Departments
         public async Task<IActionResult> Index()
         {
-            var pihareiiContext = _context.Department.Include(d => d.DepartmentState).Include(d => d.DepartmentType);
-            return View(await pihareiiContext.ToListAsync());
+            RegisterModalClientViewModal model = new RegisterModalClientViewModal
+            {
+                Departments = await _context.Department.Include(d => d.DepartmentState).Include(d => d.DepartmentType).ToListAsync()
+            };
+            return View(model);
         }
 
         // GET: Departments/Details/5
@@ -56,9 +60,28 @@ namespace WebPihare.Controllers
             return View();
         }
 
-        // POST: Departments/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        public async Task<IActionResult> RegisterClient(RegisterModalClientViewModal data, int DepartmentIdSelected)
+        {
+            if (ModelState.IsValid)
+            {
+
+                var idUser = int.Parse(User.Claims.FirstOrDefault(m => m.Type == "Id").Value);
+
+                data.Client.Commisioner.CommisionerId = idUser;
+
+                _context.Add(data.Client);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction("");
+            }
+            RegisterModalClientViewModal model = new RegisterModalClientViewModal
+            {
+                Departments = await _context.Department.Include(d => d.DepartmentState).Include(d => d.DepartmentType).ToListAsync()
+            };
+            return View(model);
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("DepartmentId,DepartmentCode,NumberFloor,NumberBedrooms,DepartmentDescription,DeparmentPrice,DepartmentTypeId,DepartmentStateId")] Department department)

@@ -1,4 +1,5 @@
-﻿@model IEnumerable<WebPihare.Entities.Department>
+﻿@model WebPihare.Models.RegisterModalClientViewModal
+
 
 @{
     ViewData["Title"] = "Index";
@@ -13,25 +14,25 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.DepartmentCode)
+                @Html.DisplayNameFor(model => model.Departments.FirstOrDefault().DepartmentCode)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.NumberFloor)
+                @Html.DisplayNameFor(model => model.Departments.FirstOrDefault().NumberFloor)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.NumberBedrooms)
+                @Html.DisplayNameFor(model => model.Departments.FirstOrDefault().NumberBedrooms)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DepartmentDescription)
+                @Html.DisplayNameFor(model => model.Departments.FirstOrDefault().DepartmentDescription)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DeparmentPrice)
+                @Html.DisplayNameFor(model => model.Departments.FirstOrDefault().DeparmentPrice)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DepartmentState)
+                @Html.DisplayNameFor(model => model.Departments.FirstOrDefault().DepartmentState)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DepartmentType)
+                @Html.DisplayNameFor(model => model.Departments.FirstOrDefault().DepartmentType)
             </th>
             <th>
                 @Html.DisplayName("Seleccionar")
@@ -40,7 +41,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var item in Model.Departments)
         {
             <tr>
                 <td>
@@ -67,37 +68,94 @@
                 <td>
                     <div class="btn-group btn-group-xs" role="group" aria-label="...">
 
-                        <a asp-controller="Visitregistrations" asp-action="Create" asp-route-id="@item.DepartmentId" type="button" class="btn btn-success"><i class="glyphicon glyphicon-plus"></i> Añadir</a>
+                        <button data-toggle="modal" data-target="#ClientModal" onclick="ChangeClientDepartmentIdValue(@item.DepartmentId)" type="button" class="btn btn-success"><i class="glyphicon glyphicon-plus"></i> Añadir</button>
                         <a asp-action="Edit" asp-route-id="@item.DepartmentId" type="button" class="btn btn-default"><i class="glyphicon glyphicon-pencil"></i> Edit</a>
                         <a asp-action="Details" asp-route-id="@item.DepartmentId" type="button" class="btn btn-default"><i class="glyphicon glyphicon-list"></i> Details</a>
                         <a asp-action="Delete" asp-route-id="@item.DepartmentId" type="button" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i> Delete</a>
                     </div>
                 </td>
             </tr>
+            <div id="ClientModal" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Registrar Cliente</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <form asp-action="RegisterClient">
+                                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                        <div class="col-xs-6">
+                                            <div class="form-group">
+                                                <label asp-for="Client.FirstName" class="control-label"></label>
+                                                <input asp-for="Client.FirstName" class="form-control" />
+                                                <span asp-validation-for="Client.FirstName" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <div class="form-group">
+                                                <label asp-for="Client.LastName" class="control-label"></label>
+                                                <input asp-for="Client.LastName" class="form-control" />
+                                                <span asp-validation-for="Client.LastName" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <div class="form-group">
+                                                <label asp-for="Client.SecondLastName" class="control-label"></label>
+                                                <input asp-for="Client.SecondLastName" class="form-control" />
+                                                <span asp-validation-for="Client.SecondLastName" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <div class="form-group">
+                                                <label asp-for="Client.Observation" class="control-label"></label>
+                                                <input asp-for="Client.Observation" class="form-control" />
+                                                <span asp-validation-for="Client.Observation" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <div class="form-group">
+                                                <label asp-for="Client.CI" class="control-label"></label>
+                                                <input asp-for="Client.CI" class="form-control" />
+                                                <span asp-validation-for="Client.CI" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <div class="form-group">
+                                                <label asp-for="Client.Telefono" class="control-label"></label>
+                                                <input asp-for="Client.Telefono" class="form-control" />
+                                                <span asp-validation-for="Client.Telefono" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <div class="form-group">
+                                                <input type="submit" value="Crear" class="btn btn-default" />
+                                            </div>
+                                        </div>
+                                        <input asp-for="DepartmentIdSelected" hidden value="0">
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        @*<div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>*@
+                    </div>
+                </div>
+            </div>
         }
     </tbody>
 </table>
 
-<button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal">Modal ejemplo</button>
+<script>
 
-
-<!-- Modal -->
-<div id="myModal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Modal Header</h4>
-            </div>
-            <div class="modal-body">
-                <p>Some text in the modal.</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-
-    </div>
-</div>
+    function ChangeClientDepartmentIdValue(data) {
+        console.log("llego")
+        console.log(document.getElementById("DepartmentIdSelected").value)
+        document.getElementById("DepartmentIdSelected").value = data;
+        console.log(document.getElementById("DepartmentIdSelected").value)
+    }
+</script>

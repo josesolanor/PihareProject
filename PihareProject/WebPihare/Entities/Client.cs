@@ -23,6 +23,8 @@ namespace WebPihare.Entities
         public string CI { get; set; }
         public int Telefono { get; set; }
 
+        public Commisioner Commisioner { get; set; }
+
         public ICollection<Visitregistration> Visitregistration { get; set; }
     }
 }
