@@ -63,23 +63,29 @@ namespace WebPihare.Controllers
         [HttpPost]
         public async Task<IActionResult> RegisterClient(RegisterModalClientViewModal data, int DepartmentIdSelected)
         {
+
+
             if (ModelState.IsValid)
             {
-
                 var idUser = int.Parse(User.Claims.FirstOrDefault(m => m.Type == "Id").Value);
 
-                data.Client.Commisioner.CommisionerId = idUser;
+                var Commisioner = _context.Commisioner.FirstOrDefault(m => m.CommisionerId == idUser);
 
-                _context.Add(data.Client);
-                await _context.SaveChangesAsync();
+                data.Client.Commisioner = Commisioner;
 
-                return RedirectToAction("");
+                var exist = _context.Client.FirstOrDefault(m => m.CI == data.Client.CI);
+
+                if (exist == null)
+                {
+                    _context.Add(data.Client);
+                    await _context.SaveChangesAsync();
+
+                    return RedirectToAction("Create", "Visitregistrations");
+                }
+                
             }
-            RegisterModalClientViewModal model = new RegisterModalClientViewModal
-            {
-                Departments = await _context.Department.Include(d => d.DepartmentState).Include(d => d.DepartmentType).ToListAsync()
-            };
-            return View(model);
+            ModelState.AddModelError("error", "cliente ya registrado");
+            return RedirectToAction("Index", "Departments");
         }
 
         [HttpPost]
