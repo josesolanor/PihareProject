@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using WebPihare.Context;
 using WebPihare.Entities;
 using WebPihare.Models;
@@ -61,9 +62,8 @@ namespace WebPihare.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> RegisterClient(RegisterModalClientViewModal data, int DepartmentIdSelected)
+        public async Task<IActionResult> RegisterClient(RegisterModalClientViewModal data)
         {
-
 
             if (ModelState.IsValid)
             {
@@ -81,7 +81,9 @@ namespace WebPihare.Controllers
                     _context.Add(data.Client);
                     await _context.SaveChangesAsync();
 
-                    return RedirectToAction("Create", "Visitregistrations");
+                    var ClientIdCreated = _context.Client.FirstOrDefault(m => m.CI == data.Client.CI).ClientId;
+
+                    return RedirectToAction("RegisterCreate", "Visitregistrations", new { idClient = ClientIdCreated, idCommisioner = idUser, idDepartment = data.DepartmentIdSelected });
                 }
                 
             }

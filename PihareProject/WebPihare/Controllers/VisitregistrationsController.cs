@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using WebPihare.Context;
 using WebPihare.Entities;
 using WebPihare.Models;
@@ -64,6 +65,20 @@ namespace WebPihare.Controllers
             ViewData["CommisionerId"] = new SelectList(_context.Commisioner, "CommisionerId", "CommisionerPassword");
             ViewData["DepartmentId"] = new SelectList(_context.Department, "DepartmentId", "DepartmentDescription");
             return View();
+        }
+
+        [HttpGet]
+        public IActionResult RegisterCreate(int idClient, int idCommisioner, int idDepartment)
+        {
+            Visitregistration model = new Visitregistration
+            {
+                Commisioner = _context.Commisioner.FirstOrDefault(m => m.CommisionerId == idCommisioner),
+                Client = _context.Client.FirstOrDefault(m => m.ClientId == idClient),
+                Department = _context.Department.FirstOrDefault(m => m.DepartmentId == idDepartment),
+                VisitDay = DateTime.Now
+            };
+
+            return View(model);
         }
 
         [HttpPost]
