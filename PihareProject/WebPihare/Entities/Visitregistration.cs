@@ -7,10 +7,7 @@ namespace WebPihare.Entities
     public partial class Visitregistration
     {
         public int VisitRegistrationId { get; set; }
-        [DisplayName("Precio de referencia")]
-        public decimal ReferencialPrice { get; set; }
-        [DisplayName("Fecha registro del cliente")]
-        public DateTime ClientRegister { get; set; }
+
         [DisplayName("Fecha de visita")]
         public DateTime VisitDay { get; set; }
         [DisplayName("Observaciones")]

@@ -72,6 +72,7 @@ namespace WebPihare.Controllers
                 var Commisioner = _context.Commisioner.FirstOrDefault(m => m.CommisionerId == idUser);
 
                 data.Client.Commisioner = Commisioner;
+                data.Client.RegistredDate = DateTime.Now;
 
                 var exist = _context.Client.FirstOrDefault(m => m.CI == data.Client.CI);
 
@@ -84,7 +85,7 @@ namespace WebPihare.Controllers
                 }
                 
             }
-            ModelState.AddModelError("error", "cliente ya registrado");
+            TempData["ErrorMsg"] = "Cliente ya registrado";
             return RedirectToAction("Index", "Departments");
         }
 

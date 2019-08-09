@@ -24,7 +24,7 @@ namespace WebPihare.Controllers
         // GET: Clients
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Client.ToListAsync());
+            return View(await _context.Client.Include(m => m.Commisioner).ToListAsync());
         }
 
         // GET: Clients/Details/5
@@ -56,10 +56,16 @@ namespace WebPihare.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ClientId,FirstName,LastName,SecondLastName,Observation,CI,Telefono")] Client client)
+        public async Task<IActionResult> Create([Bind("ClientId,FirstName,LastName,SecondLastName,Observation,CI,Telefono,RegistredDate")] Client client)
         {
             if (ModelState.IsValid)
             {
+                var idUser = int.Parse(User.Claims.FirstOrDefault(m => m.Type == "Id").Value);
+
+                var Commisioner = _context.Commisioner.FirstOrDefault(m => m.CommisionerId == idUser);
+
+                client.Commisioner = Commisioner;
+                client.RegistredDate = DateTime.Now;
                 _context.Add(client);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
