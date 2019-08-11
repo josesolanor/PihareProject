@@ -26,9 +26,6 @@
                 @Html.DisplayNameFor(model => model.Departments.FirstOrDefault().NumberBedrooms)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Departments.FirstOrDefault().DepartmentDescription)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.Departments.FirstOrDefault().DeparmentPrice)
             </th>
             <th>
@@ -55,9 +52,6 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.NumberBedrooms)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DepartmentDescription)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.DeparmentPrice)
@@ -114,16 +108,16 @@
                                         </div>
                                         <div class="col-xs-6">
                                             <div class="form-group">
-                                                <label asp-for="Client.Observation" class="control-label"></label>
-                                                <input asp-for="Client.Observation" class="form-control" />
-                                                <span asp-validation-for="Client.Observation" class="text-danger"></span>
-                                            </div>
-                                        </div>
-                                        <div class="col-xs-6">
-                                            <div class="form-group">
                                                 <label asp-for="Client.CI" class="control-label"></label>
                                                 <input asp-for="Client.CI" class="form-control" />
                                                 <span asp-validation-for="Client.CI" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12">
+                                            <div class="form-group">
+                                                <label asp-for="Client.Observation" class="control-label"></label>
+                                                <input asp-for="Client.Observation" class="form-control" />
+                                                <span asp-validation-for="Client.Observation" class="text-danger"></span>
                                             </div>
                                         </div>
                                         <div class="col-xs-12">
