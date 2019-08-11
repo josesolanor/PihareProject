@@ -18,6 +18,9 @@ namespace WebPihare.Controllers
     {
         private readonly PihareiiContext _context;
 
+        List<RegisterViewModel> jsonList = new List<RegisterViewModel>();
+
+
         public VisitregistrationsController(PihareiiContext context)
         {
             _context = context;
@@ -28,6 +31,34 @@ namespace WebPihare.Controllers
         {
             var pihareiiContext = _context.Visitregistration.Include(v => v.Client).Include(v => v.Commisioner).Include(v => v.Department);
             return View(await pihareiiContext.ToListAsync());
+        }
+
+        public IActionResult LoadGrid()
+        {
+            var pihareiiContext = _context.Visitregistration.Include(v => v.Client).Include(v => v.Commisioner).Include(v => v.Department).ToList();
+
+            foreach (Visitregistration item in pihareiiContext)
+            {
+                jsonList.Add(new RegisterViewModel
+                {
+                    VisitDay = item.VisitDay,
+                    Observations = item.Observations,
+                    VisitRegistrationId = item.VisitRegistrationId,
+                    ClientId = item.ClientId,
+                    CommisionerId =item.CommisionerId,
+                    DepartmentId = item.DepartmentId,
+                    FullNameClient = $"{item.Client.FirstName} {item.Client.LastName} {item.Client.SecondLastName}",
+                    FullNameCommisioner = $"{item.Commisioner.FirstName} {item.Commisioner.LastName} {item.Commisioner.SecondLastName}",
+                    DepartmentCode = item.Department.DepartmentCode
+                });
+            }
+
+            string JsonContext = JsonConvert.SerializeObject(jsonList, Formatting.Indented, new JsonSerializerSettings()
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            });
+
+            return Json(JsonContext);
         }
 
         // GET: Visitregistrations/Details/5
@@ -52,15 +83,8 @@ namespace WebPihare.Controllers
         }
 
         // GET: Visitregistrations/Create
-        public async Task<IActionResult> Create(int? id)
+        public IActionResult Create()
         {
-            RegisterViewModel model = new RegisterViewModel();
-
-            var idUser = int.Parse( User.Claims.FirstOrDefault(m => m.Type == "Id").Value);
-
-            model.Department = await _context.Department.Include(v => v.DepartmentState).Include(v => v.DepartmentType).FirstOrDefaultAsync(m => m.DepartmentId == id);
-            model.Commisioner = await _context.Commisioner.Include(v => v.Role).FirstOrDefaultAsync(m => m.CommisionerId == idUser);
-
             ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "FirstName");
             ViewData["CommisionerId"] = new SelectList(_context.Commisioner, "CommisionerId", "CommisionerPassword");
             ViewData["DepartmentId"] = new SelectList(_context.Department, "DepartmentId", "DepartmentDescription");

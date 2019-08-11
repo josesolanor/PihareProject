@@ -31,29 +31,54 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.VisitDay)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Observations)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Client.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Commisioner.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Department.DepartmentDescription)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.VisitRegistrationId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.VisitRegistrationId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.VisitRegistrationId">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.VisitDay)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Observations)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Client.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Commisioner.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Department.DepartmentDescription)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.VisitRegistrationId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.VisitRegistrationId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.VisitRegistrationId">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
+<div class="demo-container">
+    <div id="gridContainer"></div>
+</div>
+
+<script>
+    $.ajax({
+        url: '@Url.Action("LoadGrid", "Visitregistrations")',
+        type: "GET"
+    }).done(function (response) {
+        console.log(response)
+
+        var datasource = JSON.parse(response);
+
+        console.log(datasource)
+        $(function(){
+            $("#gridContainer").dxDataGrid({
+                dataSource: datasource,
+                showBorders: true
+            });
+        });
+
+    });
+</script>

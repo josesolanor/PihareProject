@@ -56,8 +56,8 @@ namespace WebPihare.Controllers
         // GET: Departments/Create
         public IActionResult Create()
         {
-            ViewData["DepartmentStateId"] = new SelectList(_context.Departmentstate, "DepartmentStateId", "DepartmentStateDescription");
-            ViewData["DepartmentTypeId"] = new SelectList(_context.Departmenttype, "DepartmentTypeId", "DepartmentTypeDescription");
+            ViewData["DepartmentStateId"] = new SelectList(_context.Departmentstate, "DepartmentStateId", "DepartmentStateValue");
+            ViewData["DepartmentTypeId"] = new SelectList(_context.Departmenttype, "DepartmentTypeId", "DepartmentTypeValue");
             return View();
         }
 

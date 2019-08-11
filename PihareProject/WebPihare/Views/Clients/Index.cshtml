@@ -28,13 +28,10 @@
                 @Html.DisplayNameFor(model => model.CI)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Telefono)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.RegistredDate)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Commisioner.Email)
+                @Html.DisplayNameFor(model => model.Commisioner.FullName)
             </th>
             <th></th>
         </tr>
@@ -58,16 +55,12 @@
                 @Html.DisplayFor(modelItem => item.CI)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Telefono)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.RegistredDate)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Commisioner.Email)
+                @Html.DisplayFor(modelItem => item.Commisioner.FullName)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.ClientId">Editar</a> |
                 <a asp-action="Details" asp-route-id="@item.ClientId">Detalles</a> |
                 <a asp-action="Delete" asp-route-id="@item.ClientId">Eliminar</a>
             </td>

@@ -30,6 +30,13 @@ namespace WebPihare.Entities
         [DisplayName("Role")]
         public Role Role { get; set; }
 
+        [DisplayName("Nombre Comisionista")]
+        public string FullName{ get {
+
+                string FullNameCommisioner = $"{FirstName} {LastName} {SecondLastName}";
+                return FullNameCommisioner;
+            } }
+
         public ICollection<Visitregistration> Visitregistration { get; set; }
     }
 }
