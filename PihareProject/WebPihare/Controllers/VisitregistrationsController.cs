@@ -83,9 +83,8 @@ namespace WebPihare.Controllers
         }
 
         // GET: Visitregistrations/Create
-        public async Task<IActionResult> Create(int? id)
+        public IActionResult Create()
         {
-
             ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "FirstName");
             ViewData["CommisionerId"] = new SelectList(_context.Commisioner, "CommisionerId", "CommisionerPassword");
             ViewData["DepartmentId"] = new SelectList(_context.Department, "DepartmentId", "DepartmentDescription");
