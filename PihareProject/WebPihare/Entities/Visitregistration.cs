@@ -7,7 +7,6 @@ namespace WebPihare.Entities
     public partial class Visitregistration
     {
         public int VisitRegistrationId { get; set; }
-
         [DisplayName("Fecha de visita")]
         public DateTime VisitDay { get; set; }
         [DisplayName("Observaciones")]
