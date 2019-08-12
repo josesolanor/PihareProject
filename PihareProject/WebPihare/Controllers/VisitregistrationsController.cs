@@ -45,7 +45,7 @@ namespace WebPihare.Controllers
                     Observations = item.Observations,
                     VisitRegistrationId = item.VisitRegistrationId,
                     ClientId = item.ClientId,
-                    CommisionerId =item.CommisionerId,
+                    CommisionerId = item.CommisionerId,
                     DepartmentId = item.DepartmentId,
                     FullNameClient = $"{item.Client.FirstName} {item.Client.LastName} {item.Client.SecondLastName}",
                     FullNameCommisioner = $"{item.Commisioner.FirstName} {item.Commisioner.LastName} {item.Commisioner.SecondLastName}",
@@ -92,15 +92,15 @@ namespace WebPihare.Controllers
         }
 
         [HttpGet]
-        public IActionResult RegisterCreate(int idClient, int idCommisioner, int idDepartment)
+        public IActionResult RegisterCreate(string clientJson, int idCommisioner, int idDepartment)
         {
+
             Visitregistration model = new Visitregistration
             {
                 Commisioner = _context.Commisioner.Include(v => v.Role).FirstOrDefault(m => m.CommisionerId == idCommisioner),
-                Client = _context.Client.Include(v => v.Commisioner).FirstOrDefault(m => m.ClientId == idClient),
+                ClientJson = clientJson,
                 Department = _context.Department.Include(v => v.DepartmentState).Include(v => v.DepartmentType).FirstOrDefault(m => m.DepartmentId == idDepartment),
                 VisitDay = DateTime.Now,
-                ClientId = idClient,
                 DepartmentId = idDepartment,
                 CommisionerId = idCommisioner
             };
@@ -112,11 +112,29 @@ namespace WebPihare.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Visitregistration visitregistration)
         {
-            if (ModelState.IsValid)
+
+            Client client = JsonConvert.DeserializeObject<Client>(visitregistration.ClientJson);
+
+            var Commisioner = _context.Commisioner.FirstOrDefault(m => m.CommisionerId == visitregistration.CommisionerId);
+
+            client.Commisioner = Commisioner;
+            client.RegistredDate = DateTime.Now;
+
+            try
             {
-                _context.Add(visitregistration);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                visitregistration.Client = client;
+
+                if (ModelState.IsValid)
+                {
+                    _context.Add(visitregistration);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+            catch (Exception)
+            {
+                TempData["ErrorMsg"] = "Cliente ya registrado";
+                return RedirectToAction("Index", "Departments");
             }
             ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "FirstName", visitregistration.ClientId);
             ViewData["CommisionerId"] = new SelectList(_context.Commisioner, "CommisionerId", "CommisionerPassword", visitregistration.CommisionerId);

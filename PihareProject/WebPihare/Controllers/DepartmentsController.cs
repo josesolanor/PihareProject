@@ -69,23 +69,30 @@ namespace WebPihare.Controllers
             {
                 var idUser = int.Parse(User.Claims.FirstOrDefault(m => m.Type == "Id").Value);
 
-                var Commisioner = _context.Commisioner.FirstOrDefault(m => m.CommisionerId == idUser);
+                //var Commisioner = _context.Commisioner.FirstOrDefault(m => m.CommisionerId == idUser);
 
-                data.Client.Commisioner = Commisioner;
-                data.Client.RegistredDate = DateTime.Now;
+                //data.Client.Commisioner = Commisioner;
+                //data.Client.RegistredDate = DateTime.Now;
 
                 var exist = _context.Client.FirstOrDefault(m => m.CI == data.Client.CI);
 
                 if (exist == null)
                 {
-                    _context.Add(data.Client);
-                    await _context.SaveChangesAsync();
 
-                    var ClientIdCreated = _context.Client.FirstOrDefault(m => m.CI == data.Client.CI).ClientId;
+                    string ClientJson = JsonConvert.SerializeObject(data.Client, Formatting.None,
+                        new JsonSerializerSettings()
+                        {
+                            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                        });
 
-                    return RedirectToAction("RegisterCreate", "Visitregistrations", new { idClient = ClientIdCreated, idCommisioner = idUser, idDepartment = data.DepartmentIdSelected });
+                    //_context.Add(data.Client);
+                    //await _context.SaveChangesAsync();
+
+                    //var ClientIdCreated = _context.Client.FirstOrDefault(m => m.CI == data.Client.CI).ClientId;
+
+                    return RedirectToAction("RegisterCreate", "Visitregistrations", new { clientJson = ClientJson, idCommisioner = idUser, idDepartment = data.DepartmentIdSelected });
                 }
-                
+
             }
             TempData["ErrorMsg"] = "Cliente ya registrado";
             return RedirectToAction("Index", "Departments");
