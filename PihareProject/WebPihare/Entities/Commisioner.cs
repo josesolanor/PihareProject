@@ -18,7 +18,7 @@ namespace WebPihare.Entities
         public string LastName { get; set; }
         [DisplayName("Segundo Apellido")]
         public string SecondLastName { get; set; }
-        [DisplayName("CI")]
+        [DisplayName("Nickname")]
         public string Nic { get; set; }
         [DisplayName("Numero de contrato")]
         public int ContractNumber { get; set; }
