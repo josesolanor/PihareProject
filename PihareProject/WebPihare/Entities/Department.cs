@@ -19,7 +19,9 @@ namespace WebPihare.Entities
         [DisplayName("Numero de dormitorios")]
         public int NumberBedrooms { get; set; }
         [DisplayName("Precio")]
-        public decimal DeparmentPrice { get; set; }        
+        public decimal DeparmentPrice { get; set; }
+        [DisplayName("Comentarios")]
+        public string Comments { get; set; }
         public int DepartmentTypeId { get; set; }        
         public int DepartmentStateId { get; set; }
         [DisplayName("Estado")]
