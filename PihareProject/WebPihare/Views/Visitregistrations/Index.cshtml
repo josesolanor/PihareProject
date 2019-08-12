@@ -1,38 +1,38 @@
 ﻿@model IEnumerable<WebPihare.Entities.Visitregistration>
 
-@{
+    @{
     ViewData["Title"] = "Index";
-}
+    }
 
-<h2>Index</h2>
+    <h2>Index</h2>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.VisitDay)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Observations)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Client)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Commisioner)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Department)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+    @*<table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.VisitDay)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Observations)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Client)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Commisioner)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Department)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
             <tr>
                 <td>
                     @Html.DisplayFor(modelItem => item.VisitDay)
@@ -55,15 +55,15 @@
                     <a asp-action="Delete" asp-route-id="@item.VisitRegistrationId">Delete</a>
                 </td>
             </tr>
-        }
-    </tbody>
-</table>
+            }
+        </tbody>
+    </table>*@
 
-<div class="demo-container">
-    <div id="gridContainer"></div>
-</div>
+    <div class="demo-container">
+        <div id="gridContainer"></div>
+    </div>
 
-<script>
+    <script>
     $.ajax({
         url: '@Url.Action("LoadGrid", "Visitregistrations")',
         type: "GET"
@@ -74,36 +74,53 @@
         $(function(){
             $("#gridContainer").dxDataGrid({
                 dataSource: datasource,
-                paging: {
-            pageSize: 10
-        },
-        pager: {
-            showPageSizeSelector: true,
-            allowedPageSizes: [10, 25, 50, 100]
-        },
-        remoteOperations: false,
-        searchPanel: {
-            visible: true,
-            highlightCaseSensitive: true
-        },
-        groupPanel: { visible: true },
-        grouping: {
-            autoExpandAll: false
-        },
-        allowColumnReordering: true,
-        rowAlternationEnabled: true,
-                showBorders: true,
-        columnChooser: {
-            enabled: true,
-            mode: "select"
+                allowColumnReordering: true,
+            allowColumnResizing: true,
+            columnAutoWidth: true,
+            showColumnLines: true,
+            showRowLines: true,
+            rowAlternationEnabled: true,
+            showBorders: true,
+            columnChooser: {
+                enabled: true
+            },
+
+
+            filterRow: {
+                visible: true,
+            },
+            filterPanel: { visible: true },
+            headerFilter: { visible: true },
+            paging: {
+                pageSize: 10
+            },
+            pager: {
+                showPageSizeSelector: true,
+                allowedPageSizes: [10, 25, 50, 100]
+            },
+            selection: {
+                mode: "single"
+            },
+            grouping: {
+                autoExpandAll: true
+            },
+            headerFilter: {
+                visible: true
+            },
+            groupPanel: {
+                visible: true
+            },
+            //onContentReady: function (e) {
+            //    var visibleRowsCount = e.component.totalCount();
+            //    $("#lbl_order_records").text(visibleRowsCount);
+            //},
+                "export": {
+                    enabled: true,
+                    fileName: "RegistroVisitas"+Date.now(),
+                    allowExportSelectedData: true
                 },
-        "export": {
-            enabled: true,
-            fileName: "Employees",
-            allowExportSelectedData: true
-        },
             });
         });
 
     });
-</script>
+    </script>
