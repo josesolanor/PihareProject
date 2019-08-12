@@ -68,9 +68,9 @@
         url: '@Url.Action("LoadGrid", "Visitregistrations")',
         type: "GET"
     }).done(function (response) {
-        console.log(response)
+
         var datasource = JSON.parse(response);
-        console.log(datasource)
+
         $(function(){
             $("#gridContainer").dxDataGrid({
                 dataSource: datasource,

@@ -23,16 +23,16 @@
                 @Html.DisplayNameFor(model => model.Departments.FirstOrDefault().NumberFloor)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Departments.FirstOrDefault().NumberBedrooms)
+                @Html.DisplayNameFor(model => model.Departments.FirstOrDefault().DepartmentType)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Departments.FirstOrDefault().DeparmentPrice)
+                @Html.DisplayNameFor(model => model.Departments.FirstOrDefault().NumberBedrooms)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Departments.FirstOrDefault().DepartmentState)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Departments.FirstOrDefault().DepartmentType)
+                @Html.DisplayNameFor(model => model.Departments.FirstOrDefault().DeparmentPrice)
             </th>
             <th>
                 @Html.DisplayName("Seleccionar")
@@ -51,17 +51,18 @@
                     @Html.DisplayFor(modelItem => item.NumberFloor)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.NumberBedrooms)
+                    @Html.DisplayFor(modelItem => item.DepartmentType.DepartmentTypeValue)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.DeparmentPrice)
+                    @Html.DisplayFor(modelItem => item.NumberBedrooms)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.DepartmentState.DepartmentStateValue)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.DepartmentType.DepartmentTypeValue)
+                    @Html.DisplayFor(modelItem => item.DeparmentPrice)
                 </td>
+
                 <td>
                     <div class="btn-group btn-group-xs" role="group" aria-label="...">
 
