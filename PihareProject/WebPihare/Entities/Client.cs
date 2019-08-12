@@ -21,6 +21,7 @@ namespace WebPihare.Entities
         [DisplayName("Observaciones")]
         public string Observation { get; set; }
         public string CI { get; set; }
+        public int? CommisionerId { get; set; }
         [DisplayName("Fecha Registro")]
         public DateTime RegistredDate { get; set; }
         public Commisioner Commisioner { get; set; }

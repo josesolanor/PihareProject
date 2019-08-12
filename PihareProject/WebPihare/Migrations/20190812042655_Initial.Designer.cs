@@ -9,8 +9,8 @@ using WebPihare.Context;
 namespace WebPihare.Migrations
 {
     [DbContext(typeof(PihareiiContext))]
-    [Migration("20190809022538_addClientCommisioner")]
-    partial class addClientCommisioner
+    [Migration("20190812042655_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -34,9 +34,9 @@ namespace WebPihare.Migrations
 
                     b.Property<string>("Observation");
 
-                    b.Property<string>("SecondLastName");
+                    b.Property<DateTime>("RegistredDate");
 
-                    b.Property<int>("Telefono");
+                    b.Property<string>("SecondLastName");
 
                     b.HasKey("ClientId");
 
@@ -80,11 +80,11 @@ namespace WebPihare.Migrations
                     b.Property<int>("DepartmentId")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("Comments");
+
                     b.Property<decimal>("DeparmentPrice");
 
                     b.Property<int>("DepartmentCode");
-
-                    b.Property<string>("DepartmentDescription");
 
                     b.Property<int>("DepartmentStateId");
 
@@ -152,15 +152,13 @@ namespace WebPihare.Migrations
 
                     b.Property<int>("ClientId");
 
-                    b.Property<DateTime>("ClientRegister");
-
                     b.Property<int>("CommisionerId");
 
                     b.Property<int>("DepartmentId");
 
                     b.Property<string>("Observations");
 
-                    b.Property<decimal>("ReferencialPrice");
+                    b.Property<int?>("StateVisitStateId");
 
                     b.Property<DateTime>("VisitDay");
 
@@ -172,14 +170,30 @@ namespace WebPihare.Migrations
 
                     b.HasIndex("DepartmentId");
 
+                    b.HasIndex("StateVisitStateId");
+
                     b.ToTable("Visitregistration");
+                });
+
+            modelBuilder.Entity("WebPihare.Entities.VisitState", b =>
+                {
+                    b.Property<int>("VisitStateId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("VisitStateValue");
+
+                    b.HasKey("VisitStateId");
+
+                    b.ToTable("VisitState");
                 });
 
             modelBuilder.Entity("WebPihare.Entities.Client", b =>
                 {
                     b.HasOne("WebPihare.Entities.Commisioner", "Commisioner")
-                        .WithMany()
-                        .HasForeignKey("CommisionerId");
+                        .WithMany("Client")
+                        .HasForeignKey("CommisionerId")
+                        .HasConstraintName("FK_Client_Commisioner_CommisionerId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("WebPihare.Entities.Commisioner", b =>
@@ -187,7 +201,8 @@ namespace WebPihare.Migrations
                     b.HasOne("WebPihare.Entities.Role", "Role")
                         .WithMany("Commisioner")
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasConstraintName("FK_Commisioner_Role_RoleId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("WebPihare.Entities.Department", b =>
@@ -195,12 +210,14 @@ namespace WebPihare.Migrations
                     b.HasOne("WebPihare.Entities.Departmentstate", "DepartmentState")
                         .WithMany("Department")
                         .HasForeignKey("DepartmentStateId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasConstraintName("FK_Department_Departmentstate_DepartmentStateId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("WebPihare.Entities.Departmenttype", "DepartmentType")
                         .WithMany("Department")
                         .HasForeignKey("DepartmentTypeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasConstraintName("FK_Department_Departmenttype_DepartmentTypeId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("WebPihare.Entities.Visitregistration", b =>
@@ -208,17 +225,26 @@ namespace WebPihare.Migrations
                     b.HasOne("WebPihare.Entities.Client", "Client")
                         .WithMany("Visitregistration")
                         .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasConstraintName("FK_Visitregistration_Client_ClientId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("WebPihare.Entities.Commisioner", "Commisioner")
                         .WithMany("Visitregistration")
                         .HasForeignKey("CommisionerId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasConstraintName("FK_Visitregistration_Commisioner_CommisionerId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("WebPihare.Entities.Department", "Department")
                         .WithMany("Visitregistration")
                         .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasConstraintName("FK_Visitregistration_Department_DepartmentId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("WebPihare.Entities.VisitState", "State")
+                        .WithMany("Visitregistration")
+                        .HasForeignKey("StateVisitStateId")
+                        .HasConstraintName("FK_Visitregistration_VisitState_StateVisitStateId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 #pragma warning restore 612, 618
         }

@@ -4,28 +4,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace WebPihare.Migrations
 {
-    public partial class initial : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "Client",
-                columns: table => new
-                {
-                    ClientId = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    FirstName = table.Column<string>(nullable: true),
-                    LastName = table.Column<string>(nullable: true),
-                    SecondLastName = table.Column<string>(nullable: true),
-                    Observation = table.Column<string>(nullable: true),
-                    CI = table.Column<string>(nullable: true),
-                    Telefono = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Client", x => x.ClientId);
-                });
-
             migrationBuilder.CreateTable(
                 name: "Departmentstate",
                 columns: table => new
@@ -69,6 +51,19 @@ namespace WebPihare.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "VisitState",
+                columns: table => new
+                {
+                    VisitStateId = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    VisitStateValue = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_VisitState", x => x.VisitStateId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Department",
                 columns: table => new
                 {
@@ -77,8 +72,8 @@ namespace WebPihare.Migrations
                     DepartmentCode = table.Column<int>(nullable: false),
                     NumberFloor = table.Column<int>(nullable: false),
                     NumberBedrooms = table.Column<int>(nullable: false),
-                    DepartmentDescription = table.Column<string>(nullable: true),
                     DeparmentPrice = table.Column<decimal>(nullable: false),
+                    Comments = table.Column<string>(nullable: true),
                     DepartmentTypeId = table.Column<int>(nullable: false),
                     DepartmentStateId = table.Column<int>(nullable: false)
                 },
@@ -90,13 +85,13 @@ namespace WebPihare.Migrations
                         column: x => x.DepartmentStateId,
                         principalTable: "Departmentstate",
                         principalColumn: "DepartmentStateId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Department_Departmenttype_DepartmentTypeId",
                         column: x => x.DepartmentTypeId,
                         principalTable: "Departmenttype",
                         principalColumn: "DepartmentTypeId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -123,7 +118,32 @@ namespace WebPihare.Migrations
                         column: x => x.RoleId,
                         principalTable: "Role",
                         principalColumn: "RoleId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Client",
+                columns: table => new
+                {
+                    ClientId = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    FirstName = table.Column<string>(nullable: true),
+                    LastName = table.Column<string>(nullable: true),
+                    SecondLastName = table.Column<string>(nullable: true),
+                    Observation = table.Column<string>(nullable: true),
+                    CI = table.Column<string>(nullable: true),
+                    CommisionerId = table.Column<int>(nullable: true),
+                    RegistredDate = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Client", x => x.ClientId);
+                    table.ForeignKey(
+                        name: "FK_Client_Commisioner_CommisionerId",
+                        column: x => x.CommisionerId,
+                        principalTable: "Commisioner",
+                        principalColumn: "CommisionerId",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -132,13 +152,12 @@ namespace WebPihare.Migrations
                 {
                     VisitRegistrationId = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    ReferencialPrice = table.Column<decimal>(nullable: false),
-                    ClientRegister = table.Column<DateTime>(nullable: false),
                     VisitDay = table.Column<DateTime>(nullable: false),
                     Observations = table.Column<string>(nullable: true),
                     ClientId = table.Column<int>(nullable: false),
                     DepartmentId = table.Column<int>(nullable: false),
-                    CommisionerId = table.Column<int>(nullable: false)
+                    CommisionerId = table.Column<int>(nullable: false),
+                    StateVisitStateId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -148,20 +167,31 @@ namespace WebPihare.Migrations
                         column: x => x.ClientId,
                         principalTable: "Client",
                         principalColumn: "ClientId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Visitregistration_Commisioner_CommisionerId",
                         column: x => x.CommisionerId,
                         principalTable: "Commisioner",
                         principalColumn: "CommisionerId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Visitregistration_Department_DepartmentId",
                         column: x => x.DepartmentId,
                         principalTable: "Department",
                         principalColumn: "DepartmentId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Visitregistration_VisitState_StateVisitStateId",
+                        column: x => x.StateVisitStateId,
+                        principalTable: "VisitState",
+                        principalColumn: "VisitStateId",
+                        onDelete: ReferentialAction.Restrict);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Client_CommisionerId",
+                table: "Client",
+                column: "CommisionerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Commisioner_RoleId",
@@ -192,6 +222,11 @@ namespace WebPihare.Migrations
                 name: "IX_Visitregistration_DepartmentId",
                 table: "Visitregistration",
                 column: "DepartmentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Visitregistration_StateVisitStateId",
+                table: "Visitregistration",
+                column: "StateVisitStateId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -203,19 +238,22 @@ namespace WebPihare.Migrations
                 name: "Client");
 
             migrationBuilder.DropTable(
-                name: "Commisioner");
-
-            migrationBuilder.DropTable(
                 name: "Department");
 
             migrationBuilder.DropTable(
-                name: "Role");
+                name: "VisitState");
+
+            migrationBuilder.DropTable(
+                name: "Commisioner");
 
             migrationBuilder.DropTable(
                 name: "Departmentstate");
 
             migrationBuilder.DropTable(
                 name: "Departmenttype");
+
+            migrationBuilder.DropTable(
+                name: "Role");
         }
     }
 }

@@ -8,6 +8,7 @@ namespace WebPihare.Entities
     {
         public Commisioner()
         {
+            Client = new HashSet<Client>();
             Visitregistration = new HashSet<Visitregistration>();
         }
 
@@ -36,7 +37,7 @@ namespace WebPihare.Entities
                 string FullNameCommisioner = $"{FirstName} {LastName} {SecondLastName}";
                 return FullNameCommisioner;
             } }
-
+        public ICollection<Client> Client { get; set; }
         public ICollection<Visitregistration> Visitregistration { get; set; }
     }
 }

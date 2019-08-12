@@ -12,15 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrations\20190808010328_Initial.cs" />
-    <Compile Remove="Migrations\20190808010328_Initial.Designer.cs" />
-    <Compile Remove="Migrations\20190808015834_addrle.cs" />
-    <Compile Remove="Migrations\20190808015834_addrle.Designer.cs" />
-    <Compile Remove="Migrations\20190808020103_AddRol.cs" />
-    <Compile Remove="Migrations\20190808020103_AddRol.Designer.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
     <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="3.6.0">

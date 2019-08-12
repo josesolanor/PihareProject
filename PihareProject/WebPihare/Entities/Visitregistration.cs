@@ -14,6 +14,11 @@ namespace WebPihare.Entities
         public int ClientId { get; set; }        
         public int DepartmentId { get; set; }        
         public int CommisionerId { get; set; }
+
+        public int? StateVisitStateId { get; set; }
+
+        [DisplayName("Estado")]
+        public VisitState StateVisitState { get; set; }
         [DisplayName("Cliente")]
         public Client Client { get; set; }
         [DisplayName("Comisionista")]
