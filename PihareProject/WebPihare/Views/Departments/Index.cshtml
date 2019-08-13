@@ -69,7 +69,10 @@
                 <td>
                     <div class="btn-group btn-group-xs" role="group" aria-label="...">
 
-                        <button data-toggle="modal" data-target="#ClientModal" onclick="ChangeClientDepartmentIdValue(@item.DepartmentId)" type="button" class="btn btn-success"><i class="glyphicon glyphicon-plus"></i> Añadir</button>
+                        @if (item.DepartmentStateId == 1)
+                        {
+                            <button data-toggle="modal" data-target="#ClientModal" onclick="ChangeClientDepartmentIdValue(@item.DepartmentId)" type="button" class="btn btn-success"><i class="glyphicon glyphicon-plus"></i> Añadir</button>
+                        }
                         <a asp-action="Details" asp-route-id="@item.DepartmentId" type="button" class="btn btn-default"><i class="glyphicon glyphicon-list"></i> Details</a>
                         @if (User.IsInRole("Admin"))
                         {
@@ -137,9 +140,6 @@
                                 </div>
                             </div>
                         </div>
-                        @*<div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            </div>*@
                     </div>
                 </div>
             </div>
