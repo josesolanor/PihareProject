@@ -1,0 +1,68 @@
+﻿@model IEnumerable<WebPihare.Entities.Client>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Clientes</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SecondLastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Observation)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CI)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RegistredDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Commisioner.FullName)
+            </th>
+            <th>
+                @Html.DisplayName("Acciones")
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SecondLastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Observation)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CI)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RegistredDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Commisioner.FullName)
+            </td>
+            <td>
+                <a asp-action="Details" asp-route-id="@item.ClientId">Detalle</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

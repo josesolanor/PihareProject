@@ -33,9 +33,43 @@ namespace WebPihare.Controllers
             return View(await pihareiiContext.ToListAsync());
         }
 
+        public IActionResult MyVisits()
+        {
+            return View();
+        }
+
         public IActionResult LoadGrid()
         {
             var pihareiiContext = _context.Visitregistration.Include(v => v.Client).Include(v => v.Commisioner).Include(v => v.Department).ToList();
+
+            foreach (Visitregistration item in pihareiiContext)
+            {
+                jsonList.Add(new RegisterViewModel
+                {
+                    VisitDay = item.VisitDay,
+                    Observations = item.Observations,
+                    VisitRegistrationId = item.VisitRegistrationId,
+                    ClientId = item.ClientId,
+                    CommisionerId = item.CommisionerId,
+                    DepartmentId = item.DepartmentId,
+                    FullNameClient = $"{item.Client.FirstName} {item.Client.LastName} {item.Client.SecondLastName}",
+                    FullNameCommisioner = $"{item.Commisioner.FirstName} {item.Commisioner.LastName} {item.Commisioner.SecondLastName}",
+                    DepartmentCode = item.Department.DepartmentCode
+                });
+            }
+
+            string JsonContext = JsonConvert.SerializeObject(jsonList, Formatting.Indented, new JsonSerializerSettings()
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            });
+
+            return Json(JsonContext);
+        }
+        public IActionResult MyLoadGrid()
+        {
+            var idUser = int.Parse(User.Claims.FirstOrDefault(m => m.Type == "Id").Value);
+
+            var pihareiiContext = _context.Visitregistration.Include(v => v.Client).Include(v => v.Commisioner).Include(v => v.Department).Where(m => m.Commisioner.CommisionerId == idUser).ToList();
 
             foreach (Visitregistration item in pihareiiContext)
             {

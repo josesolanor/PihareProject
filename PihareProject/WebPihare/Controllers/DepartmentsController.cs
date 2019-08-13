@@ -23,7 +23,7 @@ namespace WebPihare.Controllers
             _context = context;
         }
 
-        // GET: Departments
+        [Authorize(Roles="Admin,Comisionista")]
         public async Task<IActionResult> Index()
         {
             RegisterModalClientViewModal model = new RegisterModalClientViewModal
@@ -34,6 +34,7 @@ namespace WebPihare.Controllers
         }
 
         // GET: Departments/Details/5
+        [Authorize(Roles = "Admin,Comisionista")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -53,7 +54,7 @@ namespace WebPihare.Controllers
             return View(department);
         }
 
-        // GET: Departments/Create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             ViewData["DepartmentStateId"] = new SelectList(_context.Departmentstate, "DepartmentStateId", "DepartmentStateValue");
@@ -62,6 +63,7 @@ namespace WebPihare.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin,Comisionista")]
         public IActionResult RegisterClient(RegisterModalClientViewModal data)
         {
 
@@ -90,7 +92,8 @@ namespace WebPihare.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("DepartmentId,DepartmentCode,NumberFloor,NumberBedrooms,DepartmentDescription,DeparmentPrice,DepartmentTypeId,DepartmentStateId")] Department department)
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Create(Department department)
         {
             if (ModelState.IsValid)
             {
@@ -103,7 +106,7 @@ namespace WebPihare.Controllers
             return View(department);
         }
 
-        // GET: Departments/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -121,12 +124,10 @@ namespace WebPihare.Controllers
             return View(department);
         }
 
-        // POST: Departments/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("DepartmentId,DepartmentCode,NumberFloor,NumberBedrooms,DepartmentDescription,DeparmentPrice,DepartmentTypeId,DepartmentStateId")] Department department)
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Edit(int id, Department department)
         {
             if (id != department.DepartmentId)
             {
@@ -158,7 +159,7 @@ namespace WebPihare.Controllers
             return View(department);
         }
 
-        // GET: Departments/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -178,9 +179,9 @@ namespace WebPihare.Controllers
             return View(department);
         }
 
-        // POST: Departments/Delete/5
-        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
+        [HttpPost, ActionName("Delete")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var department = await _context.Department.FindAsync(id);

@@ -36,25 +36,35 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li><a asp-area="" asp-controller="Home" asp-action="Index">Inicio</a></li>
-                    <li><a asp-area="" asp-controller="Clients" asp-action="Index">Clientes</a></li>
-                    <li><a asp-area="" asp-controller="Commisioners" asp-action="Index">Comisionistas</a></li>
-                    <li><a asp-area="" asp-controller="Departments" asp-action="Index">Departamentos</a></li>
-                    <li><a asp-area="" asp-controller="Visitregistrations" asp-action="Index">Visitas</a></li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Configuraciones<b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            <li><a asp-area="" asp-controller="Departmenttypes" asp-action="Index">Tipo Departamento</a></li>
-                            <li><a asp-area="" asp-controller="Departmentstates" asp-action="Index">Estado Departamento</a></li>
-                            <li><a asp-area="" asp-controller="Roles" asp-action="Index">Roles</a></li>
-                        </ul>
-                    </li>
+                    @{
+                        <li><a asp-area="" asp-controller="Departments" asp-action="Index">Departamentos</a></li>
+                        if (User.IsInRole("Admin"))
+                        {
+                            <li><a asp-area="" asp-controller="Clients" asp-action="Index">Clientes</a></li>
+                            <li><a asp-area="" asp-controller="Commisioners" asp-action="Index">Comisionistas</a></li>
+                            <li><a asp-area="" asp-controller="Visitregistrations" asp-action="Index">Visitas</a></li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Configuraciones<b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    <li><a asp-area="" asp-controller="Departmenttypes" asp-action="Index">Tipo Departamento</a></li>
+                                    <li><a asp-area="" asp-controller="Departmentstates" asp-action="Index">Estado Departamento</a></li>
+                                    <li><a asp-area="" asp-controller="Roles" asp-action="Index">Roles</a></li>
+                                </ul>
+                            </li>
+                        }
+                        else
+                        {
+                            <li><a asp-area="" asp-controller="Clients" asp-action="MyClients">Mis Clientes</a></li>
+                            <li><a asp-area="" asp-controller="Visitregistrations" asp-action="MyVisits">Mis Visitas</a></li>
+                        }
+                    }
                 </ul>
                 @if (User.Identity.IsAuthenticated)
                 {
                     <form asp-controller="Login" asp-action="Logout" method="post">
                         <ul class="nav navbar-nav navbar-right">
                             <li>
-                                <a>Hola @User.FindFirst("FullName").Value</a>
+                                <a asp-controller="Commisioners" asp-action="MyProfile">Hola @User.FindFirst("FullName").Value</a>
                             </li>
                             <li>
                                 <button type="submit" class="btn btn-link navbar-btn navbar-link">Logout</button>

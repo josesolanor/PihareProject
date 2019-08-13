@@ -41,14 +41,13 @@ namespace WebPihare.Controllers
                 model.Input.Password = _hash.EncryptString(model.Input.Password);
                 var login = _context.Commisioner.Where(m => m.Email == model.Input.Email && m.CommisionerPassword == model.Input.Password).FirstOrDefault();
 
-                var RoleName = _context.Role.FirstOrDefault(m => m.RoleId == login.RoleId).RoleValue;
-
                 if (login is null)
                 {
+                    
                     model.ErrorMessage = "Credenciales Incorrectos";
                     return View(model);
                 }
-
+                var RoleName = _context.Role.FirstOrDefault(m => m.RoleId == login.RoleId).RoleValue;
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Name, login.Nic),
@@ -75,8 +74,8 @@ namespace WebPihare.Controllers
             return RedirectToAction("Index", "Login");
         }
 
-        [AllowAnonymous]
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult Denied()
         {
             return View();

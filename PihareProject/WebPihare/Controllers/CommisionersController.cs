@@ -47,6 +47,25 @@ namespace WebPihare.Controllers
             return View(commisioner);
         }
 
+        public async Task<IActionResult> MyProfile()
+        {
+            var id = int.Parse(User.Claims.FirstOrDefault(m => m.Type == "Id").Value);
+
+            if (id == 0)
+            {
+                return NotFound();
+            }
+
+            var commisioner = await _context.Commisioner
+                .FirstOrDefaultAsync(m => m.CommisionerId == id);
+            if (commisioner == null)
+            {
+                return NotFound();
+            }
+
+            return View(commisioner);
+        }
+
         public IActionResult Create()
         {
             ViewData["RoleId"] = new SelectList(_context.Role, "RoleId", "RoleValue");
