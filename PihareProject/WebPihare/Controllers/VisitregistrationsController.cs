@@ -95,10 +95,13 @@ namespace WebPihare.Controllers
         public IActionResult RegisterCreate(string clientJson, int idCommisioner, int idDepartment)
         {
 
+            Client client = JsonConvert.DeserializeObject<Client>(clientJson);
+
             Visitregistration model = new Visitregistration
             {
                 Commisioner = _context.Commisioner.Include(v => v.Role).FirstOrDefault(m => m.CommisionerId == idCommisioner),
                 ClientJson = clientJson,
+                Client = client,
                 Department = _context.Department.Include(v => v.DepartmentState).Include(v => v.DepartmentType).FirstOrDefault(m => m.DepartmentId == idDepartment),
                 VisitDay = DateTime.Now,
                 DepartmentId = idDepartment,

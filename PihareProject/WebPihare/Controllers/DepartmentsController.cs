@@ -62,17 +62,12 @@ namespace WebPihare.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> RegisterClient(RegisterModalClientViewModal data)
+        public IActionResult RegisterClient(RegisterModalClientViewModal data)
         {
 
             if (ModelState.IsValid)
             {
                 var idUser = int.Parse(User.Claims.FirstOrDefault(m => m.Type == "Id").Value);
-
-                //var Commisioner = _context.Commisioner.FirstOrDefault(m => m.CommisionerId == idUser);
-
-                //data.Client.Commisioner = Commisioner;
-                //data.Client.RegistredDate = DateTime.Now;
 
                 var exist = _context.Client.FirstOrDefault(m => m.CI == data.Client.CI);
 
@@ -84,11 +79,6 @@ namespace WebPihare.Controllers
                         {
                             ReferenceLoopHandling = ReferenceLoopHandling.Ignore
                         });
-
-                    //_context.Add(data.Client);
-                    //await _context.SaveChangesAsync();
-
-                    //var ClientIdCreated = _context.Client.FirstOrDefault(m => m.CI == data.Client.CI).ClientId;
 
                     return RedirectToAction("RegisterCreate", "Visitregistrations", new { clientJson = ClientJson, idCommisioner = idUser, idDepartment = data.DepartmentIdSelected });
                 }
