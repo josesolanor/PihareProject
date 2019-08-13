@@ -41,6 +41,8 @@ namespace WebPihare.Controllers
                 model.Input.Password = _hash.EncryptString(model.Input.Password);
                 var login = _context.Commisioner.Where(m => m.Email == model.Input.Email && m.CommisionerPassword == model.Input.Password).FirstOrDefault();
 
+                var RoleName = _context.Role.FirstOrDefault(m => m.RoleId == login.RoleId).RoleValue;
+
                 if (login is null)
                 {
                     model.ErrorMessage = "Credenciales Incorrectos";
@@ -49,11 +51,11 @@ namespace WebPihare.Controllers
 
                 var claims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.Name, login.Email),
+                    new Claim(ClaimTypes.Name, login.Nic),
                     new Claim("FullName", $"{login.FirstName} {login.LastName} {login.SecondLastName}"),
                     new Claim("Id", login.CommisionerId.ToString()),
                     new Claim(ClaimTypes.Email, login.Email),
-                    new Claim(ClaimTypes.Role, "Admin")
+                    new Claim(ClaimTypes.Role, RoleName)
                 };
 
                 var userIdentity = new ClaimsIdentity(claims, "Login");
@@ -71,6 +73,13 @@ namespace WebPihare.Controllers
         {
             await HttpContext.SignOutAsync();
             return RedirectToAction("Index", "Login");
+        }
+
+        [AllowAnonymous]
+        [HttpGet]
+        public IActionResult Denied()
+        {
+            return View();
         }
     }
 }

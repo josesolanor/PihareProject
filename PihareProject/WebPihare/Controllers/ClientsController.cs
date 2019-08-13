@@ -21,11 +21,20 @@ namespace WebPihare.Controllers
             _context = context;
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
             return View(await _context.Client.Include(m => m.Commisioner).ToListAsync());
         }
 
+        [Authorize(Roles = "Comisionista")]
+        public async Task<IActionResult> MyClients()
+        {
+            var idUser = int.Parse(User.Claims.FirstOrDefault(m => m.Type == "Id").Value);
+            return View(await _context.Client.Include(m => m.Commisioner).Where(m => m.CommisionerId == idUser).ToListAsync());
+        }
+
+        [Authorize(Roles = "Admin, Comisionista")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -43,6 +52,7 @@ namespace WebPihare.Controllers
             return View(client);
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
@@ -50,6 +60,7 @@ namespace WebPihare.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([Bind("ClientId,FirstName,LastName,SecondLastName,Observation,CI,Telefono,RegistredDate")] Client client)
         {
             if (ModelState.IsValid)
@@ -67,6 +78,7 @@ namespace WebPihare.Controllers
             return View(client);
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -86,6 +98,7 @@ namespace WebPihare.Controllers
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var client = await _context.Client.FindAsync(id);
