@@ -165,7 +165,13 @@ namespace WebPihare.Controllers
                 {
                     _context.Add(visitregistration);
                     await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
+
+                    if (User.IsInRole("Admin"))
+                    {
+                        return RedirectToAction(nameof(Index));
+                    }
+
+                    return RedirectToAction("MyVisits");
                 }
             }
             catch (Exception)

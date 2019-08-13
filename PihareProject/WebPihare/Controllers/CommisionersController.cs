@@ -74,7 +74,7 @@ namespace WebPihare.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CommisionerId,FirstName,LastName,SecondLastName,Nic,ContractNumber,Email,CommisionerPassword,Telefono,RoleId")] Commisioner commisioner)
+        public async Task<IActionResult> Create(Commisioner commisioner)
         {
             if (ModelState.IsValid)
             {
@@ -104,7 +104,7 @@ namespace WebPihare.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CommisionerId,FirstName,LastName,SecondLastName,Nic,ContractNumber,Email,CommisionerPassword,Telefono")] Commisioner commisioner)
+        public async Task<IActionResult> Edit(int id, Commisioner commisioner)
         {
             if (id != commisioner.CommisionerId)
             {
