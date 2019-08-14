@@ -8,7 +8,7 @@ namespace WebPihare.Entities
     {
         public int VisitRegistrationId { get; set; }
         [DisplayName("Fecha de visita")]
-        public DateTime VisitDay { get; set; }
+        public DateTime? VisitDay { get; set; }
         [DisplayName("Observaciones")]
         public string Observations { get; set; }        
         public int ClientId { get; set; }        

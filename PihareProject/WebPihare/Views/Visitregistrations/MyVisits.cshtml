@@ -98,44 +98,10 @@
                         dataField: "Observations",
                         caption: 'Observaciones'
                     },
-                    @*{
-                        dataField: "Acciones",
-                        caption: 'Acciones',
-                        cellTemplate: function (container, options) {
-                            var wrapper = $("<center>");
-                            var buttonContainer = $("<div>");
-                            var devolutionContainer = $("<div>");
-
-                            if (editBtn == 'True' || deleteBtn=='True'){
-                                container.append(wrapper.append(buttonContainer));
-
-                                buttonContainer.dxButton({
-                                    hint: '@Translate.Get("order_hint_button_edit")',
-                                    type: "success",
-                                    icon: 'fas fa-pen',
-                                    width: 50,
-                                    onClick: function () {
-
-                                        edit_order(options.data, editBtn, deleteBtn)
-                                    }
-                                });
-                            }
-                            if (devolutionBtn == 'True' && parseInt(options.data.balance)>0) {
-                                container.append(wrapper.append(devolutionContainer));
-
-                                devolutionContainer.dxButton({
-                                    hint: '@Translate.Get("global_hint_button_devolution")',
-                                    type: 'danger',
-                                    icon: 'fas fa-exclamation',
-                                    width: 50,
-                                    onClick: function () {
-                                        devolutionOrderData(options.data)
-                                    }
-                                });
-                            }
-
-                        }
-                    }*@
+                    {
+                        dataField: "State",
+                        caption: 'Estado'
+                    }
                 ]
             });
         });

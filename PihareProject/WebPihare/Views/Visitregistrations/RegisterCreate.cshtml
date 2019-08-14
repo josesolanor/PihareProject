@@ -15,17 +15,24 @@
             <input type="hidden" asp-for="ClientJson" />
             <input type="hidden" asp-for="DepartmentId" id="DepartmentId" />
             <input type="hidden" asp-for="CommisionerId" id="CommisionerId" />
+
+            <div class="col-xs-12">
+                <div class="checkbox">
+                    <label><input type="checkbox" id="checkRegisterVisit" value="">Registrar Visita</label>
+                </div>
+            </div>
+
             <div class="col-xs-6">
                 <div class="form-group">
                     <label asp-for="VisitDay" class="control-label"></label>
-                    <input asp-for="VisitDay" class="form-control" />
+                    <input asp-for="VisitDay" disabled class="form-control" />
                     <span asp-validation-for="VisitDay" class="text-danger"></span>
                 </div>
             </div>
             <div class="col-xs-6">
                 <div class="form-group">
                     <label asp-for="Observations" class="control-label"></label>
-                    <input asp-for="Observations" class="form-control" />
+                    <input asp-for="Observations" disabled class="form-control" />
                     <span asp-validation-for="Observations" class="text-danger"></span>
                 </div>
             </div>
@@ -65,12 +72,6 @@
                             </dt>
                             <dd>
                                 @Html.DisplayFor(model => model.Client.CI)
-                            </dd>
-                            <dt>
-                                @Html.DisplayNameFor(model => model.Client.RegistredDate)
-                            </dt>
-                            <dd>
-                                @Html.DisplayFor(model => model.Client.RegistredDate)
                             </dd>
                         </dl>
                     </div>
@@ -190,3 +191,20 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
+<script type="text/javascript">
+    $(function () {
+        $("#checkRegisterVisit").click(function () {
+            if ($(this).is(":checked")) {
+                $("#VisitDay").removeAttr("disabled");
+                $("#VisitDay").focus();
+                $("#Observations").removeAttr("disabled");
+                $("#Observations").focus();
+            } else {
+                $("#VisitDay").attr("disabled", "disabled");
+                $("#VisitDay").val("")
+                $("#Observations").attr("disabled", "disabled");
+                $("#Observations").val("")
+            }
+        });
+    });
+</script>

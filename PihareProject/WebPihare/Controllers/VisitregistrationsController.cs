@@ -70,7 +70,7 @@ namespace WebPihare.Controllers
         {
             var idUser = int.Parse(User.Claims.FirstOrDefault(m => m.Type == "Id").Value);
 
-            var pihareiiContext = _context.Visitregistration.Include(v => v.Client).Include(v => v.Commisioner).Include(v => v.Department).Where(m => m.Commisioner.CommisionerId == idUser).ToList();
+            var pihareiiContext = _context.Visitregistration.Include(v => v.Client).Include(v => v.Commisioner).Include(v => v.Department).Include(v => v.StateVisitState).ToList();
 
             foreach (Visitregistration item in pihareiiContext)
             {
@@ -139,7 +139,6 @@ namespace WebPihare.Controllers
                 ClientJson = clientJson,
                 Client = client,
                 Department = _context.Department.Include(v => v.DepartmentState).Include(v => v.DepartmentType).FirstOrDefault(m => m.DepartmentId == idDepartment),
-                VisitDay = DateTime.Now,
                 DepartmentId = idDepartment,
                 CommisionerId = idCommisioner
             };
@@ -152,17 +151,26 @@ namespace WebPihare.Controllers
         public async Task<IActionResult> Create(Visitregistration visitregistration)
         {
 
-            Client client = JsonConvert.DeserializeObject<Client>(visitregistration.ClientJson);
+            if (visitregistration.ClientId == 0)
+            {
+                Client client = JsonConvert.DeserializeObject<Client>(visitregistration.ClientJson);
+                var Commisioner = _context.Commisioner.FirstOrDefault(m => m.CommisionerId == visitregistration.CommisionerId);
 
-            var Commisioner = _context.Commisioner.FirstOrDefault(m => m.CommisionerId == visitregistration.CommisionerId);
-
-            client.Commisioner = Commisioner;
-            client.RegistredDate = DateTime.Now;
-
+                client.Commisioner = Commisioner;
+                client.RegistredDate = DateTime.Now;
+                visitregistration.Client = client;
+            }
+           
             try
             {
-                visitregistration.Client = client;
+                
+                visitregistration.StateVisitStateId = 1;
 
+                if (visitregistration.VisitDay is null && string.IsNullOrEmpty(visitregistration.Observations))
+                {
+                    visitregistration.StateVisitStateId = 4;
+                }
+                
                 if (ModelState.IsValid)
                 {
                     _context.Add(visitregistration);

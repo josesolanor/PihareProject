@@ -9,7 +9,7 @@ namespace WebPihare.Models
     public class RegisterViewModel
     {
         public int VisitRegistrationId { get; set; }
-        public DateTime VisitDay { get; set; }
+        public DateTime? VisitDay { get; set; }
         public string Observations { get; set; }
         public int ClientId { get; set; }
         public int DepartmentId { get; set; }

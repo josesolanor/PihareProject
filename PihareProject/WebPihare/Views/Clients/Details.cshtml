@@ -55,5 +55,12 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Index">Volver a la lista</a>
+    @if (User.IsInRole("Admin"))
+    {
+        <a asp-action="Index">Volver a la lista</a>
+    }
+    else
+    {
+        <a asp-action="MyClients">Volver a la lista</a>
+    }
 </div>
