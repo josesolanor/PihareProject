@@ -70,7 +70,12 @@ namespace WebPihare.Controllers
         {
             var idUser = int.Parse(User.Claims.FirstOrDefault(m => m.Type == "Id").Value);
 
-            var pihareiiContext = _context.Visitregistration.Include(v => v.Client).Include(v => v.Commisioner).Include(v => v.Department).Include(v => v.StateVisitState).ToList();
+            var pihareiiContext = _context.Visitregistration
+                .Include(v => v.Client)
+                .Include(v => v.Commisioner)
+                .Include(v => v.Department)
+                .Include(v => v.StateVisitState)
+                .Where(m => m.CommisionerId == idUser).ToList();
 
             foreach (Visitregistration item in pihareiiContext)
             {
