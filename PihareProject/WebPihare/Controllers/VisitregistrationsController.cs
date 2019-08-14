@@ -27,10 +27,10 @@ namespace WebPihare.Controllers
         }
 
         // GET: Visitregistrations
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var pihareiiContext = _context.Visitregistration.Include(v => v.Client).Include(v => v.Commisioner).Include(v => v.Department);
-            return View(await pihareiiContext.ToListAsync());
+            ViewData["VisitStateId"] = new SelectList(_context.VisitState, "VisitStateId", "VisitStateValue");
+            return View();
         }
 
         public IActionResult MyVisits()
@@ -211,7 +211,7 @@ namespace WebPihare.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("VisitRegistrationId,ReferencialPrice,ClientRegister,VisitDay,Observations,ClientId,DepartmentId,CommisionerId")] Visitregistration visitregistration)
+        public async Task<IActionResult> Edit(int id, Visitregistration visitregistration)
         {
             if (id != visitregistration.VisitRegistrationId)
             {
@@ -274,6 +274,38 @@ namespace WebPihare.Controllers
             _context.Visitregistration.Remove(visitregistration);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddState(AddVisitState data)
+        {
+            var visit = _context.Visitregistration.FirstOrDefault(m => m.VisitRegistrationId == data.visitSeletedId);
+
+            visit.StateVisitStateId = data.stateId;
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(visit);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!VisitregistrationExists(visit.VisitRegistrationId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            TempData["ErrorMsg"] = "No se puede añadir estado";
+            return RedirectToAction("Index", "Departments");
         }
 
         private bool VisitregistrationExists(int id)

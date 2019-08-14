@@ -1,11 +1,11 @@
-﻿@model IEnumerable<WebPihare.Entities.Visitregistration>
+﻿@model WebPihare.Models.AddVisitState
 
 @{
     ViewData["Title"] = "Index";
 }
 
 <h2>Index</h2>
-
+<h2>@TempData["ErrorMsg"]</h2>
 <p>
     <a asp-action="Create">Create New</a>
 </p>
@@ -20,18 +20,16 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Añadir Comentario</h4>
+                <h4 class="modal-title">Estado de la visita</h4>
             </div>
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-12">
-                        @*<form asp-action="AddState">
-                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <form asp-action="AddState" method="post">
                             <div class="col-xs-12">
                                 <div class="form-group">
-                                    <label value="Estado" class="control-label"></label>
-                                    <input asp-for="DepartmentComment" class="form-control" />
-                                    <span asp-validation-for="DepartmentComment" class="text-danger"></span>
+                                    <label asp-for="stateId" class="control-label">Seleccionar un estado</label>
+                                    <select asp-for="stateId" class="form-control" asp-items="ViewBag.VisitStateId"></select>
                                 </div>
                             </div>
                             <div class="col-xs-12">
@@ -39,8 +37,8 @@
                                     <input type="submit" value="Comentar" class="btn btn-default" />
                                 </div>
                             </div>
-                            <input asp-for="DepartmentIdCommentSelected" hidden value="0">
-                        </form>*@
+                            <input asp-for="visitSeletedId" hidden value="0">
+                        </form>
                     </div>
                 </div>
             </div>
@@ -159,7 +157,7 @@
                                 width: 50,
                                 onClick: function () {
 
-                                    $("#StateModal").modal();
+                                    stateModal(options.data.VisitRegistrationId)
                                 }
                             });
 
@@ -209,4 +207,13 @@
         });
         
     });
+</script>
+
+<script>
+
+    function stateModal(data) {
+        $("#StateModal").modal();
+        $("#visitSeletedId").val(data);
+    }
+
 </script>
