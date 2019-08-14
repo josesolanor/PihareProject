@@ -12,5 +12,7 @@ namespace WebPihare.Models
         public IEnumerable<Department> Departments { get; set; }
 
         public int DepartmentIdSelected { get; set; }
+        public int DepartmentIdCommentSelected { get; set; }
+        public string DepartmentComment { get; set; }
     }
 }

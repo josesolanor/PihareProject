@@ -14,6 +14,40 @@
     <div id="gridContainer"></div>
 </div>
 
+<div id="StateModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Añadir Comentario</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        @*<form asp-action="AddState">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="col-xs-12">
+                                <div class="form-group">
+                                    <label value="Estado" class="control-label"></label>
+                                    <input asp-for="DepartmentComment" class="form-control" />
+                                    <span asp-validation-for="DepartmentComment" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-xs-12">
+                                <div class="form-group">
+                                    <input type="submit" value="Comentar" class="btn btn-default" />
+                                </div>
+                            </div>
+                            <input asp-for="DepartmentIdCommentSelected" hidden value="0">
+                        </form>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     $.ajax({
         url: '@Url.Action("LoadGrid", "Visitregistrations")',
@@ -102,47 +136,77 @@
                         dataField: "Observations",
                         caption: 'Observaciones'
                     },
-                    @*{
+                    {
+                        dataField: "State",
+                        caption: 'Estado'
+                    },
+                    {
                         dataField: "Acciones",
                         caption: 'Acciones',
                         cellTemplate: function (container, options) {
                             var wrapper = $("<center>");
-                            var buttonContainer = $("<div>");
-                            var devolutionContainer = $("<div>");
+                            var StateContainer = $("<div>");
+                            var DetailsContainer = $("<div>");
+                            var EditContainer = $("<div>");
+                            var DeleteContainer = $("<div>");
 
-                            if (editBtn == 'True' || deleteBtn=='True'){
-                                container.append(wrapper.append(buttonContainer));
+                            container.append(wrapper.append(StateContainer));
 
-                                buttonContainer.dxButton({
-                                    hint: '@Translate.Get("order_hint_button_edit")',
-                                    type: "success",
-                                    icon: 'fas fa-pen',
-                                    width: 50,
-                                    onClick: function () {
+                            StateContainer.dxButton({
+                                hint: 'Cambiar Estado',
+                                type: "success",
+                                icon: 'glyphicon glyphicon-cog',
+                                width: 50,
+                                onClick: function () {
 
-                                        edit_order(options.data, editBtn, deleteBtn)
-                                    }
-                                });
-                            }
-                            if (devolutionBtn == 'True' && parseInt(options.data.balance)>0) {
-                                container.append(wrapper.append(devolutionContainer));
+                                    $("#StateModal").modal();
+                                }
+                            });
 
-                                devolutionContainer.dxButton({
-                                    hint: '@Translate.Get("global_hint_button_devolution")',
-                                    type: 'danger',
-                                    icon: 'fas fa-exclamation',
-                                    width: 50,
-                                    onClick: function () {
-                                        devolutionOrderData(options.data)
-                                    }
-                                });
-                            }
+                            container.append(wrapper.append(DetailsContainer));
+
+                            DetailsContainer.dxButton({
+                                hint: 'Detalles',
+                                type: "default",
+                                icon: 'glyphicon glyphicon-list',
+                                width: 50,
+                                onClick: function () {
+                                    var url = "@Url.Action("Details","VisitRegistrations")/" + options.data.VisitRegistrationId;
+                                    window.location.href = url;
+                                }
+                            });
+
+                            container.append(wrapper.append(EditContainer));
+
+                            EditContainer.dxButton({
+                                hint: 'Editar',
+                                type: 'default',
+                                icon: 'glyphicon glyphicon-pencil',
+                                width: 50,
+                                onClick: function () {
+                                    var url = "@Url.Action("Edit","VisitRegistrations")/" + options.data.VisitRegistrationId;
+                                    window.location.href = url;
+                                }
+                            });
+
+                            container.append(wrapper.append(DeleteContainer));
+
+                            DeleteContainer.dxButton({
+                                hint: 'Editar',
+                                type: 'danger',
+                                icon: 'glyphicon glyphicon-trash',
+                                width: 50,
+                                onClick: function () {                                    
+                                    var url = "@Url.Action("Delete","VisitRegistrations")/" + options.data.VisitRegistrationId;
+                                    window.location.href = url;
+                                }
+                            });
 
                         }
-                    }*@
+                    }
                 ]
             });
         });
-
+        
     });
 </script>

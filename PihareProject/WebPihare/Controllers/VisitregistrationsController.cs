@@ -40,7 +40,7 @@ namespace WebPihare.Controllers
 
         public IActionResult LoadGrid()
         {
-            var pihareiiContext = _context.Visitregistration.Include(v => v.Client).Include(v => v.Commisioner).Include(v => v.Department).ToList();
+            var pihareiiContext = _context.Visitregistration.Include(v => v.Client).Include(v => v.Commisioner).Include(v => v.Department).Include(v => v.StateVisitState).ToList();
 
             foreach (Visitregistration item in pihareiiContext)
             {
@@ -54,7 +54,8 @@ namespace WebPihare.Controllers
                     DepartmentId = item.DepartmentId,
                     FullNameClient = $"{item.Client.FirstName} {item.Client.LastName} {item.Client.SecondLastName}",
                     FullNameCommisioner = $"{item.Commisioner.FirstName} {item.Commisioner.LastName} {item.Commisioner.SecondLastName}",
-                    DepartmentCode = item.Department.DepartmentCode
+                    DepartmentCode = item.Department.DepartmentCode,
+                    State = item.StateVisitState.VisitStateValue
                 });
             }
 
@@ -83,7 +84,8 @@ namespace WebPihare.Controllers
                     DepartmentId = item.DepartmentId,
                     FullNameClient = $"{item.Client.FirstName} {item.Client.LastName} {item.Client.SecondLastName}",
                     FullNameCommisioner = $"{item.Commisioner.FirstName} {item.Commisioner.LastName} {item.Commisioner.SecondLastName}",
-                    DepartmentCode = item.Department.DepartmentCode
+                    DepartmentCode = item.Department.DepartmentCode,
+                    State = item.StateVisitState.VisitStateValue
                 });
             }
 
@@ -120,8 +122,8 @@ namespace WebPihare.Controllers
         public IActionResult Create()
         {
             ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "FirstName");
-            ViewData["CommisionerId"] = new SelectList(_context.Commisioner, "CommisionerId", "CommisionerPassword");
-            ViewData["DepartmentId"] = new SelectList(_context.Department, "DepartmentId", "DepartmentDescription");
+            ViewData["CommisionerId"] = new SelectList(_context.Commisioner, "CommisionerId", "Nic");
+            ViewData["DepartmentId"] = new SelectList(_context.Department, "DepartmentId", "DepartmentCode");
             return View();
         }
 
@@ -199,8 +201,8 @@ namespace WebPihare.Controllers
                 return NotFound();
             }
             ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "FirstName", visitregistration.ClientId);
-            ViewData["CommisionerId"] = new SelectList(_context.Commisioner, "CommisionerId", "CommisionerPassword", visitregistration.CommisionerId);
-            ViewData["DepartmentId"] = new SelectList(_context.Department, "DepartmentId", "DepartmentDescription", visitregistration.DepartmentId);
+            ViewData["CommisionerId"] = new SelectList(_context.Commisioner, "CommisionerId", "Nic", visitregistration.CommisionerId);
+            ViewData["DepartmentId"] = new SelectList(_context.Department, "DepartmentId", "DepartmentCode", visitregistration.DepartmentId);
             return View(visitregistration);
         }
 

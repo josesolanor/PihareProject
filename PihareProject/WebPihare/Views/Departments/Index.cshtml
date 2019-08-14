@@ -38,6 +38,9 @@
                 @Html.DisplayNameFor(model => model.Departments.FirstOrDefault().DeparmentPrice)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.Departments.FirstOrDefault().Comments)
+            </th>
+            <th>
                 @Html.DisplayName("Seleccionar")
             </th>
             <th></th>
@@ -65,6 +68,9 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.DeparmentPrice)
                 </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Comments)
+                </td>
 
                 <td>
                     <div class="btn-group btn-group-xs" role="group" aria-label="...">
@@ -73,9 +79,10 @@
                         {
                             <button data-toggle="modal" data-target="#ClientModal" onclick="ChangeClientDepartmentIdValue(@item.DepartmentId)" type="button" class="btn btn-success"><i class="glyphicon glyphicon-plus"></i> Añadir</button>
                         }
-                        <a asp-action="Details" asp-route-id="@item.DepartmentId" type="button" class="btn btn-default"><i class="glyphicon glyphicon-list"></i> Details</a>
+                            <a asp-action="Details" asp-route-id="@item.DepartmentId" type="button" class="btn btn-default"><i class="glyphicon glyphicon-list"></i> Details</a>
                         @if (User.IsInRole("Admin"))
                         {
+                            <button data-toggle="modal" data-target="#CommentModal" onclick="ChangeClientDepartmentIdValueComment(@item.DepartmentId)" type="button" class="btn btn-default"><i class="glyphicon glyphicon-comment"></i> Comentar</button>
                             <a asp-action="Edit" asp-route-id="@item.DepartmentId" type="button" class="btn btn-default"><i class="glyphicon glyphicon-pencil"></i> Edit</a>
                             <a asp-action="Delete" asp-route-id="@item.DepartmentId" type="button" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i> Delete</a>
                         }
@@ -143,6 +150,40 @@
                     </div>
                 </div>
             </div>
+
+            <div id="CommentModal" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Añadir Comentario</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <form asp-action="AddComment">
+                                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                        <div class="col-xs-12">
+                                            <div class="form-group">
+                                                <label asp-for="DepartmentComment" class="control-label"></label>
+                                                <input asp-for="DepartmentComment" class="form-control" />
+                                                <span asp-validation-for="DepartmentComment" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12">
+                                            <div class="form-group">
+                                                <input type="submit" value="Comentar" class="btn btn-default" />
+                                            </div>
+                                        </div>
+                                        <input asp-for="DepartmentIdCommentSelected" hidden value="0">
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         }
     </tbody>
 </table>
@@ -151,5 +192,9 @@
 
     function ChangeClientDepartmentIdValue(data) {
         document.getElementById("DepartmentIdSelected").value = data;
+    }
+
+    function ChangeClientDepartmentIdValueComment(data) {
+        document.getElementById("DepartmentIdCommentSelected").value = data;
     }
 </script>

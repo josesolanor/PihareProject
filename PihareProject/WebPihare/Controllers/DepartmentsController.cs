@@ -194,5 +194,37 @@ namespace WebPihare.Controllers
         {
             return _context.Department.Any(e => e.DepartmentId == id);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> AddComment(RegisterModalClientViewModal data)
+        {
+
+            var department = _context.Department.FirstOrDefault(m => m.DepartmentId == data.DepartmentIdCommentSelected);
+
+            department.Comments = data.DepartmentComment;
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(department);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!DepartmentExists(department.DepartmentId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            TempData["ErrorMsg"] = "No se puede añadir comentario";
+            return RedirectToAction("Index", "Departments");
+        }
     }
 }

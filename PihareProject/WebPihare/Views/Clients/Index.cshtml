@@ -37,34 +37,38 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SecondLastName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Observation)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CI)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RegistredDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Commisioner.FullName)
-            </td>
-            <td>
-                <a asp-action="Details" asp-route-id="@item.ClientId">Detalles</a> |
-                <a asp-action="Delete" asp-route-id="@item.ClientId">Eliminar</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SecondLastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Observation)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CI)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RegistredDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Commisioner.FullName)
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.ClientId">Detalles</a> |
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a asp-action="Delete" asp-route-id="@item.ClientId">Eliminar</a>
+                    }
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

@@ -17,6 +17,7 @@ namespace WebPihare.Models
         public string FullNameClient { get; set; }
         public string FullNameCommisioner { get; set; }
         public int DepartmentCode { get; set; }
+        public string State { get; set; }
 
     }
 }
