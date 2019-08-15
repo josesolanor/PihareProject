@@ -6,8 +6,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using WebPihare.Context;
 using WebPihare.Entities;
+using WebPihare.Models;
 
 namespace WebPihare.Controllers
 {
@@ -24,7 +26,8 @@ namespace WebPihare.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Client.Include(m => m.Commisioner).ToListAsync());
+            var model = await _context.Client.Include(m => m.Commisioner).Include(m => m.Visitregistration).ToListAsync();
+            return View(model);
         }
 
         [Authorize(Roles = "Comisionista")]
@@ -61,7 +64,7 @@ namespace WebPihare.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Create([Bind("ClientId,FirstName,LastName,SecondLastName,Observation,CI,Telefono,RegistredDate")] Client client)
+        public async Task<IActionResult> Create(Client client)
         {
             if (ModelState.IsValid)
             {
@@ -105,6 +108,53 @@ namespace WebPihare.Controllers
             _context.Client.Remove(client);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult LoadGrid()
+        {
+
+            List<DepartmentClientViewModel> departmentClient = new List<DepartmentClientViewModel>();
+
+            var client = _context.Client.Include(v => v.Commisioner).ToList();
+            var visitregistration = _context.Visitregistration
+                .Include(v => v.Department)
+                .Include(m => m.Department.DepartmentState)
+                .Include(m => m.Department.DepartmentType).ToList();
+
+            foreach (var item in visitregistration)
+            {
+                departmentClient.Add(new DepartmentClientViewModel
+                {
+                    ClientId = item.ClientId,
+                    DepartmentId = item.DepartmentId,
+                    DeparmentPrice = item.Department.DeparmentPrice,
+                    DepartmentCode = item.Department.DepartmentCode,
+                    NumberBedrooms = item.Department.NumberBedrooms,
+                    NumberFloor = item.Department.NumberFloor,
+                    DepartmentStateId = item.Department.DepartmentStateId,
+                    DepartmentTypeId = item.Department.DepartmentTypeId,
+                    DepartmentState = item.Department.DepartmentState.DepartmentStateValue,
+                    DepartmentType = item.Department.DepartmentType.DepartmentTypeValue
+                });
+            }
+
+            string JsonClientContext = JsonConvert.SerializeObject(client, Formatting.Indented, new JsonSerializerSettings()
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            });
+
+            string JsonDepartmentContext = JsonConvert.SerializeObject(departmentClient, Formatting.Indented, new JsonSerializerSettings()
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            });
+
+            ClientMasterDetailViewModel clientViewModel = new ClientMasterDetailViewModel
+            {
+                Master = JsonClientContext,
+                Detail = JsonDepartmentContext
+            };
+
+            return Json(clientViewModel);
         }
 
         private bool ClientExists(int id)

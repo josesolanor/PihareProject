@@ -39,7 +39,7 @@ namespace WebPihare.Controllers
             if (ModelState.IsValid)
             {
                 model.Input.Password = _hash.EncryptString(model.Input.Password);
-                var login = _context.Commisioner.Where(m => m.Email == model.Input.Email && m.CommisionerPassword == model.Input.Password).FirstOrDefault();
+                var login = _context.Commisioner.Where(m => m.Email == model.Input.Username && m.CommisionerPassword == model.Input.Password).FirstOrDefault();
 
                 if (login is null)
                 {
