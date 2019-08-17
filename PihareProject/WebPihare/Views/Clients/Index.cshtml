@@ -21,15 +21,13 @@
         type: "GET"
     }).done(function (response) {
 
-        //var dataSourceMaster = JSON.parse(response.master);
-        //var dataSourceDetail = JSON.parse(response.detail)
-        console.log(response)
-
+        var dataSourceMaster = response.master;
+        var dataSourceDetail = response.detail;
 
         $(function(){
             $("#clientGrid").dxDataGrid({
-                dataSource: response,
-                keyExpr: "ClientId",
+                dataSource: dataSourceMaster,
+                keyExpr: "clientId",
                 allowColumnReordering: true,
                 allowColumnResizing: true,
                 columnAutoWidth: true,
@@ -70,19 +68,19 @@
                 },
                 columns: [
                     {
-                        dataField: "ClientId",
+                        dataField: "clientId",
                         visible: false
                     },
                     {
-                        dataField: "FirstName",
+                        dataField: "firstName",
                         caption: 'Nombre'
                     },
                     {
-                        dataField: "LastName",
+                        dataField: "lastName",
                         caption: 'Apellido Paterno'
                     },
                     {
-                        dataField: "SecondLastName",
+                        dataField: "secondLastName",
                         caption: 'Apellido Materno'
                     },
                     {
@@ -90,15 +88,15 @@
                         caption: 'CI'
                     },
                     {
-                        dataField: "RegistredDate",
+                        dataField: "registredDate",
                         caption: 'Fecha Registrado'
                     },
                     {
-                        dataField: "ComisionerFullName",
+                        dataField: "commisionerFullName",
                         caption: 'Nombre Comisionista'
                     },
                     {
-                        dataField: "Observation",
+                        dataField: "observation",
                         caption: 'Observaciones'
                     },                    
                     {
@@ -137,57 +135,57 @@
 
                         }
                     }
-                ]
-                //masterDetail: {
-                //enabled: true,
-                //    template: function (container, options)
-                //    {
-                //    var currentClientData = options.data;
-                //        $("<div>")
-                //            .addClass("master-detail-caption")
-                //            .text("Departamentos de " + currentClientData.FirstName + " " + currentClientData.LastName)
-                //            .appendTo(container);
+                ],
+                masterDetail: {
+                enabled: true,
+                    template: function (container, options)
+                    {
+                    var currentClientData = options.data;
+                        $("<div>")
+                            .addClass("master-detail-caption")
+                            .text("Departamentos de " + currentClientData.firstName + " " + currentClientData.lastName)
+                            .appendTo(container);
 
-                //        $("<div>")
-                //            .dxDataGrid({
-                //                columnAutoWidth: true,
-                //                showBorders: true,
-                //                columns: [
-                //                {
-                //                    dataField: "ClientId",
-                //                    visible: false
-                //                },
-                //                {
-                //                    dataField: "DepartmentId",
-                //                    visible: false
-                //                },
-                //                {
-                //                    dataField: "DepartmentCode",
-                //                    caption: 'Codigo Departamento'
-                //                },
-                //                {
-                //                    dataField: "NumberFloor",
-                //                    caption: 'Piso'
-                //                },
-                //                {
-                //                    dataField: "NumberBedrooms",
-                //                    caption: 'Dormitorios'
-                //                },
-                //                {
-                //                    dataField: "DeparmentPrice",
-                //                    caption: 'Precio'
-                //                }
-                //                ],
-                //        dataSource: new DevExpress.data.DataSource({
-                //            store: new DevExpress.data.ArrayStore({
-                //                key: "DepartmentId",
-                //                data: dataSourceDetail
-                //            }),
-                //            filter: ["ClientId", "=", options.key]
-                //        })
-                //        }).appendTo(container);
-                //    }
-                //}
+                        $("<div>")
+                            .dxDataGrid({
+                                columnAutoWidth: true,
+                                showBorders: true,
+                                columns: [
+                                {
+                                    dataField: "clientId",
+                                    visible: false
+                                },
+                                {
+                                    dataField: "departmentId",
+                                    visible: false
+                                },
+                                {
+                                    dataField: "departmentCode",
+                                    caption: 'Codigo Departamento'
+                                },
+                                {
+                                    dataField: "numberFloor",
+                                    caption: 'Piso'
+                                },
+                                {
+                                    dataField: "numberBedrooms",
+                                    caption: 'Dormitorios'
+                                },
+                                {
+                                    dataField: "deparmentPrice",
+                                    caption: 'Precio'
+                                }
+                                ],
+                        dataSource: new DevExpress.data.DataSource({
+                            store: new DevExpress.data.ArrayStore({
+                                key: "departmentId",
+                                data: dataSourceDetail
+                            }),
+                            filter: ["clientId", "=", options.key]
+                        })
+                        }).appendTo(container);
+                    }
+                }
             });
         });
 

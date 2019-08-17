@@ -114,6 +114,7 @@ namespace WebPihare.Controllers
         {
 
             List<DepartmentClientViewModel> departmentClient = new List<DepartmentClientViewModel>();
+            List<ClientViewModel> clients = new List<ClientViewModel>();
 
             var client = _context.Client.Include(v => v.Commisioner).ToList();
             var visitregistration = _context.Visitregistration
@@ -138,23 +139,24 @@ namespace WebPihare.Controllers
                 });
             }
 
-            //string JsonClientContext = JsonConvert.SerializeObject(client, Formatting.Indented, new JsonSerializerSettings()
-            //{
-            //    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-            //});
+            foreach (var item in client)
+            {
+                clients.Add(new ClientViewModel
+                {
+                    ClientId = item.ClientId,
+                    FirstName = item.FirstName,
+                    LastName = item.LastName,
+                    SecondLastName = item.SecondLastName,
+                    Observation = item.Observation,
+                    CI = item.CI,
+                    CommisionerId = item.CommisionerId,
+                    RegistredDate = item.RegistredDate,
+                    CommisionerFullName = item.Commisioner.FullName
+                });
+            }
 
-            //string JsonDepartmentContext = JsonConvert.SerializeObject(departmentClient, Formatting.Indented, new JsonSerializerSettings()
-            //{
-            //    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-            //});
-
-            //ClientMasterDetailViewModel clientViewModel = new ClientMasterDetailViewModel
-            //{
-            //    Master = JsonClientContext,
-            //    Detail = JsonDepartmentContext
-            //};
-
-            return Json(client);
+            var result = new { Master = clients, Detail = departmentClient };
+            return Json(result);
         }
 
         private bool ClientExists(int id)

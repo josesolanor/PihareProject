@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebPihare.Entities;
 
 namespace WebPihare.Models
 {
@@ -17,5 +18,6 @@ namespace WebPihare.Models
         public int DepartmentStateId { get; set; }
         public string DepartmentState { get; set; }
         public string DepartmentType { get; set; }
+
     }
 }
