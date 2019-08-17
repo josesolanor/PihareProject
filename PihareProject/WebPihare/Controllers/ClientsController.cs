@@ -138,23 +138,23 @@ namespace WebPihare.Controllers
                 });
             }
 
-            string JsonClientContext = JsonConvert.SerializeObject(client, Formatting.Indented, new JsonSerializerSettings()
-            {
-                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-            });
+            //string JsonClientContext = JsonConvert.SerializeObject(client, Formatting.Indented, new JsonSerializerSettings()
+            //{
+            //    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            //});
 
-            string JsonDepartmentContext = JsonConvert.SerializeObject(departmentClient, Formatting.Indented, new JsonSerializerSettings()
-            {
-                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-            });
+            //string JsonDepartmentContext = JsonConvert.SerializeObject(departmentClient, Formatting.Indented, new JsonSerializerSettings()
+            //{
+            //    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            //});
 
-            ClientMasterDetailViewModel clientViewModel = new ClientMasterDetailViewModel
-            {
-                Master = JsonClientContext,
-                Detail = JsonDepartmentContext
-            };
+            //ClientMasterDetailViewModel clientViewModel = new ClientMasterDetailViewModel
+            //{
+            //    Master = JsonClientContext,
+            //    Detail = JsonDepartmentContext
+            //};
 
-            return Json(clientViewModel);
+            return Json(client);
         }
 
         private bool ClientExists(int id)
