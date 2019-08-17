@@ -34,7 +34,7 @@ namespace WebPihare
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-                options.CheckConsentNeeded = context => true;
+                options.CheckConsentNeeded = context => false;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
@@ -45,14 +45,25 @@ namespace WebPihare
                     options.Conventions.AddPageRoute("/Departments/Index", "");
                 });
 
+            services.Configure<ForwardedHeadersOptions>(options =>
+            {
+                options.ForwardedHeaders = ForwardedHeaders.XForwardedProto;
+            });
+
             services.AddDbContext<PihareiiContext>(options => options.UseMySql(Configuration.GetConnectionString("PihareConnection")));
 
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(options =>
-                {
-                    options.LoginPath = new PathString("/Login");
-                    options.AccessDeniedPath = new PathString("/Login/Denied");
-                });
+            services.AddAuthentication(options =>
+            {
+                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+
+            }).AddCookie(options =>
+            {
+                options.LoginPath = new PathString("/Login");
+                options.AccessDeniedPath = new PathString("/Login/Denied");
+
+            });
 
             services.AddScoped<Hash>();
         }
@@ -60,6 +71,9 @@ namespace WebPihare
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+
+            app.UseForwardedHeaders();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -70,17 +84,11 @@ namespace WebPihare
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
-            app.UseStaticFiles();
-            app.UseCookiePolicy();
-
-            app.UseForwardedHeaders(new ForwardedHeadersOptions
-            {
-                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-            });
-
             app.UseAuthentication();
 
+            app.UseStaticFiles();
+            app.UseCookiePolicy();
+            app.UseHttpsRedirection();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

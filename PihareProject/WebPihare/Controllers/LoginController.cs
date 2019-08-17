@@ -14,7 +14,7 @@ using WebPihare.Models;
 
 namespace WebPihare.Controllers
 {
-    [Authorize]
+    [AllowAnonymous]
     public class LoginController : Controller
     {
 
@@ -39,7 +39,7 @@ namespace WebPihare.Controllers
             if (ModelState.IsValid)
             {
                 model.Input.Password = _hash.EncryptString(model.Input.Password);
-                var login = _context.Commisioner.Where(m => m.Email == model.Input.Username && m.CommisionerPassword == model.Input.Password).FirstOrDefault();
+                var login = _context.Commisioner.Where(m => m.Nic == model.Input.Username && m.CommisionerPassword == model.Input.Password).FirstOrDefault();
 
                 if (login is null)
                 {
@@ -57,10 +57,12 @@ namespace WebPihare.Controllers
                     new Claim(ClaimTypes.Role, RoleName)
                 };
 
-                var userIdentity = new ClaimsIdentity(claims, "Login");
+                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                var authProperties = new AuthenticationProperties
+                {
 
-                ClaimsPrincipal principal = new ClaimsPrincipal(userIdentity);
-                await HttpContext.SignInAsync(principal);
+                };
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
 
             }
             return RedirectToAction("Index", "Departments");
