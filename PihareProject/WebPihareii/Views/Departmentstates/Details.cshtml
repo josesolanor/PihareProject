@@ -1,0 +1,30 @@
+﻿@model WebPihareii.Entities.Departmentstate
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Departmentstate</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.DepartmentStateValue)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DepartmentStateValue)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DepartmentStateDescription)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DepartmentStateDescription)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.DepartmentStateId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

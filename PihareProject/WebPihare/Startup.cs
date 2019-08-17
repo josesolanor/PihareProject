@@ -16,6 +16,7 @@ using WebPihare.Context;
 using WebPihare.Core;
 using WebPihare.Entities;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 
 namespace WebPihare
 {
@@ -37,6 +38,22 @@ namespace WebPihare
                 options.CheckConsentNeeded = context => false;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
+            services.AddDbContext<PihareiiContext>(options => options.UseMySql(Configuration.GetConnectionString("PihareConnection")));
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+
+            }).AddCookie(options =>
+            {
+                options.LoginPath = new PathString("/Login");
+                options.AccessDeniedPath = new PathString("/Login/Denied");
+                options.Cookie.SameSite = SameSiteMode.None;
+                options.Cookie.HttpOnly = false;
+
+            });
 
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
@@ -49,22 +66,7 @@ namespace WebPihare
             {
                 options.ForwardedHeaders = ForwardedHeaders.XForwardedProto;
             });
-
-            services.AddDbContext<PihareiiContext>(options => options.UseMySql(Configuration.GetConnectionString("PihareConnection")));
-
-            services.AddAuthentication(options =>
-            {
-                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-
-            }).AddCookie(options =>
-            {
-                options.LoginPath = new PathString("/Login");
-                options.AccessDeniedPath = new PathString("/Login/Denied");
-
-            });
-
+           
             services.AddScoped<Hash>();
         }
 
@@ -78,14 +80,8 @@ namespace WebPihare
             {
                 app.UseDeveloperExceptionPage();
             }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
-                app.UseHsts();
-            }
 
             app.UseAuthentication();
-
             app.UseStaticFiles();
             app.UseCookiePolicy();
             app.UseHttpsRedirection();
@@ -93,7 +89,7 @@ namespace WebPihare
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Departments}/{action=Index}/{id?}");
+                    template: "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }

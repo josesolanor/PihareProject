@@ -1,0 +1,194 @@
+﻿@model IEnumerable<WebPihareii.Entities.Client>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Clientes</h2>
+
+<p>
+    <a asp-action="Create">Nuevo Cliente</a>
+</p>
+
+<div class="demo-container">
+    <div id="clientGrid"></div>
+</div>
+
+<script>
+
+    $.ajax({
+        url: '@Url.Action("LoadGrid", "Clients")',
+        type: "GET"
+    }).done(function (response) {
+
+        var dataSourceMaster = JSON.parse(response.master);
+        var dataSourceDetail = JSON.parse(response.detail)
+
+
+        $(function(){
+            $("#clientGrid").dxDataGrid({
+                dataSource: dataSourceMaster,
+                keyExpr: "ClientId",
+                allowColumnReordering: true,
+                allowColumnResizing: true,
+                columnAutoWidth: true,
+                showColumnLines: true,
+                showRowLines: true,
+                rowAlternationEnabled: true,
+                showBorders: true,
+                columnChooser: {
+                enabled: true
+                },
+                filterRow: {
+                    visible: true,
+                },
+                headerFilter: { visible: true },
+                paging: {
+                    pageSize: 10
+                },
+                pager: {
+                    showPageSizeSelector: true,
+                    allowedPageSizes: [10, 25, 50, 100]
+                },
+                selection: {
+                    mode: "single"
+                },
+                grouping: {
+                    autoExpandAll: true
+                },
+                headerFilter: {
+                    visible: true
+                },
+                groupPanel: {
+                    visible: true
+                },
+                "export": {
+                    enabled: true,
+                    fileName: "RegistroClientes"+Date.now(),
+                    allowExportSelectedData: true
+                },
+                columns: [
+                    {
+                        dataField: "ClientId",
+                        visible: false
+                    },
+                    {
+                        dataField: "FirstName",
+                        caption: 'Nombre'
+                    },
+                    {
+                        dataField: "LastName",
+                        caption: 'Apellido Paterno'
+                    },
+                    {
+                        dataField: "SecondLastName",
+                        caption: 'Apellido Materno'
+                    },
+                    {
+                        dataField: "CI",
+                        caption: 'CI'
+                    },
+                    {
+                        dataField: "RegistredDate",
+                        caption: 'Fecha Registrado'
+                    },
+                    {
+                        dataField: "ComisionerFullName",
+                        caption: 'Nombre Comisionista'
+                    },
+                    {
+                        dataField: "Observation",
+                        caption: 'Observaciones'
+                    },                    
+                    {
+                        dataField: "Acciones",
+                        caption: 'Acciones',
+                        cellTemplate: function (container, options) {
+                            var wrapper = $("<center>");
+                            var DetailsContainer = $("<div>");
+                            var DeleteContainer = $("<div>");
+
+                            container.append(wrapper.append(DetailsContainer));
+
+                            DetailsContainer.dxButton({
+                                hint: 'Detalles',
+                                type: "default",
+                                icon: 'glyphicon glyphicon-list',
+                                width: 50,
+                                onClick: function () {
+                                    var url = "@Url.Action("Details","Clients")/" + options.data.ClientId;
+                                    window.location.href = url;
+                                }
+                            });
+
+                            container.append(wrapper.append(DeleteContainer));
+
+                            DeleteContainer.dxButton({
+                                hint: 'Editar',
+                                type: 'danger',
+                                icon: 'glyphicon glyphicon-trash',
+                                width: 50,
+                                onClick: function () {
+                                    var url = "@Url.Action("Delete","Clients")/" + options.data.ClientId;
+                                    window.location.href = url;
+                                }
+                            });
+
+                        }
+                    }
+                ],
+                masterDetail: {
+                enabled: true,
+                    template: function (container, options)
+                    {
+                    var currentClientData = options.data;
+                        $("<div>")
+                            .addClass("master-detail-caption")
+                            .text("Departamentos de " + currentClientData.FirstName + " " + currentClientData.LastName)
+                            .appendTo(container);
+
+                        $("<div>")
+                            .dxDataGrid({
+                                columnAutoWidth: true,
+                                showBorders: true,
+                                columns: [
+                                {
+                                    dataField: "ClientId",
+                                    visible: false
+                                },
+                                {
+                                    dataField: "DepartmentId",
+                                    visible: false
+                                },
+                                {
+                                    dataField: "DepartmentCode",
+                                    caption: 'Codigo Departamento'
+                                },
+                                {
+                                    dataField: "NumberFloor",
+                                    caption: 'Piso'
+                                },
+                                {
+                                    dataField: "NumberBedrooms",
+                                    caption: 'Dormitorios'
+                                },
+                                {
+                                    dataField: "DeparmentPrice",
+                                    caption: 'Precio'
+                                }
+                                ],
+                        dataSource: new DevExpress.data.DataSource({
+                            store: new DevExpress.data.ArrayStore({
+                                key: "DepartmentId",
+                                data: dataSourceDetail
+                            }),
+                            filter: ["ClientId", "=", options.key]
+                        })
+                        }).appendTo(container);
+                    }
+                }
+            });
+        });
+
+    });
+</script>

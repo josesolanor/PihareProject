@@ -1,0 +1,57 @@
+﻿@model WebPihareii.Entities.Department
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Department</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.DepartmentCode)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DepartmentCode)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.NumberFloor)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.NumberFloor)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.NumberBedrooms)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.NumberBedrooms)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DeparmentPrice)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DeparmentPrice)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DepartmentState)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DepartmentState.DepartmentStateDescription)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DepartmentType)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DepartmentType.DepartmentTypeDescription)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="DepartmentId" />
+        <input type="submit" value="Delete" class="btn btn-default" /> |
+        <a asp-action="Index">Back to List</a>
+    </form>
+</div>

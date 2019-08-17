@@ -1,0 +1,77 @@
+﻿@model IEnumerable<WebPihareii.Entities.Commisioner>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Comisionista</h2>
+
+<p>
+    <a asp-action="Create">Nuevo Comisionista</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SecondLastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nic)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ContractNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Telefono)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Role)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SecondLastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nic)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ContractNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Telefono)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Role.RoleValue)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.CommisionerId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.CommisionerId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.CommisionerId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

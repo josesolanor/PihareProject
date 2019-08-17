@@ -1,0 +1,66 @@
+﻿@model WebPihareii.Entities.Client
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Detalles</h2>
+
+<div>
+    <h4>Cliente</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.FirstName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.FirstName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.LastName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.LastName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.SecondLastName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SecondLastName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Observation)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Observation)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.CI)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CI)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.RegistredDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.RegistredDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Commisioner.Email)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Commisioner.Email)
+        </dd>
+    </dl>
+</div>
+<div>
+    @if (User.IsInRole("Admin"))
+    {
+        <a asp-action="Index">Volver a la lista</a>
+    }
+    else
+    {
+        <a asp-action="MyClients">Volver a la lista</a>
+    }
+</div>
