@@ -21,14 +21,13 @@
         type: "GET"
     }).done(function (response) {
 
-        var dataSourceMaster = JSON.parse(response.master);
-        var dataSourceDetail = JSON.parse(response.detail)
-
+        var dataSourceMaster = response.master;
+        var dataSourceDetail = response.detail;
 
         $(function(){
             $("#clientGrid").dxDataGrid({
                 dataSource: dataSourceMaster,
-                keyExpr: "ClientId",
+                keyExpr: "clientId",
                 allowColumnReordering: true,
                 allowColumnResizing: true,
                 columnAutoWidth: true,
@@ -69,19 +68,19 @@
                 },
                 columns: [
                     {
-                        dataField: "ClientId",
+                        dataField: "clientId",
                         visible: false
                     },
                     {
-                        dataField: "FirstName",
+                        dataField: "firstName",
                         caption: 'Nombre'
                     },
                     {
-                        dataField: "LastName",
+                        dataField: "lastName",
                         caption: 'Apellido Paterno'
                     },
                     {
-                        dataField: "SecondLastName",
+                        dataField: "secondLastName",
                         caption: 'Apellido Materno'
                     },
                     {
@@ -89,15 +88,15 @@
                         caption: 'CI'
                     },
                     {
-                        dataField: "RegistredDate",
+                        dataField: "registredDate",
                         caption: 'Fecha Registrado'
                     },
                     {
-                        dataField: "ComisionerFullName",
+                        dataField: "commisionerFullName",
                         caption: 'Nombre Comisionista'
                     },
                     {
-                        dataField: "Observation",
+                        dataField: "observation",
                         caption: 'Observaciones'
                     },                    
                     {
@@ -144,7 +143,7 @@
                     var currentClientData = options.data;
                         $("<div>")
                             .addClass("master-detail-caption")
-                            .text("Departamentos de " + currentClientData.FirstName + " " + currentClientData.LastName)
+                            .text("Departamentos de " + currentClientData.firstName + " " + currentClientData.lastName)
                             .appendTo(container);
 
                         $("<div>")
@@ -153,36 +152,36 @@
                                 showBorders: true,
                                 columns: [
                                 {
-                                    dataField: "ClientId",
+                                    dataField: "clientId",
                                     visible: false
                                 },
                                 {
-                                    dataField: "DepartmentId",
+                                    dataField: "departmentId",
                                     visible: false
                                 },
                                 {
-                                    dataField: "DepartmentCode",
+                                    dataField: "departmentCode",
                                     caption: 'Codigo Departamento'
                                 },
                                 {
-                                    dataField: "NumberFloor",
+                                    dataField: "numberFloor",
                                     caption: 'Piso'
                                 },
                                 {
-                                    dataField: "NumberBedrooms",
+                                    dataField: "numberBedrooms",
                                     caption: 'Dormitorios'
                                 },
                                 {
-                                    dataField: "DeparmentPrice",
+                                    dataField: "deparmentPrice",
                                     caption: 'Precio'
                                 }
                                 ],
                         dataSource: new DevExpress.data.DataSource({
                             store: new DevExpress.data.ArrayStore({
-                                key: "DepartmentId",
+                                key: "departmentId",
                                 data: dataSourceDetail
                             }),
-                            filter: ["ClientId", "=", options.key]
+                            filter: ["clientId", "=", options.key]
                         })
                         }).appendTo(container);
                     }
