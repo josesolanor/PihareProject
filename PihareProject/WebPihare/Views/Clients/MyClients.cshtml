@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<WebPihare.Entities.Client>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Mis Clientes";
 }
 
 <h2>Clientes</h2>
@@ -27,15 +27,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.RegistredDate)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Commisioner.FullName)
-            </th>
-            <th>
-                @Html.DisplayName("Codigo Departamento")
-            </th>
-            <th>
-                @Html.DisplayName("Acciones")
-            </th>
         </tr>
     </thead>
     <tbody>
@@ -59,15 +50,6 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.RegistredDate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Commisioner.FullName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Visitregistration.FirstOrDefault(m => m.ClientId == item.ClientId).Department.DepartmentCode)
-                </td>
-                <td>
-                    <a asp-action="Details" asp-route-id="@item.ClientId">Detalle</a>
                 </td>
             </tr>
         }
