@@ -16,6 +16,8 @@ using WebPihare.Context;
 using WebPihare.Core;
 using WebPihare.Entities;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
+using Microsoft.AspNetCore.Identity;
+using WebPihare.Data;
 
 namespace WebPihare
 {
@@ -52,6 +54,12 @@ namespace WebPihare
 
             services.AddDbContext<PihareiiContext>(options => options.UseMySql(Configuration.GetConnectionString("PihareConnection")));
 
+            //services.AddDefaultIdentity<IdentityUser>()
+            //    .AddEntityFrameworkStores<PihareiiContext>();
+
+            services.AddDefaultIdentity<IdentityUser>()
+                .AddEntityFrameworkStores<ApplicationDbContext>();
+
             services.AddAuthentication(options =>
             {
                 options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -66,6 +74,7 @@ namespace WebPihare
             });
 
             services.AddScoped<Hash>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

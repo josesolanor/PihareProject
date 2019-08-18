@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WebPihare.Context;
 using WebPihare.Core;
+using WebPihare.Library;
 using WebPihare.Models;
 
 namespace WebPihare.Controllers
@@ -17,14 +19,15 @@ namespace WebPihare.Controllers
     [AllowAnonymous]
     public class LoginController : Controller
     {
-
+        private LibUsers _usuarios;
         private readonly PihareiiContext _context;
         private readonly Hash _hash;
 
-        public LoginController(PihareiiContext context, Hash hash)
+        public LoginController(PihareiiContext context, Hash hash, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, RoleManager<IdentityRole> roleManager)
         {
             _context = context;
             _hash = hash;
+            _usuarios = new LibUsers(userManager, signInManager, roleManager);
         }
         [AllowAnonymous]
         public ActionResult Index()
@@ -38,31 +41,32 @@ namespace WebPihare.Controllers
         {
             if (ModelState.IsValid)
             {
-                model.Input.Password = _hash.EncryptString(model.Input.Password);
-                var login = _context.Commisioner.Where(m => m.Nic == model.Input.Username && m.CommisionerPassword == model.Input.Password).FirstOrDefault();
+                var listObject = await _usuarios.userLogin(model.Input.Username, model.Input.Password);
 
-                if (login is null)
-                {
-                    
-                    model.ErrorMessage = "Credenciales Incorrectos";
-                    return View(model);
-                }
-                var RoleName = _context.Role.FirstOrDefault(m => m.RoleId == login.RoleId).RoleValue;
-                var claims = new List<Claim>
-                {
-                    new Claim(ClaimTypes.Name, login.Nic),
-                    new Claim("FullName", $"{login.FirstName} {login.LastName} {login.SecondLastName}"),
-                    new Claim("Id", login.CommisionerId.ToString()),
-                    new Claim(ClaimTypes.Email, login.Email),
-                    new Claim(ClaimTypes.Role, RoleName)
-                };
+                //model.Input.Password = _hash.EncryptString(model.Input.Password);
+                //var login = _context.Commisioner.Where(m => m.Nic == model.Input.Username && m.CommisionerPassword == model.Input.Password).FirstOrDefault();
 
-                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                var authProperties = new AuthenticationProperties
-                {
+                //if (login is null)
+                //{                    
+                //    model.ErrorMessage = "Credenciales Incorrectos";
+                //    return View(model);
+                //}
+                //var RoleName = _context.Role.FirstOrDefault(m => m.RoleId == login.RoleId).RoleValue;
+                //var claims = new List<Claim>
+                //{
+                //    new Claim(ClaimTypes.Name, login.Nic),
+                //    new Claim("FullName", $"{login.FirstName} {login.LastName} {login.SecondLastName}"),
+                //    new Claim("Id", login.CommisionerId.ToString()),
+                //    new Claim(ClaimTypes.Email, login.Email),
+                //    new Claim(ClaimTypes.Role, RoleName)
+                //};
 
-                };
-                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
+                //var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                //var authProperties = new AuthenticationProperties
+                //{
+
+                //};
+                //await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
 
             }
             return RedirectToAction("Index", "Departments");
