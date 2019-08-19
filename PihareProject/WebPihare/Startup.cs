@@ -42,7 +42,7 @@ namespace WebPihare
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
                 .AddRazorPagesOptions(options =>
                 {
-                    options.Conventions.AddPageRoute("/Departments/Index", "");
+                    options.Conventions.AddPageRoute("/Login/Index", "");
                 });
 
             services.Configure<ForwardedHeadersOptions>(options =>
@@ -93,7 +93,7 @@ namespace WebPihare
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Departments}/{action=Index}/{id?}");
+                    template: "{controller=Login}/{action=Index}/{id?}");
             });
         }
     }
