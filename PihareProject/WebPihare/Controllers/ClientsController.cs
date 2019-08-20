@@ -159,6 +159,57 @@ namespace WebPihare.Controllers
             return Json(result);
         }
 
+        public IActionResult MyLoadGrid()
+        {
+            var idUser = int.Parse(User.Claims.FirstOrDefault(m => m.Type == "Id").Value);
+            List<DepartmentClientViewModel> departmentClient = new List<DepartmentClientViewModel>();
+            List<ClientViewModel> clients = new List<ClientViewModel>();
+
+            var client = _context.Client.Include(v => v.Commisioner).Where(v => v.CommisionerId.Equals(idUser)).ToList();
+            var visitregistration = _context.Visitregistration
+                .Include(v => v.Department)
+                .Include(m => m.Department.DepartmentState)
+                .Include(m => m.Department.DepartmentType)
+                .Where(m => m.CommisionerId.Equals(idUser))
+                .ToList();
+
+            foreach (var item in visitregistration)
+            {
+                departmentClient.Add(new DepartmentClientViewModel
+                {
+                    ClientId = item.ClientId,
+                    DepartmentId = item.DepartmentId,
+                    DeparmentPrice = item.Department.DeparmentPrice,
+                    DepartmentCode = item.Department.DepartmentCode,
+                    NumberBedrooms = item.Department.NumberBedrooms,
+                    NumberFloor = item.Department.NumberFloor,
+                    DepartmentStateId = item.Department.DepartmentStateId,
+                    DepartmentTypeId = item.Department.DepartmentTypeId,
+                    DepartmentState = item.Department.DepartmentState.DepartmentStateValue,
+                    DepartmentType = item.Department.DepartmentType.DepartmentTypeValue
+                });
+            }
+
+            foreach (var item in client)
+            {
+                clients.Add(new ClientViewModel
+                {
+                    ClientId = item.ClientId,
+                    FirstName = item.FirstName,
+                    LastName = item.LastName,
+                    SecondLastName = item.SecondLastName,
+                    Observation = item.Observation,
+                    CI = item.CI,
+                    CommisionerId = item.CommisionerId,
+                    RegistredDate = item.RegistredDate,
+                    CommisionerFullName = item.Commisioner.FullName
+                });
+            }
+
+            var result = new { Master = clients, Detail = departmentClient };
+            return Json(result);
+        }
+
         private bool ClientExists(int id)
         {
             return _context.Client.Any(e => e.ClientId == id);

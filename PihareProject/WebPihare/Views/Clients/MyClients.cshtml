@@ -6,52 +6,144 @@
 
 <h2>Clientes</h2>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.FirstName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LastName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SecondLastName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Observation)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CI)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.RegistredDate)
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.FirstName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.LastName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.SecondLastName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Observation)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CI)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.RegistredDate)
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+<div class="demo-container">
+    <div id="clientGrid"></div>
+</div>
+
+<script>
+
+    $.ajax({
+        url: '@Url.Action("MyLoadGrid", "Clients")',
+        type: "GET"
+    }).done(function (response) {
+
+        var dataSourceMaster = response.master;
+        var dataSourceDetail = response.detail;
+
+        $(function(){
+            $("#clientGrid").dxDataGrid({
+                dataSource: dataSourceMaster,
+                keyExpr: "clientId",
+                allowColumnReordering: true,
+                allowColumnResizing: true,
+                columnAutoWidth: true,
+                showColumnLines: true,
+                showRowLines: true,
+                rowAlternationEnabled: true,
+                showBorders: true,
+                columnChooser: {
+                enabled: true
+                },
+                filterRow: {
+                    visible: true,
+                },
+                headerFilter: { visible: true },
+                paging: {
+                    pageSize: 10
+                },
+                pager: {
+                    showPageSizeSelector: true,
+                    allowedPageSizes: [10, 25, 50, 100]
+                },
+                selection: {
+                    mode: "single"
+                },
+                grouping: {
+                    autoExpandAll: true
+                },
+                headerFilter: {
+                    visible: true
+                },
+                groupPanel: {
+                    visible: true
+                },
+                "export": {
+                    enabled: true,
+                    fileName: "RegistroClientes"+Date.now(),
+                    allowExportSelectedData: true
+                },
+                columns: [
+                    {
+                        dataField: "clientId",
+                        visible: false
+                    },
+                    {
+                        dataField: "firstName",
+                        caption: 'Nombre'
+                    },
+                    {
+                        dataField: "lastName",
+                        caption: 'Apellido Paterno'
+                    },
+                    {
+                        dataField: "secondLastName",
+                        caption: 'Apellido Materno'
+                    },
+                    {
+                        dataField: "CI",
+                        caption: 'CI'
+                    },
+                    {
+                        dataField: "registredDate",
+                        caption: 'Fecha Registrado'
+                    },
+                    {
+                        dataField: "observation",
+                        caption: 'Observaciones'
+                    }                    
+                ],
+                masterDetail: {
+                enabled: true,
+                    template: function (container, options)
+                    {
+                    var currentClientData = options.data;
+                        $("<div>")
+                            .addClass("master-detail-caption")
+                            .text("Departamentos de " + currentClientData.firstName + " " + currentClientData.lastName)
+                            .appendTo(container);
+
+                        $("<div>")
+                            .dxDataGrid({
+                                columnAutoWidth: true,
+                                showBorders: true,
+                                columns: [
+                                {
+                                    dataField: "clientId",
+                                    visible: false
+                                },
+                                {
+                                    dataField: "departmentId",
+                                    visible: false
+                                },
+                                {
+                                    dataField: "departmentCode",
+                                    caption: 'Codigo Departamento'
+                                },
+                                {
+                                    dataField: "numberFloor",
+                                    caption: 'Piso'
+                                },
+                                {
+                                    dataField: "numberBedrooms",
+                                    caption: 'Dormitorios'
+                                },
+                                {
+                                    dataField: "deparmentPrice",
+                                    caption: 'Precio'
+                                }
+                                ],
+                        dataSource: new DevExpress.data.DataSource({
+                            store: new DevExpress.data.ArrayStore({
+                                key: "departmentId",
+                                data: dataSourceDetail
+                            }),
+                            filter: ["clientId", "=", options.key]
+                        })
+                        }).appendTo(container);
+                    }
+                }
+            });
+        });
+
+    });
+</script>
