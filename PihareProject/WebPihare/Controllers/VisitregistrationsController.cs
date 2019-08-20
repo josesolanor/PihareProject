@@ -129,6 +129,7 @@ namespace WebPihare.Controllers
             ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "FirstName");
             ViewData["CommisionerId"] = new SelectList(_context.Commisioner, "CommisionerId", "Nic");
             ViewData["DepartmentId"] = new SelectList(_context.Department, "DepartmentId", "DepartmentCode");
+            ViewData["StateVisitStateId"] = new SelectList(_context.VisitState, "VisitStateId", "VisitStateValue");
             return View();
         }
 
@@ -197,6 +198,7 @@ namespace WebPihare.Controllers
             ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "FirstName", visitregistration.ClientId);
             ViewData["CommisionerId"] = new SelectList(_context.Commisioner, "CommisionerId", "CommisionerPassword", visitregistration.CommisionerId);
             ViewData["DepartmentId"] = new SelectList(_context.Department, "DepartmentId", "DepartmentDescription", visitregistration.DepartmentId);
+            ViewData["StateVisitStateId"] = new SelectList(_context.VisitState, "VisitStateId", "VisitStateValue", visitregistration.StateVisitStateId);
             return View(visitregistration);
         }
 
@@ -216,6 +218,7 @@ namespace WebPihare.Controllers
             ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "FirstName", visitregistration.ClientId);
             ViewData["CommisionerId"] = new SelectList(_context.Commisioner, "CommisionerId", "Nic", visitregistration.CommisionerId);
             ViewData["DepartmentId"] = new SelectList(_context.Department, "DepartmentId", "DepartmentCode", visitregistration.DepartmentId);
+            ViewData["StateVisitStateId"] = new SelectList(_context.VisitState, "VisitStateId", "VisitStateValue", visitregistration.StateVisitStateId);
             return View(visitregistration);
         }
 
@@ -254,6 +257,7 @@ namespace WebPihare.Controllers
             ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "FirstName", visitregistration.ClientId);
             ViewData["CommisionerId"] = new SelectList(_context.Commisioner, "CommisionerId", "CommisionerPassword", visitregistration.CommisionerId);
             ViewData["DepartmentId"] = new SelectList(_context.Department, "DepartmentId", "DepartmentDescription", visitregistration.DepartmentId);
+            ViewData["StateVisitStateId"] = new SelectList(_context.VisitState, "VisitStateId", "VisitStateValue", visitregistration.StateVisitStateId);
             return View(visitregistration);
         }
 
