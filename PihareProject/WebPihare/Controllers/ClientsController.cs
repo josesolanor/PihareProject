@@ -45,7 +45,7 @@ namespace WebPihare.Controllers
                 return NotFound();
             }
 
-            var client = await _context.Client
+            var client = await _context.Client.Include(v => v.Commisioner)
                 .FirstOrDefaultAsync(m => m.ClientId == id);
             if (client == null)
             {
@@ -73,7 +73,7 @@ namespace WebPihare.Controllers
                 var Commisioner = _context.Commisioner.FirstOrDefault(m => m.CommisionerId == idUser);
 
                 client.Commisioner = Commisioner;
-                client.RegistredDate = DateTime.Now;
+                client.RegistredDate = DateTime.UtcNow;
                 _context.Add(client);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -89,7 +89,7 @@ namespace WebPihare.Controllers
                 return NotFound();
             }
 
-            var client = await _context.Client
+            var client = await _context.Client.Include(v => v.Commisioner)
                 .FirstOrDefaultAsync(m => m.ClientId == id);
             if (client == null)
             {

@@ -86,54 +86,54 @@ namespace WebPihare.Controllers
             return View(commisioner);
         }
 
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+        //public async Task<IActionResult> Edit(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            var commisioner = await _context.Commisioner.FindAsync(id);
-            if (commisioner == null)
-            {
-                return NotFound();
-            }
-            ViewData["RoleId"] = new SelectList(_context.Role, "RoleId", "RoleValue");
-            return View(commisioner);
-        }
+        //    var commisioner = await _context.Commisioner.FindAsync(id);
+        //    if (commisioner == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    ViewData["RoleId"] = new SelectList(_context.Role, "RoleId", "RoleValue");
+        //    return View(commisioner);
+        //}
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Commisioner commisioner)
-        {
-            if (id != commisioner.CommisionerId)
-            {
-                return NotFound();
-            }
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Edit(int id, Commisioner commisioner)
+        //{
+        //    if (id != commisioner.CommisionerId)
+        //    {
+        //        return NotFound();
+        //    }
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    commisioner.CommisionerPassword = _hash.EncryptString(commisioner.CommisionerPassword);
-                    _context.Update(commisioner);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!CommisionerExists(commisioner.CommisionerId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(commisioner);
-        }
+        //    if (ModelState.IsValid)
+        //    {
+        //        try
+        //        {
+        //            commisioner.CommisionerPassword = _hash.EncryptString(commisioner.CommisionerPassword);
+        //            _context.Update(commisioner);
+        //            await _context.SaveChangesAsync();
+        //        }
+        //        catch (DbUpdateConcurrencyException)
+        //        {
+        //            if (!CommisionerExists(commisioner.CommisionerId))
+        //            {
+        //                return NotFound();
+        //            }
+        //            else
+        //            {
+        //                throw;
+        //            }
+        //        }
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    return View(commisioner);
+        //}
 
         public async Task<IActionResult> Delete(int? id)
         {

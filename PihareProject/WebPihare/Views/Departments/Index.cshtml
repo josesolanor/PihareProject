@@ -82,7 +82,7 @@
                             <a asp-action="Details" asp-route-id="@item.DepartmentId" type="button" class="btn btn-default"><i class="glyphicon glyphicon-list"></i> Details</a>
                         @if (User.IsInRole("Admin"))
                         {
-                            <button data-toggle="modal" data-target="#CommentModal" onclick="ChangeClientDepartmentIdValueComment(@item.DepartmentId)" type="button" class="btn btn-default"><i class="glyphicon glyphicon-comment"></i> Comentar</button>
+                            <button data-toggle="modal" data-target="#CommentModal" onclick="ChangeClientDepartmentIdValueComment(@item.DepartmentId, '@item.Comments')" type="button" class="btn btn-default"><i class="glyphicon glyphicon-comment"></i> Comentar</button>
                             <a asp-action="Edit" asp-route-id="@item.DepartmentId" type="button" class="btn btn-default"><i class="glyphicon glyphicon-pencil"></i> Edit</a>
                             <a asp-action="Delete" asp-route-id="@item.DepartmentId" type="button" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i> Delete</a>
                         }
@@ -194,7 +194,12 @@
         document.getElementById("DepartmentIdSelected").value = data;
     }
 
-    function ChangeClientDepartmentIdValueComment(data) {
-        document.getElementById("DepartmentIdCommentSelected").value = data;
+    function ChangeClientDepartmentIdValueComment(id, value) {
+        console.log(id)
+        console.log(value)
+        document.getElementById("DepartmentIdCommentSelected").value = id;
+        document.getElementById("DepartmentComment").value = value;
+
+
     }
 </script>

@@ -58,9 +58,9 @@
                 headerFilter: {
                     visible: true
                 },
-                groupPanel: {
-                    visible: true
-                },
+                //groupPanel: {
+                //    visible: true
+                //},
                 "export": {
                     enabled: true,
                     fileName: "RegistroClientes"+Date.now(),
@@ -84,7 +84,7 @@
                         caption: 'Apellido Materno'
                     },
                     {
-                        dataField: "CI",
+                        dataField: "ci",
                         caption: 'CI'
                     },
                     {
@@ -103,6 +103,7 @@
                         dataField: "Acciones",
                         caption: 'Acciones',
                         cellTemplate: function (container, options) {
+
                             var wrapper = $("<center>");
                             var DetailsContainer = $("<div>");
                             var DeleteContainer = $("<div>");
@@ -115,7 +116,7 @@
                                 icon: 'glyphicon glyphicon-list',
                                 width: 50,
                                 onClick: function () {
-                                    var url = "@Url.Action("Details","Clients")/" + options.data.ClientId;
+                                    var url = "@Url.Action("Details","Clients")/" + options.data['clientId'];
                                     window.location.href = url;
                                 }
                             });
@@ -128,7 +129,7 @@
                                 icon: 'glyphicon glyphicon-trash',
                                 width: 50,
                                 onClick: function () {
-                                    var url = "@Url.Action("Delete","Clients")/" + options.data.ClientId;
+                                    var url = "@Url.Action("Delete","Clients")/" + options.data['clientId'];
                                     window.location.href = url;
                                 }
                             });

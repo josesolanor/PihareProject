@@ -9,7 +9,7 @@
 <div>
     <h4>Visitregistration</h4>
     <hr />
-    <dl class="dl-horizontal">       
+    <dl class="dl-horizontal">
         <dt>
             @Html.DisplayNameFor(model => model.VisitDay)
         </dt>
@@ -32,13 +32,19 @@
             @Html.DisplayNameFor(model => model.Commisioner)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Commisioner.CommisionerPassword)
+            @Html.DisplayFor(model => model.Commisioner.FullName)
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Department)
         </dt>
         <dd>
             @Html.DisplayFor(model => model.Department.DepartmentCode)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.StateVisitState)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.StateVisitState.VisitStateValue)
         </dd>
     </dl>
 </div>

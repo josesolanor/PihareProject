@@ -114,6 +114,7 @@ namespace WebPihare.Controllers
                 .Include(v => v.Client)
                 .Include(v => v.Commisioner)
                 .Include(v => v.Department)
+                .Include(v => v.StateVisitState)
                 .FirstOrDefaultAsync(m => m.VisitRegistrationId == id);
             if (visitregistration == null)
             {
@@ -163,7 +164,7 @@ namespace WebPihare.Controllers
                 var Commisioner = _context.Commisioner.FirstOrDefault(m => m.CommisionerId == visitregistration.CommisionerId);
 
                 client.Commisioner = Commisioner;
-                client.RegistredDate = DateTime.Now;
+                client.RegistredDate = DateTime.UtcNow;
                 visitregistration.Client = client;
             }
            
