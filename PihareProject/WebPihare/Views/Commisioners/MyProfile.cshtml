@@ -4,6 +4,8 @@
     ViewData["Title"] = "Details";
 }
 
+    
+
     <div id="ChangePasswordModal" class="modal fade" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -14,25 +16,25 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-12">
-                            <form asp-action="ChangePassword" method="post">
+                            <form asp-action="ChangePassword">
                                 <div class="col-xs-12">
                                     <div class="form-group">
                                         <label asp-for="ActualPassword" class="control-label"></label>
-                                        <input asp-for="ActualPassword" type="text" class="form-control" />
+                                        <input id="ActualPassword" name="ActualPassword" type="password" class="form-control" />
                                         <span asp-validation-for="ActualPassword" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-xs-12">
                                     <div class="form-group">
                                         <label asp-for="NewPassword" class="control-label"></label>
-                                        <input asp-for="NewPassword" type="text" class="form-control" />
+                                        <input id="NewPassword" name="NewPassword" type="password" class="form-control" />
                                         <span asp-validation-for="NewPassword" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-xs-12">
                                     <div class="form-group">
                                         <label asp-for="ConfirmNewPassword" class="control-label"></label>
-                                        <input asp-for="ConfirmNewPassword" type="text" class="form-control" />
+                                        <input id="ConfirmNewPassword" name="ConfirmNewPassword" type="password" class="form-control" />
                                         <span asp-validation-for="ConfirmNewPassword" class="text-danger"></span>
                                     </div>
                                 </div>
@@ -50,7 +52,7 @@
     </div>
 
 <h2>Mi Perfil</h2>
-
+<h4>@TempData["ErrorPassword"]</h4>
 <div>
     <hr />
     <dl class="dl-horizontal">
@@ -114,8 +116,4 @@
     $("#modalPassword").click(function () {
         $("#ChangePasswordModal").modal();
     });
-
-    function changePasswordModal(data) {
-        
-    }
 </script>

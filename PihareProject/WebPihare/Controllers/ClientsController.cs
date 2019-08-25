@@ -73,7 +73,7 @@ namespace WebPihare.Controllers
                 var Commisioner = _context.Commisioner.FirstOrDefault(m => m.CommisionerId == idUser);
 
                 client.Commisioner = Commisioner;
-                client.RegistredDate = DateTime.UtcNow;
+                client.RegistredDate = DateTime.UtcNow.AddHours(-4);
                 _context.Add(client);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

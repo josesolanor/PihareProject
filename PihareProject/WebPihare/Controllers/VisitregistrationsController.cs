@@ -172,7 +172,7 @@ namespace WebPihare.Controllers
                 var Commisioner = _context.Commisioner.FirstOrDefault(m => m.CommisionerId == visitregistration.CommisionerId);
 
                 client.Commisioner = Commisioner;
-                client.RegistredDate = DateTime.UtcNow;
+                client.RegistredDate = DateTime.UtcNow.AddHours(-4);
                 visitregistration.Client = client;
             }
 
@@ -342,7 +342,7 @@ namespace WebPihare.Controllers
             if (!string.IsNullOrEmpty(data.Message))
             {
                 var idUser = int.Parse(User.Claims.FirstOrDefault(m => m.Type == "Id").Value);
-                var dateUTC4 = DateTime.UtcNow;
+                var dateUTC4 = DateTime.UtcNow.AddHours(-4);
 
                 data.CommisionerId = idUser;
                 data.MessageTime = dateUTC4.AddHours(-4);

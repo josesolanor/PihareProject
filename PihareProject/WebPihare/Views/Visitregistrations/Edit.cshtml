@@ -65,11 +65,14 @@
 <script>
     $(function () {
         var dateGet = $('#StringDate').val();
-        console.log(dateGet);
-        var now = new Date(dateGet.toString())
-        console.log(now);
+
+        var now = new Date(dateGet.toString());
+
+        if (isNaN(now.getTime())) {
+            now = new Date();
+        }
+
         $('#VisitDayDx').val(now);
-        console.log($('#VisitDayDx').val());
 
         $("#VisitDay1").dxDateBox({
             type: "datetime",

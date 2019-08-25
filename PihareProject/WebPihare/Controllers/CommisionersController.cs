@@ -103,6 +103,36 @@ namespace WebPihare.Controllers
 
             return RedirectToAction("Index", "Commisioners");
         }
+        
+        [HttpPost]
+        public async Task<IActionResult> ChangePassword(MyProfile data)
+        {
+            var idUser = int.Parse(User.Claims.FirstOrDefault(m => m.Type == "Id").Value);
+
+            if (data.NewPassword != data.ConfirmNewPassword)
+            {
+                TempData["ErrorPassword"] = "Password no coincide";
+                return RedirectToAction("MyProfile", "Commisioners");
+
+            }
+
+            
+            var commisioner = _context.Commisioner.FirstOrDefault(v => v.CommisionerId.Equals(idUser));
+            var actualPasswordHashed = _hash.EncryptString(data.ActualPassword);
+
+            if (commisioner.CommisionerPassword == actualPasswordHashed)
+            {
+                var newPasswordHashed = _hash.EncryptString(data.NewPassword);
+                commisioner.CommisionerPassword = newPasswordHashed;
+
+                _context.Update(commisioner);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction("Index", "Commisioners");
+            }
+            TempData["ErrorPassword"] = "Password Actual no es correcto";
+            return RedirectToAction("MyProfile", "Commisioners");
+        }
 
         public async Task<IActionResult> Edit(int? id)
         {
@@ -189,6 +219,7 @@ namespace WebPihare.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
 
         private bool CommisionerExists(int id)
         {
