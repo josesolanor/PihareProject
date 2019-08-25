@@ -4,10 +4,82 @@
     ViewData["Title"] = "Index";
 }
 
+<style>
+        .chat {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .chat li {
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px dotted #B3A9A9;
+        }
+
+        .chat li .chat-body p {
+            margin: 0;
+            color: #777777;
+        }
+
+        .panel .slidedown .glyphicon, .chat .glyphicon {
+            margin-right: 5px;
+        }
+
+        .panel-body {
+            overflow-y: scroll;
+            height: 250px;
+        }
+
+        ::-webkit-scrollbar-track {
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+            background-color: #F5F5F5;
+        }
+
+        ::-webkit-scrollbar {
+            width: 12px;
+            background-color: #F5F5F5;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+            background-color: #555;
+        }
+    </style>
+
 <h2>Mis Visitas</h2>
 
 <div class="demo-container">
     <div id="gridContainer"></div>
+</div>
+
+<div id="ChatModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Mensajes</h4>
+            </div>
+            <div class="panel-body">
+                <ul class="chat" id="chatBody">
+                    <li class="left clearfix">
+                    </li>
+                </ul>
+            </div>
+            <input id="visitChatSeletedId" hidden value="0">
+            <div class="panel-footer">
+                <div class="input-group">
+                    <input id="btn_input" type="text" class="form-control input-sm" placeholder="Escribe tu mensaje aqui..." />
+                    <span class="input-group-btn">
+                        <button class="btn btn-warning btn-sm" id="btn_chat">
+                            Enviar
+                        </button>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <script>
@@ -95,16 +167,150 @@
                     },
                     {
                         dataField: "Observations",
-                        caption: 'Observaciones',
-                        width: 250
+                        caption: 'Observacion',
+                        width: 150
                     },
                     {
                         dataField: "State",
                         caption: 'Estado'
+                    },
+                    {
+                        dataField: "Acciones",
+                        caption: 'Acciones',
+                        cellTemplate: function (container, options) {
+                            var wrapper = $("<center>");
+                            var ChatContainer = $("<div>");
+
+
+                            container.append(wrapper.append(ChatContainer));
+
+                            ChatContainer.dxButton({
+                                hint: 'Observaciones',
+                                type: "default",
+                                icon: 'glyphicon glyphicon-comment',
+                                width: 50,
+                                onClick: function () {
+
+                                    chatModal(options.data.VisitRegistrationId)
+                                }
+                            });
+                          
+                        }
                     }
                 ]
             });
         });
 
     });
+</script>
+<script>
+
+    $("#btn_chat").click(function() {
+        var visitSeletedId = $("#visitChatSeletedId").val();
+        var messsageText = $("#btn_input").val();
+
+        console.log(visitSeletedId)
+        console.log(messsageText)
+
+        $.ajax({
+            url: '@Url.Action("ChatMessages", "Visitregistrations")',
+            type: "POST",
+            data: {
+                VisitId: visitSeletedId,
+                Message: messsageText
+            }
+        }).done(function (response) {
+
+            cleanMessageBox();
+            $("#btn_input").val("");
+            $('#ChatModal').modal('toggle');
+
+        }).fail( function() {
+
+            alert("Mensaje no enviado, error en la solicitud");
+        });
+    });
+
+    function cleanMessageBox() {
+        var list = document.getElementById("chatBody");
+
+        while (list.hasChildNodes()) {
+            list.removeChild(list.firstChild);
+        }
+    }
+
+    function stateModal(data) {
+        $("#StateModal").modal();
+        $("#visitSeletedId").val(data);
+    }
+
+    function chatModal(data) {
+
+        $("#ChatModal").modal();
+        $("#visitChatSeletedId").val(data);
+
+        $.ajax({
+            url: '@Url.Action("ChatMessages", "Visitregistrations")',
+            type: "GET",
+            data: {visitId: data}
+        }).done(function (response) {
+            var dataMessages = JSON.parse(response);
+            cleanMessageBox();
+            createChatMessage(dataMessages)
+        });
+    }
+
+    function createChatMessage(dataMessages) {
+
+        dataMessages.forEach(loadMessages);
+    }
+
+    function loadMessages(item, index)
+    {
+        var body = document.getElementById("chatBody");
+
+        var liMessage = document.createElement("li");
+        liMessage.classList.add("left");
+        liMessage.classList.add("clearfix");
+
+
+        var divGeneral = document.createElement("div");
+        divGeneral.classList.add("chat-body");
+        divGeneral.classList.add("clearfix");
+
+        var chatHeader = document.createElement("div");
+        chatHeader.classList.add("header");
+
+        var messageBody = document.createElement("p");
+        var textMessage = document.createTextNode(item["Message"]);
+        messageBody.appendChild(textMessage);
+
+        var autorName = document.createElement("strong");
+        autorName.classList.add("primary-font");
+        var textAutor = document.createTextNode(item["AutorFullName"]);
+        autorName.appendChild(textAutor);
+
+        var messageTime = document.createElement("small");
+        messageTime.classList.add("pull-right");
+        messageTime.classList.add("text-muted");
+        var textMessage = document.createTextNode(item["MessageTime"]);
+        messageTime.appendChild(textMessage);
+
+        var logoTime = document.createElement("span");
+        logoTime.classList.add("glyphicon")
+        logoTime.classList.add("glyphicon-time")
+
+        messageTime.appendChild(logoTime)
+
+        chatHeader.appendChild(autorName)
+        chatHeader.appendChild(messageTime)
+
+        divGeneral.appendChild(chatHeader)
+        divGeneral.appendChild(messageBody)
+
+        liMessage.appendChild(divGeneral)
+
+        body.appendChild(liMessage)
+    }
+
 </script>

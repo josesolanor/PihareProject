@@ -93,44 +93,20 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Observaciones</h4>
+                <h4 class="modal-title">Mensajes</h4>
             </div>
             <div class="panel-body">
-                <ul class="chat">
+                <ul class="chat" id="chatBody">
                     <li class="left clearfix">
-                        <div class="chat-body clearfix">
-                            <div class="header">
-                                <strong class="primary-font">Jack Sparrow</strong> <small class="pull-right text-muted">
-                                    <span class="glyphicon glyphicon-time"></span>14 mins ago
-                                </small>
-                            </div>
-                            <p>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare
-                                dolor, quis ullamcorper ligula sodales.
-                            </p>
-                        </div>
                     </li>
                 </ul>
             </div>
+            <input id="visitChatSeletedId" hidden value="0">
             <div class="panel-footer">
                 <div class="input-group">
-                    <form asp-action="AddChatMessage" method="post">
-                        <div class="col-xs-12">
-                            <div class="form-group">
-                                <label asp-for="stateId" class="control-label">Seleccionar un estado</label>
-                                <select asp-for="stateId" class="form-control" asp-items="ViewBag.VisitStateId"></select>
-                            </div>
-                        </div>
-                        <div class="col-xs-12">
-                            <div class="form-group">
-                                <input type="submit" value="Enviar" class="btn btn-default" />
-                            </div>
-                        </div>
-                        <input asp-for="visitSeletedId" hidden value="0">
-                    </form>
-                    <input id="btn-input" type="text" class="form-control input-sm" placeholder="Escribe tu mensaje aqui..." />
+                    <input id="btn_input" type="text" class="form-control input-sm" placeholder="Escribe tu mensaje aqui..." />
                     <span class="input-group-btn">
-                        <button class="btn btn-warning btn-sm" id="btn-chat">
+                        <button class="btn btn-warning btn-sm" id="btn_chat">
                             Enviar
                         </button>
                     </span>
@@ -139,34 +115,8 @@
         </div>
     </div>
 
-    @*<div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">Observaciones</h4>
-        </div>
-        <div class="modal-body">
-            <div class="row">
-                <div class="row">
-                    <div class="col-md-12">
-                        <form asp-action="AddChatMessage" method="post">
-                            <div class="col-xs-12">
-                                <div class="form-group">
-                                    <label asp-for="stateId" class="control-label">Seleccionar un estado</label>
-                                    <select asp-for="stateId" class="form-control" asp-items="ViewBag.VisitStateId"></select>
-                                </div>
-                            </div>
-                            <div class="col-xs-12">
-                                <div class="form-group">
-                                    <input type="submit" value="Enviar" class="btn btn-default" />
-                                </div>
-                            </div>
-                            <input asp-for="visitSeletedId" hidden value="0">
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>*@
-
 </div>
+
 <script>
     $.ajax({
         url: '@Url.Action("LoadGrid", "Visitregistrations")',
@@ -251,6 +201,11 @@
                     {
                         dataField: "FullNameCommisioner",
                         caption: 'Nombre Comisionista'
+                    },
+                    {
+                        dataField: "Observations",
+                        caption: 'Observacion',
+                        width: 150
                     },
                     {
                         dataField: "State",
@@ -339,9 +294,45 @@
         });
 
     });
+
+      
 </script>
 
 <script>
+
+    $("#btn_chat").click(function() {
+        var visitSeletedId = $("#visitChatSeletedId").val();
+        var messsageText = $("#btn_input").val();
+
+        console.log(visitSeletedId)
+        console.log(messsageText)
+
+        $.ajax({
+            url: '@Url.Action("ChatMessages", "Visitregistrations")',
+            type: "POST",
+            data: {
+                VisitId: visitSeletedId,
+                Message: messsageText
+            }
+        }).done(function (response) {
+
+            cleanMessageBox();
+            $("#btn_input").val("");
+            $('#ChatModal').modal('toggle');
+
+        }).fail( function() {
+
+            alert("Mensaje no enviado, error en la solicitud");
+        });
+    });
+
+    function cleanMessageBox() {
+        var list = document.getElementById("chatBody");
+
+        while (list.hasChildNodes()) {   
+            list.removeChild(list.firstChild);
+        }
+    }
 
     function stateModal(data) {
         $("#StateModal").modal();
@@ -349,8 +340,72 @@
     }
 
     function chatModal(data) {
+
         $("#ChatModal").modal();
-        $("#visitSeletedId").val(data);
+        $("#visitChatSeletedId").val(data);
+
+        $.ajax({
+            url: '@Url.Action("ChatMessages", "Visitregistrations")',
+            type: "GET",
+            data: {visitId: data}
+        }).done(function (response) {
+            var dataMessages = JSON.parse(response);            
+            cleanMessageBox();
+            createChatMessage(dataMessages)
+        });
+    }
+
+    function createChatMessage(dataMessages) {
+
+        dataMessages.forEach(loadMessages);
+    }
+
+    function loadMessages(item, index)
+    {
+        var body = document.getElementById("chatBody");
+
+        var liMessage = document.createElement("li");
+        liMessage.classList.add("left");
+        liMessage.classList.add("clearfix");
+
+
+        var divGeneral = document.createElement("div");
+        divGeneral.classList.add("chat-body");
+        divGeneral.classList.add("clearfix");
+
+        var chatHeader = document.createElement("div");
+        chatHeader.classList.add("header");
+
+        var messageBody = document.createElement("p");
+        var textMessage = document.createTextNode(item["Message"]);
+        messageBody.appendChild(textMessage);
+
+        var autorName = document.createElement("strong");
+        autorName.classList.add("primary-font");
+        var textAutor = document.createTextNode(item["AutorFullName"]);
+        autorName.appendChild(textAutor);
+
+        var messageTime = document.createElement("small");
+        messageTime.classList.add("pull-right");
+        messageTime.classList.add("text-muted");
+        var textMessage = document.createTextNode(item["MessageTime"]);
+        messageTime.appendChild(textMessage);
+
+        var logoTime = document.createElement("span");
+        logoTime.classList.add("glyphicon")
+        logoTime.classList.add("glyphicon-time")
+
+        messageTime.appendChild(logoTime)
+
+        chatHeader.appendChild(autorName)
+        chatHeader.appendChild(messageTime)
+
+        divGeneral.appendChild(chatHeader)
+        divGeneral.appendChild(messageBody)
+
+        liMessage.appendChild(divGeneral)
+
+        body.appendChild(liMessage)
     }
 
 </script>

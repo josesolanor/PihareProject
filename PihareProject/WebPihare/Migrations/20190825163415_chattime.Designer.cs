@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebPihare.Context;
 
 namespace WebPihare.Migrations
 {
     [DbContext(typeof(PihareiiContext))]
-    partial class PihareiiContextModelSnapshot : ModelSnapshot
+    [Migration("20190825163415_chattime")]
+    partial class chattime
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,13 +32,9 @@ namespace WebPihare.Migrations
 
                     b.Property<int>("VisitId");
 
-                    b.Property<int?>("VisitRegistrationId");
-
                     b.HasKey("ChatId");
 
                     b.HasIndex("CommisionerId");
-
-                    b.HasIndex("VisitRegistrationId");
 
                     b.ToTable("Chat");
                 });
@@ -172,6 +170,8 @@ namespace WebPihare.Migrations
                     b.Property<int>("VisitRegistrationId")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<int?>("ChatId");
+
                     b.Property<int>("ClientId");
 
                     b.Property<string>("ClientJson");
@@ -187,6 +187,8 @@ namespace WebPihare.Migrations
                     b.Property<DateTime?>("VisitDay");
 
                     b.HasKey("VisitRegistrationId");
+
+                    b.HasIndex("ChatId");
 
                     b.HasIndex("ClientId");
 
@@ -217,10 +219,6 @@ namespace WebPihare.Migrations
                         .WithMany("Chat")
                         .HasForeignKey("CommisionerId")
                         .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("WebPihare.Entities.Visitregistration", "Visitregistration")
-                        .WithMany()
-                        .HasForeignKey("VisitRegistrationId");
                 });
 
             modelBuilder.Entity("WebPihare.Entities.Client", b =>
@@ -258,6 +256,10 @@ namespace WebPihare.Migrations
 
             modelBuilder.Entity("WebPihare.Entities.Visitregistration", b =>
                 {
+                    b.HasOne("WebPihare.Entities.Chat", "Chat")
+                        .WithMany("Visitregistration")
+                        .HasForeignKey("ChatId");
+
                     b.HasOne("WebPihare.Entities.Client", "Client")
                         .WithMany("Visitregistration")
                         .HasForeignKey("ClientId")

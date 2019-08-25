@@ -20,6 +20,7 @@ namespace WebPihare.Controllers
         private readonly PihareiiContext _context;
 
         List<RegisterViewModel> jsonList = new List<RegisterViewModel>();
+        List<ChatViewModel> jsonChats = new List<ChatViewModel>();
 
         public VisitregistrationsController(PihareiiContext context)
         {
@@ -155,6 +156,7 @@ namespace WebPihare.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Visitregistration visitregistration, string VisitDayDx)
         {
+
             if (!string.IsNullOrEmpty(VisitDayDx))
             {
                 var date = DateTime.ParseExact(VisitDayDx.Substring(0, 24),
@@ -163,7 +165,7 @@ namespace WebPihare.Controllers
 
                 visitregistration.VisitDay = date;
             }
-            
+
             if (visitregistration.ClientId == 0)
             {
                 Client client = JsonConvert.DeserializeObject<Client>(visitregistration.ClientJson);
@@ -176,7 +178,6 @@ namespace WebPihare.Controllers
 
             try
             {
-
                 visitregistration.StateVisitStateId = 1;
 
                 if (string.IsNullOrEmpty(visitregistration.VisitDay.ToString()) && string.IsNullOrEmpty(visitregistration.Observations))
@@ -184,8 +185,10 @@ namespace WebPihare.Controllers
                     visitregistration.StateVisitStateId = 4;
                 }
 
+
                 if (ModelState.IsValid)
                 {
+
                     _context.Add(visitregistration);
                     await _context.SaveChangesAsync();
 
@@ -334,10 +337,51 @@ namespace WebPihare.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddChatMessage(Chat data)
+        public async Task<IActionResult> ChatMessages(Chat data)
         {
-            return Ok();
+            if (!string.IsNullOrEmpty(data.Message))
+            {
+                var idUser = int.Parse(User.Claims.FirstOrDefault(m => m.Type == "Id").Value);
+                var dateUTC4 = DateTime.UtcNow;
+
+                data.CommisionerId = idUser;
+                data.MessageTime = dateUTC4.AddHours(-4);
+
+                if (ModelState.IsValid)
+                {
+                    _context.Add(data);
+                    await _context.SaveChangesAsync();
+                    return Ok();
+                }
+            }
+            return BadRequest();
+        }
+
+        [HttpGet]
+        public IActionResult ChatMessages(int visitId)
+        {
+
+            var chats = _context.Chat.Include(v => v.Commisioner).Where(v => v.VisitId.Equals(visitId)).ToList();
+
+            foreach (Chat item in chats)
+            {
+                jsonChats.Add(new ChatViewModel
+                {
+                    ChatId = item.ChatId,
+                    Message = item.Message,
+                    MessageTime = item.MessageTime.ToString("dd/MM/yyyy HH:mm "),
+                    AutorFullName = $"{item.Commisioner.FirstName} {item.Commisioner.LastName} {item.Commisioner.SecondLastName}",
+                    VisitId = item.VisitId,
+                    CommisionerId = item.CommisionerId
+                }); ;
+            }
+
+            string JsonContext = JsonConvert.SerializeObject(jsonChats, Formatting.Indented, new JsonSerializerSettings()
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            });
+
+            return Json(JsonContext);
         }
 
 
