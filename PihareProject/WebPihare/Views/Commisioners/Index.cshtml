@@ -40,37 +40,82 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SecondLastName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nic)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ContractNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Telefono)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Role.RoleValue)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.CommisionerId">Edit</a> |
-                <a asp-action="Delete" asp-route-id="@item.CommisionerId">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SecondLastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nic)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ContractNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Telefono)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Role.RoleValue)
+                </td>
+                <td>
+
+                    <div class="btn-group btn-group-xs" role="group" aria-label="...">
+                        <button data-toggle="modal" data-target="#AdminChangePasswordModal" onclick="ChangePasswordCommisionerByAdmin(@item.CommisionerId)" type="button" class="btn btn-success"><i class="glyphicon glyphicon-plus"></i> Cambiar Contraseña</button>
+                        <a asp-action="Edit" asp-route-id="@item.CommisionerId" type="button" class="btn btn-default"><i class="glyphicon glyphicon-pencil"></i> Edit</a>
+                        <a asp-action="Delete" asp-route-id="@item.CommisionerId" type="button" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i> Delete</a>
+                    </div>
+                </td>
+            </tr>
+
+            <div id="AdminChangePasswordModal" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Cambiar Contraseña</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <form asp-action="AdminChangePassword">
+                                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                        <div class="col-xs-12">
+                                            <div class="form-group">
+                                                <label class="control-label">Nueva Password</label>
+                                                <input id="NewPassword" name="NewPassword" class="form-control" />
+                                            </div>
+                                            <input id="CommisionerIdSelected" name="CommisionerIdSelected" hidden value="0">
+                                        </div>
+                                        <div class="col-xs-12">
+                                            <div class="form-group">
+                                                <input type="submit" value="Guardar" class="btn btn-default" />
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        }
     </tbody>
 </table>
+
+<script>
+    function ChangePasswordCommisionerByAdmin(data) {
+        document.getElementById("CommisionerIdSelected").value = data;
+    }
+</script>

@@ -91,6 +91,19 @@ namespace WebPihare.Controllers
             return View(commisioner);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> AdminChangePassword(string NewPassword, int CommisionerIdSelected)
+        {
+            var commisioner = _context.Commisioner.FirstOrDefault(v => v.CommisionerId.Equals(CommisionerIdSelected));
+
+            commisioner.CommisionerPassword = _hash.EncryptString(NewPassword);
+
+            _context.Update(commisioner);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index", "Commisioners");
+        }
+
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
