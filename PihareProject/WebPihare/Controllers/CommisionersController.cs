@@ -116,11 +116,13 @@ namespace WebPihare.Controllers
                 return NotFound();
             }
 
+            var actualpassword = _context.Commisioner.FirstOrDefault(v => v.CommisionerId.Equals(id)).CommisionerPassword;
+
             if (ModelState.IsValid)
             {
                 try
                 {
-                    commisioner.CommisionerPassword = _hash.EncryptString(commisioner.CommisionerPassword);
+                    commisioner.CommisionerPassword = actualpassword;
                     _context.Update(commisioner);
                     await _context.SaveChangesAsync();
                 }
