@@ -18,6 +18,7 @@
     }).done(function (response) {
 
         var dataSourceMaster = response.master;
+        console.log(dataSourceMaster)
         var dataSourceDetail = response.detail;
 
         $(function(){
@@ -80,12 +81,14 @@
                         caption: 'Apellido Materno'
                     },
                     {
-                        dataField: "CI",
+                        dataField: "ci",
                         caption: 'CI'
                     },
                     {
                         dataField: "registredDate",
-                        caption: 'Fecha Registrado'
+                        caption: 'Fecha Registrado',
+                        dataType: "datetime",
+                        format: 'dd/MM/yyyy HH:MM:ss'
                     },
                     {
                         dataField: "observation",
