@@ -22,7 +22,9 @@ namespace WebPihare.Entities
         public decimal DeparmentPrice { get; set; }
         [DisplayName("Comentarios")]
         public string Comments { get; set; }
-        public int DepartmentTypeId { get; set; }        
+        [DisplayName("Tipo")]
+        public int DepartmentTypeId { get; set; }
+        [DisplayName("Estado")]
         public int DepartmentStateId { get; set; }
         [DisplayName("Estado")]
         public Departmentstate DepartmentState { get; set; }

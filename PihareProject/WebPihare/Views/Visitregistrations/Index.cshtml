@@ -47,10 +47,10 @@
     }
 </style>
 
-<h2>Index</h2>
+<h2>Horario de Visitas</h2>
 <h2>@TempData["ErrorMsg"]</h2>
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Nueva visita</a>
 </p>
 
 <div class="demo-container">
@@ -159,7 +159,7 @@
                     visible: true
                 },
                 groupPanel: {
-                    visible: true
+                    visible: false
                 },
                 "export": {
                     enabled: true,
@@ -186,13 +186,13 @@
 
                     {
                         dataField: "VisitDay",
-                        caption: 'Fecha Visita',
+                        caption: 'Fecha de Visita',
                         dataType: "datetime",
                         format: 'dd/MM/yyyy HH:MM:ss'
                     },
                     {
                         dataField: "DepartmentCode",
-                        caption: 'Codigo Departamento'
+                        caption: 'Código'
                     },
                     {
                         dataField: "FullNameClient",
@@ -204,8 +204,8 @@
                     },
                     {
                         dataField: "Observations",
-                        caption: 'Observacion',
-                        width: 150
+                        caption: 'Observación',
+                        width: 283
                     },
                     {
                         dataField: "State",
