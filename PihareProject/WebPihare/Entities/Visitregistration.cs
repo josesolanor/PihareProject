@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace WebPihare.Entities
 {
@@ -27,5 +28,10 @@ namespace WebPihare.Entities
         public Department Department { get; set; }
 
         public string ClientJson { get; set; }
+        public string StringDate { get {
+
+                var dateString = this.VisitDay?.ToString("yyyy-MM-ddTHH:MM:ssZ");
+                return dateString;
+            } }
     }
 }

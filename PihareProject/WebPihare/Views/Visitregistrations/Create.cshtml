@@ -1,5 +1,4 @@
 ﻿@model WebPihare.Entities.Visitregistration
-
 @{
     ViewData["Title"] = "Create";
 }
@@ -14,7 +13,7 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="VisitDay" class="control-label"></label>
-                <input asp-for="VisitDay" class="form-control" />
+                <div style="width: 100%" class="form-control" id="VisitDay1" />
                 <span asp-validation-for="VisitDay" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -38,17 +37,40 @@
                 <label asp-for="StateVisitStateId" class="control-label"></label>
                 <select asp-for="StateVisitStateId" class="form-control" asp-items="ViewBag.StateVisitStateId"></select>
             </div>
+            <input type="hidden" id="VisitDayDx" name="VisitDayDx" value="" />
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-default" />
             </div>
         </form>
     </div>
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+
+
+<script>
+    $(function () {
+        var now = new Date();
+        
+        $('#VisitDayDx').val(String(now));
+
+
+        $("#VisitDay1").dxDateBox({
+            type: "datetime",
+            value: now,
+            displayFormat: "dd/MM/yyy HH:mm",
+            min: new Date(),
+            onValueChanged: function (e) {
+                var newValue = String(e.value);
+                $('#VisitDayDx').val(newValue);
+            }
+        });
+    });
+</script>

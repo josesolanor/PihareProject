@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -155,9 +156,17 @@ namespace WebPihare.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Visitregistration visitregistration)
+        public async Task<IActionResult> Create(Visitregistration visitregistration, string VisitDayDx)
         {
+            if (!string.IsNullOrEmpty(VisitDayDx))
+            {
+                var date = DateTime.ParseExact(VisitDayDx.Substring(0, 24),
+                                          "ddd MMM dd yyyy HH:mm:ss",
+                                          CultureInfo.InvariantCulture);
 
+                visitregistration.VisitDay = date;
+            }
+            
             if (visitregistration.ClientId == 0)
             {
                 Client client = JsonConvert.DeserializeObject<Client>(visitregistration.ClientJson);
@@ -167,17 +176,17 @@ namespace WebPihare.Controllers
                 client.RegistredDate = DateTime.UtcNow;
                 visitregistration.Client = client;
             }
-           
+
             try
             {
-                
+
                 visitregistration.StateVisitStateId = 1;
 
-                if (visitregistration.VisitDay is null && string.IsNullOrEmpty(visitregistration.Observations))
+                if (string.IsNullOrEmpty(visitregistration.VisitDay.ToString()) && string.IsNullOrEmpty(visitregistration.Observations))
                 {
                     visitregistration.StateVisitStateId = 4;
                 }
-                
+
                 if (ModelState.IsValid)
                 {
                     _context.Add(visitregistration);
@@ -216,6 +225,9 @@ namespace WebPihare.Controllers
             {
                 return NotFound();
             }
+
+            //visitregistration.StringDate = visitregistration.VisitDay.ToString();
+
             ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "FirstName", visitregistration.ClientId);
             ViewData["CommisionerId"] = new SelectList(_context.Commisioner, "CommisionerId", "Nic", visitregistration.CommisionerId);
             ViewData["DepartmentId"] = new SelectList(_context.Department, "DepartmentId", "DepartmentCode", visitregistration.DepartmentId);
@@ -228,7 +240,7 @@ namespace WebPihare.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Visitregistration visitregistration)
+        public async Task<IActionResult> Edit(int id, Visitregistration visitregistration, string VisitDayDx)
         {
             if (id != visitregistration.VisitRegistrationId)
             {
@@ -239,6 +251,12 @@ namespace WebPihare.Controllers
             {
                 try
                 {
+                    var date = DateTime.ParseExact(VisitDayDx.Substring(0, 24),
+                          "ddd MMM dd yyyy HH:mm:ss",
+                          CultureInfo.InvariantCulture);
+
+                    visitregistration.VisitDay = date;
+
                     _context.Update(visitregistration);
                     await _context.SaveChangesAsync();
                 }

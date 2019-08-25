@@ -8,200 +8,224 @@
 
 <h4>Visita</h4>
 <hr />
-<div class="row">
-    <div class="col-md-12">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="ClientJson" />
-            <input type="hidden" asp-for="DepartmentId" id="DepartmentId" />
-            <input type="hidden" asp-for="CommisionerId" id="CommisionerId" />
+<form asp-action="Create">
 
-            <div class="col-xs-12">
-                <div class="checkbox">
-                    <label><input type="checkbox" id="checkRegisterVisit" value="">Registrar Visita</label>
-                </div>
-            </div>
+    <div class="row">
 
-            <div class="col-xs-6">
-                <div class="form-group">
-                    <label asp-for="VisitDay" class="control-label"></label>
-                    <input asp-for="VisitDay" disabled class="form-control" />
-                    <span asp-validation-for="VisitDay" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="col-xs-6">
-                <div class="form-group">
-                    <label asp-for="Observations" class="control-label"></label>
-                    <input asp-for="Observations" disabled class="form-control" />
-                    <span asp-validation-for="Observations" class="text-danger"></span>
-                </div>
-            </div>
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="ClientJson" />
+        <input type="hidden" asp-for="DepartmentId" id="DepartmentId" />
+        <input type="hidden" asp-for="CommisionerId" id="CommisionerId" />
+        <input type="hidden" id="VisitDayDx" name="VisitDayDx" value="" />
 
-            <div class="col-md-12">
-                <div class="col-md-4">
-                    <div>
-                        <h4>Cliente elegido</h4>
-                        <hr />
-                        <dl class="dl-horizontal">
-                            <dt>
-                                @Html.DisplayNameFor(model => model.Client.FirstName)
-                            </dt>
-                            <dd>
-                                @Html.DisplayFor(model => model.Client.FirstName)
-                            </dd>
-                            <dt>
-                                @Html.DisplayNameFor(model => model.Client.LastName)
-                            </dt>
-                            <dd>
-                                @Html.DisplayFor(model => model.Client.LastName)
-                            </dd>
-                            <dt>
-                                @Html.DisplayNameFor(model => model.Client.SecondLastName)
-                            </dt>
-                            <dd>
-                                @Html.DisplayFor(model => model.Client.SecondLastName)
-                            </dd>
-                            <dt>
-                                @Html.DisplayNameFor(model => model.Client.Observation)
-                            </dt>
-                            <dd>
-                                @Html.DisplayFor(model => model.Client.Observation)
-                            </dd>
-                            <dt>
-                                @Html.DisplayNameFor(model => model.Client.CI)
-                            </dt>
-                            <dd>
-                                @Html.DisplayFor(model => model.Client.CI)
-                            </dd>
-                        </dl>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div>
-                        <h4>Departamento Elegido</h4>
-                        <hr />
-                        <dl class="dl-horizontal">
-                            <dt>
-                                @Html.DisplayNameFor(model => model.Department.DepartmentCode)
-                            </dt>
-                            <dd>
-                                @Html.DisplayFor(model => model.Department.DepartmentCode)
-                            </dd>
-                            <dt>
-                                @Html.DisplayNameFor(model => model.Department.NumberFloor)
-                            </dt>
-                            <dd>
-                                @Html.DisplayFor(model => model.Department.NumberFloor)
-                            </dd>
-                            <dt>
-                                @Html.DisplayNameFor(model => model.Department.NumberBedrooms)
-                            </dt>
-                            <dd>
-                                @Html.DisplayFor(model => model.Department.NumberBedrooms)
-                            </dd>
-                            <dt>
-                                @Html.DisplayNameFor(model => model.Department.DeparmentPrice)
-                            </dt>
-                            <dd>
-                                @Html.DisplayFor(model => model.Department.DeparmentPrice)
-                            </dd>
-                            <dt>
-                                @Html.DisplayNameFor(model => model.Department.DepartmentState)
-                            </dt>
-                            <dd>
-                                @Html.DisplayFor(model => model.Department.DepartmentState.DepartmentStateDescription)
-                            </dd>
-                            <dt>
-                                @Html.DisplayNameFor(model => model.Department.DepartmentType)
-                            </dt>
-                            <dd>
-                                @Html.DisplayFor(model => model.Department.DepartmentType.DepartmentTypeDescription)
-                            </dd>
-                        </dl>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div>
-                        <h4>Comisionista</h4>
-                        <hr />
-                        <dl class="dl-horizontal">
-                            <dt>
-                                @Html.DisplayNameFor(model => model.Commisioner.FirstName)
-                            </dt>
-                            <dd>
-                                @Html.DisplayFor(model => model.Commisioner.FirstName)
-                            </dd>
-                            <dt>
-                                @Html.DisplayNameFor(model => model.Commisioner.LastName)
-                            </dt>
-                            <dd>
-                                @Html.DisplayFor(model => model.Commisioner.LastName)
-                            </dd>
-                            <dt>
-                                @Html.DisplayNameFor(model => model.Commisioner.SecondLastName)
-                            </dt>
-                            <dd>
-                                @Html.DisplayFor(model => model.Commisioner.SecondLastName)
-                            </dd>
-                            <dt>
-                                @Html.DisplayNameFor(model => model.Commisioner.Nic)
-                            </dt>
-                            <dd>
-                                @Html.DisplayFor(model => model.Commisioner.Nic)
-                            </dd>
-                            <dt>
-                                @Html.DisplayNameFor(model => model.Commisioner.ContractNumber)
-                            </dt>
-                            <dd>
-                                @Html.DisplayFor(model => model.Commisioner.ContractNumber)
-                            </dd>
-                            <dt>
-                                @Html.DisplayNameFor(model => model.Commisioner.Email)
-                            </dt>
-                            <dd>
-                                @Html.DisplayFor(model => model.Commisioner.Email)
-                            </dd>
-                            <dt>
-                                @Html.DisplayNameFor(model => model.Commisioner.Telefono)
-                            </dt>
-                            <dd>
-                                @Html.DisplayFor(model => model.Commisioner.Telefono)
-                            </dd>
-                            <dt>
-                                @Html.DisplayNameFor(model => model.Commisioner.Role)
-                            </dt>
-                            <dd>
-                                @Html.DisplayFor(model => model.Commisioner.Role.RoleValue)
-                            </dd>
-                        </dl>
-                    </div>
-                </div>
+        <div class="col-md-12">
+            <div class="checkbox">
+                <label><input type="checkbox" id="checkRegisterVisit" value="">Registrar Visita</label>
             </div>
-
-            <div class="col-xs-6">
-                <div class="form-group">
-                    <input type="submit" value="Crear" class="btn btn-default" />
-                </div>
-            </div>
-        </form>
+        </div>
     </div>
-</div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label asp-for="VisitDay" class="control-label"></label>
+                <div style="width: 100%" class="form-control" id="VisitDay1" />
+                <span asp-validation-for="VisitDay" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Observations" class="control-label"></label>
+                <textarea rows="3" asp-for="Observations" disabled class="form-control"></textarea>
+                <span asp-validation-for="Observations" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-4">
+                <div>
+                    <h4>Cliente elegido</h4>
+                    <hr />
+                    <dl class="dl-horizontal">
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Client.FirstName)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.Client.FirstName)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Client.LastName)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.Client.LastName)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Client.SecondLastName)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.Client.SecondLastName)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Client.Observation)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.Client.Observation)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Client.CI)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.Client.CI)
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div>
+                    <h4>Departamento Elegido</h4>
+                    <hr />
+                    <dl class="dl-horizontal">
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Department.DepartmentCode)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.Department.DepartmentCode)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Department.NumberFloor)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.Department.NumberFloor)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Department.NumberBedrooms)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.Department.NumberBedrooms)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Department.DeparmentPrice)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.Department.DeparmentPrice)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Department.DepartmentState)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.Department.DepartmentState.DepartmentStateDescription)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Department.DepartmentType)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.Department.DepartmentType.DepartmentTypeDescription)
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div>
+                    <h4>Comisionista</h4>
+                    <hr />
+                    <dl class="dl-horizontal">
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Commisioner.FirstName)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.Commisioner.FirstName)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Commisioner.LastName)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.Commisioner.LastName)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Commisioner.SecondLastName)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.Commisioner.SecondLastName)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Commisioner.Nic)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.Commisioner.Nic)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Commisioner.ContractNumber)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.Commisioner.ContractNumber)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Commisioner.Email)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.Commisioner.Email)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Commisioner.Telefono)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.Commisioner.Telefono)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Commisioner.Role)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.Commisioner.Role.RoleValue)
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6">
+            <div class="form-group">
+                <input type="submit" value="Crear" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <a asp-action="Index">Back to List</a>
+        </div>
+    </div>
+</form>
+
+
+
 
 <script type="text/javascript">
+    var now = new Date();
+    $(function () {
+        $('#VisitDayDx').val("");
+
+
+        $("#VisitDay1").dxDateBox({
+            type: "datetime",
+            displayFormat: "dd/MM/yyy HH:mm",
+            min: new Date(),
+            disabled: true,
+            onValueChanged: function (e) {
+                var newValue = String(e.value);
+                $('#VisitDayDx').val(newValue);
+            }
+        });
+    });
+
     $(function () {
         $("#checkRegisterVisit").click(function () {
             if ($(this).is(":checked")) {
-                $("#VisitDay").removeAttr("disabled");
-                $("#VisitDay").focus();
+                $("#VisitDay1").dxDateBox("instance").option("disabled", false);
+                $("#VisitDay1").dxDateBox("instance").option("value", now);
                 $("#Observations").removeAttr("disabled");
                 $("#Observations").focus();
             } else {
-                $("#VisitDay").attr("disabled", "disabled");
-                $("#VisitDay").val("")
+                $("#VisitDay1").dxDateBox("instance").option("disabled", true);
+                $("#VisitDay1").dxDateBox("instance").option("value", null);
+                $('#VisitDayDx').val("");
                 $("#Observations").attr("disabled", "disabled");
                 $("#Observations").val("")
             }
