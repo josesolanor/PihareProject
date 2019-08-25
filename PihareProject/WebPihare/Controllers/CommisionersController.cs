@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using WebPihare.Context;
 using WebPihare.Entities;
 using WebPihare.Core;
+using WebPihare.Models;
 
 namespace WebPihare.Controllers
 {
@@ -49,6 +50,8 @@ namespace WebPihare.Controllers
 
         public async Task<IActionResult> MyProfile()
         {
+            MyProfile myprofile = new MyProfile();
+
             var id = int.Parse(User.Claims.FirstOrDefault(m => m.Type == "Id").Value);
 
             if (id == 0)
@@ -63,7 +66,9 @@ namespace WebPihare.Controllers
                 return NotFound();
             }
 
-            return View(commisioner);
+            myprofile.Commisioner = commisioner;
+
+            return View(myprofile);
         }
 
         public IActionResult Create()
@@ -86,54 +91,54 @@ namespace WebPihare.Controllers
             return View(commisioner);
         }
 
-        //public async Task<IActionResult> Edit(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-        //    var commisioner = await _context.Commisioner.FindAsync(id);
-        //    if (commisioner == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    ViewData["RoleId"] = new SelectList(_context.Role, "RoleId", "RoleValue");
-        //    return View(commisioner);
-        //}
+            var commisioner = await _context.Commisioner.FindAsync(id);
+            if (commisioner == null)
+            {
+                return NotFound();
+            }
+            ViewData["RoleId"] = new SelectList(_context.Role, "RoleId", "RoleValue");
+            return View(commisioner);
+        }
 
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Edit(int id, Commisioner commisioner)
-        //{
-        //    if (id != commisioner.CommisionerId)
-        //    {
-        //        return NotFound();
-        //    }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, Commisioner commisioner)
+        {
+            if (id != commisioner.CommisionerId)
+            {
+                return NotFound();
+            }
 
-        //    if (ModelState.IsValid)
-        //    {
-        //        try
-        //        {
-        //            commisioner.CommisionerPassword = _hash.EncryptString(commisioner.CommisionerPassword);
-        //            _context.Update(commisioner);
-        //            await _context.SaveChangesAsync();
-        //        }
-        //        catch (DbUpdateConcurrencyException)
-        //        {
-        //            if (!CommisionerExists(commisioner.CommisionerId))
-        //            {
-        //                return NotFound();
-        //            }
-        //            else
-        //            {
-        //                throw;
-        //            }
-        //        }
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    return View(commisioner);
-        //}
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    commisioner.CommisionerPassword = _hash.EncryptString(commisioner.CommisionerPassword);
+                    _context.Update(commisioner);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!CommisionerExists(commisioner.CommisionerId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(commisioner);
+        }
 
         public async Task<IActionResult> Delete(int? id)
         {
