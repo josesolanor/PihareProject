@@ -1,8 +1,53 @@
-﻿@model WebPihare.Entities.Commisioner
+﻿@model WebPihare.Models.MyProfile
 
 @{
     ViewData["Title"] = "Details";
 }
+
+    <div id="ChangePasswordModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Cambiar el password</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <form asp-action="ChangePassword" method="post">
+                                <div class="col-xs-12">
+                                    <div class="form-group">
+                                        <label asp-for="ActualPassword" class="control-label"></label>
+                                        <input asp-for="ActualPassword" type="text" class="form-control" />
+                                        <span asp-validation-for="ActualPassword" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12">
+                                    <div class="form-group">
+                                        <label asp-for="NewPassword" class="control-label"></label>
+                                        <input asp-for="NewPassword" type="text" class="form-control" />
+                                        <span asp-validation-for="NewPassword" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12">
+                                    <div class="form-group">
+                                        <label asp-for="ConfirmNewPassword" class="control-label"></label>
+                                        <input asp-for="ConfirmNewPassword" type="text" class="form-control" />
+                                        <span asp-validation-for="ConfirmNewPassword" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12">
+                                    <div class="form-group">
+                                        <input type="submit" value="Guardar" class="btn btn-default" />
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 <h2>Mi Perfil</h2>
 
@@ -10,55 +55,69 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.FirstName)
+            @Html.DisplayNameFor(model => model.Commisioner.FirstName)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.FirstName)
+            @Html.DisplayFor(model => model.Commisioner.FirstName)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.LastName)
+            @Html.DisplayNameFor(model => model.Commisioner.LastName)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.LastName)
+            @Html.DisplayFor(model => model.Commisioner.LastName)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.SecondLastName)
+            @Html.DisplayNameFor(model => model.Commisioner.SecondLastName)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.SecondLastName)
+            @Html.DisplayFor(model => model.Commisioner.SecondLastName)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Nic)
+            @Html.DisplayNameFor(model => model.Commisioner.Nic)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Nic)
+            @Html.DisplayFor(model => model.Commisioner.Nic)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.ContractNumber)
+            @Html.DisplayNameFor(model => model.Commisioner.ContractNumber)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.ContractNumber)
+            @Html.DisplayFor(model => model.Commisioner.ContractNumber)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Email)
+            @Html.DisplayNameFor(model => model.Commisioner.Email)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Email)
+            @Html.DisplayFor(model => model.Commisioner.Email)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Telefono)
+            @Html.DisplayNameFor(model => model.Commisioner.Telefono)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Telefono)
+            @Html.DisplayFor(model => model.Commisioner.Telefono)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Role)
+            @Html.DisplayNameFor(model => model.Commisioner.Role)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Role.RoleValue)
+            @Html.DisplayFor(model => model.Commisioner.Role.RoleValue)
         </dd>
     </dl>
 </div>
+
+@*<div>
+    <div class="form-group">
+        <input type="button" value="Cambiar Password" class="btn btn-default" />
+    </div>
+</div>*@
+
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
+
+
+<script>
+    function changePasswordModal(data) {
+        $("#ChangePasswordModal").modal();
+    }
+</script>
