@@ -116,14 +116,22 @@ namespace WebPihare.Controllers
                 return NotFound();
             }
 
-            var actualpassword = _context.Commisioner.FirstOrDefault(v => v.CommisionerId.Equals(id)).CommisionerPassword;
+            var updateCommisioner = _context.Commisioner.FirstOrDefault(v => v.CommisionerId.Equals(id));
+
+            updateCommisioner.FirstName = commisioner.FirstName;
+            updateCommisioner.LastName = commisioner.LastName;
+            updateCommisioner.SecondLastName = commisioner.SecondLastName;
+            updateCommisioner.Nic = commisioner.Nic;
+            updateCommisioner.ContractNumber = commisioner.ContractNumber;
+            updateCommisioner.Email = commisioner.Email;
+            updateCommisioner.Telefono = commisioner.Telefono;
+            updateCommisioner.RoleId = commisioner.RoleId;
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    commisioner.CommisionerPassword = actualpassword;
-                    _context.Update(commisioner);
+                    _context.Update(updateCommisioner);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
