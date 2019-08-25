@@ -39,5 +39,6 @@ namespace WebPihare.Entities
             } }
         public ICollection<Client> Client { get; set; }
         public ICollection<Visitregistration> Visitregistration { get; set; }
+        public ICollection<Chat> Chat { get; set; }
     }
 }

@@ -26,6 +26,7 @@ namespace WebPihare.Entities
         public Commisioner Commisioner { get; set; }
         [DisplayName("Departamento")]
         public Department Department { get; set; }
+        public Chat Chat { get; set; }
 
         public string ClientJson { get; set; }
         public string StringDate { get {

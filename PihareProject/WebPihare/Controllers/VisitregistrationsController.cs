@@ -21,7 +21,6 @@ namespace WebPihare.Controllers
 
         List<RegisterViewModel> jsonList = new List<RegisterViewModel>();
 
-
         public VisitregistrationsController(PihareiiContext context)
         {
             _context = context;
@@ -103,7 +102,6 @@ namespace WebPihare.Controllers
             return Json(JsonContext);
         }
 
-        // GET: Visitregistrations/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -125,7 +123,6 @@ namespace WebPihare.Controllers
             return View(visitregistration);
         }
 
-        // GET: Visitregistrations/Create
         public IActionResult Create()
         {
             ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "FirstName");
@@ -212,7 +209,6 @@ namespace WebPihare.Controllers
             return View(visitregistration);
         }
 
-        // GET: Visitregistrations/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -226,8 +222,6 @@ namespace WebPihare.Controllers
                 return NotFound();
             }
 
-            //visitregistration.StringDate = visitregistration.VisitDay.ToString();
-
             ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "FirstName", visitregistration.ClientId);
             ViewData["CommisionerId"] = new SelectList(_context.Commisioner, "CommisionerId", "Nic", visitregistration.CommisionerId);
             ViewData["DepartmentId"] = new SelectList(_context.Department, "DepartmentId", "DepartmentCode", visitregistration.DepartmentId);
@@ -235,9 +229,6 @@ namespace WebPihare.Controllers
             return View(visitregistration);
         }
 
-        // POST: Visitregistrations/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Visitregistration visitregistration, string VisitDayDx)
@@ -280,7 +271,6 @@ namespace WebPihare.Controllers
             return View(visitregistration);
         }
 
-        // GET: Visitregistrations/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -301,7 +291,6 @@ namespace WebPihare.Controllers
             return View(visitregistration);
         }
 
-        // POST: Visitregistrations/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -343,6 +332,14 @@ namespace WebPihare.Controllers
             TempData["ErrorMsg"] = "No se puede añadir estado";
             return RedirectToAction("Index", "Departments");
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddChatMessage(Chat data)
+        {
+            return Ok();
+        }
+
 
         private bool VisitregistrationExists(int id)
         {
