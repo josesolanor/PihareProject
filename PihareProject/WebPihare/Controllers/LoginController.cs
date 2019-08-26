@@ -44,7 +44,7 @@ namespace WebPihare.Controllers
                 if (login is null)
                 {
                     
-                    model.ErrorMessage = "Credenciales Incorrectos";
+                    model.ErrorMessage = "Credenciales Incorrectas";
                     return View(model);
                 }
                 var RoleName = _context.Role.FirstOrDefault(m => m.RoleId == login.RoleId).RoleValue;
