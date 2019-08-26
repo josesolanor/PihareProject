@@ -20,6 +20,7 @@ namespace WebPihare.Entities
         public string SecondLastName { get; set; }
         [DisplayName("Observaciones")]
         public string Observation { get; set; }
+        [DisplayName("C.I.")]
         public string CI { get; set; }
         public int? CommisionerId { get; set; }
         [DisplayName("Fecha Registro")]

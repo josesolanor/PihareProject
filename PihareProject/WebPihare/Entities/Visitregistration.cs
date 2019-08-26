@@ -11,11 +11,14 @@ namespace WebPihare.Entities
         [DisplayName("Fecha de visita")]
         public DateTime? VisitDay { get; set; }
         [DisplayName("Observaciones")]
-        public string Observations { get; set; }        
-        public int ClientId { get; set; }        
-        public int DepartmentId { get; set; }        
+        public string Observations { get; set; }
+        [DisplayName("Cliente")]
+        public int ClientId { get; set; }
+        [DisplayName("Departamento")]
+        public int DepartmentId { get; set; }
+        [DisplayName("Comisionista")]
         public int CommisionerId { get; set; }
-
+        [DisplayName("Estado")]
         public int? StateVisitStateId { get; set; }
 
         [DisplayName("Estado")]

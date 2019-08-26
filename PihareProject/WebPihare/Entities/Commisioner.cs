@@ -15,20 +15,22 @@ namespace WebPihare.Entities
         public int CommisionerId { get; set; }
         [DisplayName("Nombre")]
         public string FirstName { get; set; }
-        [DisplayName("Primer Apellido")]
+        [DisplayName("Apellido P.")]
         public string LastName { get; set; }
-        [DisplayName("Segundo Apellido")]
+        [DisplayName("Apellido M.")]
         public string SecondLastName { get; set; }
         [DisplayName("Nickname")]
         public string Nic { get; set; }
-        [DisplayName("Numero de contrato")]
+        [DisplayName("No de Contrato")]
         public int ContractNumber { get; set; }
-        [DisplayName("Correo Electronico")]
+        [DisplayName("Correo Electrónico")]
         public string Email { get; set; }
+        [DisplayName("Teléfono")]
         public int Telefono { get; set; }
         public string CommisionerPassword { get; set; }
+        [DisplayName("Rol")]
         public int RoleId { get; set; }
-        [DisplayName("Role")]
+        [DisplayName("Rol")]
         public Role Role { get; set; }
 
         [DisplayName("Nombre Comisionista")]

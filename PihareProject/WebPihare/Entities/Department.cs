@@ -12,11 +12,11 @@ namespace WebPihare.Entities
         }
 
         public int DepartmentId { get; set; }
-        [DisplayName("Codigo Departamento")]
+        [DisplayName("Código")]
         public int DepartmentCode { get; set; }
         [DisplayName("Piso")]
         public int NumberFloor { get; set; }
-        [DisplayName("Numero de dormitorios")]
+        [DisplayName("Dormitorios")]
         public int NumberBedrooms { get; set; }
         [DisplayName("Precio")]
         public decimal DeparmentPrice { get; set; }

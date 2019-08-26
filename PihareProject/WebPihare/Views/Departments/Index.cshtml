@@ -37,7 +37,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.Departments.FirstOrDefault().DeparmentPrice)
             </th>
-            <th>
+            <th style="width:280px">
                 @Html.DisplayNameFor(model => model.Departments.FirstOrDefault().Comments)
             </th>
             <th>
@@ -68,7 +68,7 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.DeparmentPrice)
                 </td>
-                <td>
+                <td style="width:280px">
                     @Html.DisplayFor(modelItem => item.Comments)
                 </td>
 
@@ -79,12 +79,12 @@
                         {
                             <button data-toggle="modal" data-target="#ClientModal" onclick="ChangeClientDepartmentIdValue(@item.DepartmentId)" type="button" class="btn btn-success"><i class="glyphicon glyphicon-plus"></i> Añadir</button>
                         }
-                            <a asp-action="Details" asp-route-id="@item.DepartmentId" type="button" class="btn btn-default"><i class="glyphicon glyphicon-list"></i> Details</a>
+                            <a asp-action="Details" asp-route-id="@item.DepartmentId" type="button" class="btn btn-default"><i class="glyphicon glyphicon-list"></i> Detalles</a>
                         @if (User.IsInRole("Admin"))
                         {
                             <button data-toggle="modal" data-target="#CommentModal" onclick="ChangeClientDepartmentIdValueComment(@item.DepartmentId, '@item.Comments')" type="button" class="btn btn-default"><i class="glyphicon glyphicon-comment"></i> Comentar</button>
-                            <a asp-action="Edit" asp-route-id="@item.DepartmentId" type="button" class="btn btn-default"><i class="glyphicon glyphicon-pencil"></i> Edit</a>
-                            <a asp-action="Delete" asp-route-id="@item.DepartmentId" type="button" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i> Delete</a>
+                            <a asp-action="Edit" asp-route-id="@item.DepartmentId" type="button" class="btn btn-default"><i class="glyphicon glyphicon-pencil"></i> Editar</a>
+                            <a asp-action="Delete" asp-route-id="@item.DepartmentId" type="button" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i> Eliminar</a>
                         }
                     </div>
                 </td>
