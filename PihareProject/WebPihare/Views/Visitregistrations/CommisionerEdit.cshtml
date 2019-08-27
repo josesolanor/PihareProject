@@ -1,0 +1,72 @@
+﻿@model WebPihare.Entities.Visitregistration
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h2>Editar</h2>
+
+<h4>Registro de Visita</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="CommisionerEdit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="VisitRegistrationId" />
+            <div class="form-group">
+                <label asp-for="VisitDay" class="control-label"></label>
+                <div style="width: 100%" class="form-control" id="VisitDay1" />
+                <span asp-validation-for="VisitDay" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Observations" class="control-label"></label>
+                <textarea rows="3" asp-for="Observations" class="form-control"></textarea>
+                <span asp-validation-for="Observations" class="text-danger"></span>
+            </div>
+            <input type="hidden" asp-for="ClientId" />
+            <input type="hidden" asp-for="DepartmentId" />
+            <input type="hidden" asp-for="CommisionerId" />
+            <input type="hidden" asp-for="StateVisitStateId" />
+            <input type="hidden" id="VisitDayDx" name="VisitDayDx" value="" />
+            <input type="hidden" asp-for="VisitDay" />
+            <input type="hidden" asp-for="StringDate" />
+            <div class="form-group">
+                <input type="submit" value="Guardar" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+    <div>
+        <a asp-action="MyVisits">Volver a la lista</a>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+<script>
+    $(function () {
+        var dateGet = $('#StringDate').val();
+
+        var now = new Date(dateGet.toString());
+
+        if (isNaN(now.getTime())) {
+            now = new Date();
+        }
+
+        $('#VisitDayDx').val(now);
+
+        $("#VisitDay1").dxDateBox({
+            type: "datetime",
+            value: now,
+            displayFormat: "dd/MM/yyy HH:mm",
+            min: new Date(),
+            onValueChanged: function (e) {
+                var newValue = String(e.value);
+                $('#VisitDayDx').val(newValue);
+            }
+        });
+    });
+</script>

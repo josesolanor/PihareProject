@@ -27,7 +27,7 @@ namespace WebPihare.Controllers
             _context = context;
         }
 
-        // GET: Visitregistrations
+        [Authorize(Roles = "Admin")]
         public IActionResult Index()
         {
             ViewData["VisitStateId"] = new SelectList(_context.VisitState, "VisitStateId", "VisitStateValue");
@@ -271,6 +271,60 @@ namespace WebPihare.Controllers
             ViewData["CommisionerId"] = new SelectList(_context.Commisioner, "CommisionerId", "CommisionerPassword", visitregistration.CommisionerId);
             ViewData["DepartmentId"] = new SelectList(_context.Department, "DepartmentId", "DepartmentDescription", visitregistration.DepartmentId);
             ViewData["StateVisitStateId"] = new SelectList(_context.VisitState, "VisitStateId", "VisitStateValue", visitregistration.StateVisitStateId);
+            return View(visitregistration);
+        }
+
+        public async Task<IActionResult> CommisionerEdit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var visitregistration = await _context.Visitregistration.FindAsync(id);
+            if (visitregistration == null)
+            {
+                return NotFound();
+            }
+            return View(visitregistration);
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CommisionerEdit(int id, Visitregistration visitregistration, string VisitDayDx)
+        {
+            if (id != visitregistration.VisitRegistrationId)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var date = DateTime.ParseExact(VisitDayDx.Substring(0, 24),
+                          "ddd MMM dd yyyy HH:mm:ss",
+                          CultureInfo.InvariantCulture);
+
+                    visitregistration.VisitDay = date;
+
+                    _context.Update(visitregistration);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!VisitregistrationExists(visitregistration.VisitRegistrationId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction("MyVisits");
+            }
             return View(visitregistration);
         }
 

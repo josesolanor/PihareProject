@@ -182,6 +182,7 @@
                         cellTemplate: function (container, options) {
                             var wrapper = $("<center>");
                             var ChatContainer = $("<div>");
+                            var EditContainer = $("<div>");
 
 
                             container.append(wrapper.append(ChatContainer));
@@ -194,6 +195,19 @@
                                 onClick: function () {
 
                                     chatModal(options.data.VisitRegistrationId)
+                                }
+                            });
+
+                            container.append(wrapper.append(EditContainer));
+
+                            EditContainer.dxButton({
+                                hint: 'Editar',
+                                type: 'default',
+                                icon: 'glyphicon glyphicon-pencil',
+                                width: 50,
+                                onClick: function () {
+                                    var url = "@Url.Action("CommisionerEdit","VisitRegistrations")/" + options.data.VisitRegistrationId;
+                                    window.location.href = url;
                                 }
                             });
                           
