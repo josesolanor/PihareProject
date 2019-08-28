@@ -148,7 +148,7 @@ namespace WebPihare.Controllers
                     LastName = item.LastName,
                     SecondLastName = item.SecondLastName,
                     Observation = item.Observation,
-                    CI = item.CI,
+                    CI = $"{ item.CI}-{item.Provenance}",
                     CommisionerId = item.CommisionerId,
                     RegistredDate = item.RegistredDate,
                     CommisionerFullName = item.Commisioner.FullName
@@ -199,7 +199,7 @@ namespace WebPihare.Controllers
                     LastName = item.LastName,
                     SecondLastName = item.SecondLastName,
                     Observation = item.Observation,
-                    CI = item.CI,
+                    CI = $"{ item.CI}-{item.Provenance}",
                     CommisionerId = item.CommisionerId,
                     RegistredDate = item.RegistredDate,
                     CommisionerFullName = item.Commisioner.FullName

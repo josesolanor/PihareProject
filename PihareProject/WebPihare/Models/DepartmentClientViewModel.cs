@@ -13,7 +13,7 @@ namespace WebPihare.Models
         public int DepartmentCode { get; set; }       
         public int NumberFloor { get; set; }       
         public int NumberBedrooms { get; set; }      
-        public decimal DeparmentPrice { get; set; }
+        public float DeparmentPrice { get; set; }
         public int DepartmentTypeId { get; set; }
         public int DepartmentStateId { get; set; }
         public string DepartmentState { get; set; }

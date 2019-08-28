@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebPihare.Entities
 {
@@ -19,7 +21,7 @@ namespace WebPihare.Entities
         [DisplayName("Dormitorios")]
         public int NumberBedrooms { get; set; }
         [DisplayName("Precio")]
-        public decimal DeparmentPrice { get; set; }
+        public float DeparmentPrice { get; set; }
         [DisplayName("Comentarios")]
         public string Comments { get; set; }
         [DisplayName("Tipo")]

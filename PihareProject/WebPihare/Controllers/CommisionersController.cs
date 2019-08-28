@@ -24,7 +24,8 @@ namespace WebPihare.Controllers
             _context = context;
             _hash = hash;
         }
-        
+
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
             var pihareiiContext = _context.Commisioner.Include(d => d.Role);

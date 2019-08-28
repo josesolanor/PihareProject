@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace WebPihare.Entities
 {
@@ -21,7 +22,22 @@ namespace WebPihare.Entities
         [DisplayName("Observaciones")]
         public string Observation { get; set; }
         [DisplayName("C.I.")]
+        [RegularExpression(@"^[0-9]+$",
+         ErrorMessage = "Solo Numeros")]
         public string CI { get; set; }
+        [DisplayName("Procedencia")]
+        public string Provenance { get; set; }
+
+        public string FullCI
+        {
+            get
+            {
+
+                string FullCI = $"{CI}-{Provenance}";
+                return FullCI;
+            }
+        }
+
         public int? CommisionerId { get; set; }
         [DisplayName("Fecha Registro")]
         public DateTime RegistredDate { get; set; }

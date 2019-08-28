@@ -25,13 +25,13 @@ namespace WebPihare.Context
         public virtual DbSet<Role> Role { get; set; }
         public virtual DbSet<VisitState> VisitState { get; set; }
         public virtual DbSet<Chat> Chat { get; set; }
-        
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Client>(entity =>
             {
-               
+
                 entity.HasOne(d => d.Commisioner)
                     .WithMany(p => p.Client)
                     .HasForeignKey(d => d.CommisionerId)
@@ -49,9 +49,9 @@ namespace WebPihare.Context
                     .OnDelete(DeleteBehavior.Restrict);
             });
 
+
             modelBuilder.Entity<Department>(entity =>
             {
-
                 entity.HasOne(d => d.DepartmentState)
                     .WithMany(p => p.Department)
                     .HasForeignKey(d => d.DepartmentStateId)
