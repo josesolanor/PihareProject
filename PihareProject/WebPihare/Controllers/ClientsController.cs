@@ -68,16 +68,22 @@ namespace WebPihare.Controllers
         {
             if (ModelState.IsValid)
             {
-                var idUser = int.Parse(User.Claims.FirstOrDefault(m => m.Type == "Id").Value);
+                var exist = _context.Client.FirstOrDefault(m => m.CI.Equals(client.CI));
 
-                var Commisioner = _context.Commisioner.FirstOrDefault(m => m.CommisionerId == idUser);
+                if (exist == null)
+                {
+                    var idUser = int.Parse(User.Claims.FirstOrDefault(m => m.Type == "Id").Value);
 
-                client.Commisioner = Commisioner;
-                client.RegistredDate = DateTime.UtcNow.AddHours(-4);
-                _context.Add(client);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                    var Commisioner = _context.Commisioner.FirstOrDefault(m => m.CommisionerId == idUser);
+
+                    client.Commisioner = Commisioner;
+                    client.RegistredDate = DateTime.UtcNow.AddHours(-4);
+                    _context.Add(client);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
             }
+            TempData["ErrorMsg"] = $"Error, El cliente con CI: {client.CI} ya se encuentra registrado";
             return View(client);
         }
 

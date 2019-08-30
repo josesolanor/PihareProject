@@ -86,7 +86,7 @@ namespace WebPihare.Controllers
                 }
 
             }
-            TempData["ErrorMsg"] = "Cliente ya registrado";
+            TempData["ErrorMsg"] = $"Error, El cliente con CI: {data.Client.CI} ya se encuentra registrado";
             return RedirectToAction("Index", "Departments");
         }
 
