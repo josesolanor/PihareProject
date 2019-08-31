@@ -74,7 +74,7 @@ namespace WebPihare.Controllers
 
         public IActionResult Create()
         {
-            ViewData["RoleId"] = new SelectList(_context.Role, "RoleId", "RoleValue");
+            ViewData["RoleId"] = new SelectList(_context.Role.OrderByDescending(v => v.RoleValue), "RoleId", "RoleValue");
             return View();
         }
 
