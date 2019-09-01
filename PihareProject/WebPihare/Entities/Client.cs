@@ -19,6 +19,18 @@ namespace WebPihare.Entities
         public string LastName { get; set; }
         [DisplayName("Segundo Apellido")]
         public string SecondLastName { get; set; }
+
+        [DisplayName("Nombre Cliente")]
+        public string FullName
+        {
+            get
+            {
+
+                string FullNameCommisioner = $"{FirstName} {LastName} {SecondLastName}";
+                return FullNameCommisioner;
+            }
+        }
+
         [DisplayName("Observaciones")]
         public string Observation { get; set; }
         [DisplayName("C.I.")]

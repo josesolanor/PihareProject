@@ -33,7 +33,7 @@ namespace WebPihare.Entities
         public string ClientJson { get; set; }
         public string StringDate { get {
 
-                var dateString = this.VisitDay?.ToString("yyyy-MM-ddTHH:MM:ssZ");
+                var dateString = this.VisitDay?.ToString("yyyy-MM-dd HH:mm:ss");
                 return dateString;
             } }
     }
