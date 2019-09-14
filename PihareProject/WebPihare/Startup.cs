@@ -18,6 +18,7 @@ using WebPihare.Entities;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using System.Globalization;
 using Microsoft.AspNetCore.Localization;
+using WebPihare.Hubs;
 
 namespace WebPihare
 {
@@ -69,6 +70,8 @@ namespace WebPihare
             });
 
             services.AddScoped<Hash>();
+            services.AddSignalR();
+            services.AddSingleton<ChatHub>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -88,7 +91,10 @@ namespace WebPihare
             }
 
             app.UseAuthentication();
-
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<ChatHub>("/chatHub");
+            });
             app.UseStaticFiles();
             app.UseCookiePolicy();
             app.UseHttpsRedirection();

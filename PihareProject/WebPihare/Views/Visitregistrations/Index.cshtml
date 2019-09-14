@@ -299,6 +299,15 @@
 </script>
 
 <script>
+    var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
+
+    connection.on("Message", function () {
+        chatModalSignalr();
+    });
+
+    connection.start().catch(function (err) {
+        return console.error(err.toString());
+    });
 
     $("#btn_chat").click(function() {
         var visitSeletedId = $("#visitChatSeletedId").val();
@@ -316,9 +325,7 @@
             }
         }).done(function (response) {
 
-            cleanMessageBox();
-            $("#btn_input").val("");
-            $('#ChatModal').modal('toggle');
+            chatModalSignalr();
 
         }).fail( function() {
 
@@ -343,6 +350,20 @@
 
         $("#ChatModal").modal();
         $("#visitChatSeletedId").val(data);
+
+        $.ajax({
+            url: '@Url.Action("ChatMessages", "Visitregistrations")',
+            type: "GET",
+            data: {visitId: data}
+        }).done(function (response) {
+            var dataMessages = JSON.parse(response);            
+            cleanMessageBox();
+            createChatMessage(dataMessages)
+        });
+    }
+
+    function chatModalSignalr() {
+        var data = $("#visitChatSeletedId").val();
 
         $.ajax({
             url: '@Url.Action("ChatMessages", "Visitregistrations")',
@@ -408,7 +429,4 @@
         body.appendChild(liMessage)
     }
 
-</script>
-<script>
-    var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
 </script>

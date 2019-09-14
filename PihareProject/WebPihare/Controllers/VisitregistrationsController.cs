@@ -6,10 +6,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using WebPihare.Context;
 using WebPihare.Entities;
+using WebPihare.Hubs;
 using WebPihare.Models;
 
 namespace WebPihare.Controllers
@@ -18,13 +21,17 @@ namespace WebPihare.Controllers
     public class VisitregistrationsController : Controller
     {
         private readonly PihareiiContext _context;
+        private readonly IHubContext<ChatHub> _hubContext;
 
         List<RegisterViewModel> jsonList = new List<RegisterViewModel>();
         List<ChatViewModel> jsonChats = new List<ChatViewModel>();
 
-        public VisitregistrationsController(PihareiiContext context)
+        public VisitregistrationsController(PihareiiContext context, IHubContext<ChatHub> hubContext)
         {
             _context = context;
+            _hubContext = hubContext;
+
+            
         }
 
         [Authorize(Roles = "Admin")]
@@ -393,6 +400,7 @@ namespace WebPihare.Controllers
         [HttpPost]
         public async Task<IActionResult> ChatMessages(Chat data)
         {
+
             if (!string.IsNullOrEmpty(data.Message))
             {
                 var idUser = int.Parse(User.Claims.FirstOrDefault(m => m.Type == "Id").Value);
@@ -405,6 +413,7 @@ namespace WebPihare.Controllers
                 {
                     _context.Add(data);
                     await _context.SaveChangesAsync();
+                    await _hubContext.Clients.All.SendAsync("Message");
                     return Ok();
                 }
             }
