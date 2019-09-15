@@ -52,11 +52,12 @@ body {
 }
 
 #btnChat {
-    animation: blinker 1.2s linear infinite;
+    animation: blinker 0.7s linear infinite;
 }
 
 @keyframes blinker {
     50% {
         opacity: 0.5;
+        background-color: red;
     }
 }
