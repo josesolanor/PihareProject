@@ -48,7 +48,14 @@ namespace WebPihare.Controllers
 
         public IActionResult LoadGrid()
         {
-            var pihareiiContext = _context.Visitregistration.Include(v => v.Client).Include(v => v.Commisioner).Include(v => v.Department).Include(v => v.StateVisitState).ToList();
+            var pihareiiContext = _context.Visitregistration
+                .Include(v => v.Client)
+                .Include(v => v.Commisioner)
+                .Include(v => v.Department)
+                .Include(v => v.StateVisitState)
+                .OrderByDescending(m => m.NotificationState)
+                .ThenByDescending(m => m.VisitDay)
+                .ToList();
 
             foreach (Visitregistration item in pihareiiContext)
             {
@@ -63,7 +70,8 @@ namespace WebPihare.Controllers
                     FullNameClient = $"{item.Client.FirstName} {item.Client.LastName} {item.Client.SecondLastName}",
                     FullNameCommisioner = $"{item.Commisioner.FirstName} {item.Commisioner.LastName} {item.Commisioner.SecondLastName}",
                     DepartmentCode = item.Department.DepartmentCode,
-                    State = item.StateVisitState.VisitStateValue
+                    State = item.StateVisitState.VisitStateValue,
+                    NotificationState = item.NotificationState
                 });
             }
 
@@ -83,7 +91,8 @@ namespace WebPihare.Controllers
                 .Include(v => v.Commisioner)
                 .Include(v => v.Department)
                 .Include(v => v.StateVisitState)
-                .Where(m => m.CommisionerId == idUser).ToList();
+                .Where(m => m.CommisionerId == idUser)
+                .OrderByDescending(m => m.VisitDay).ToList();
 
             foreach (Visitregistration item in pihareiiContext)
             {
@@ -198,6 +207,7 @@ namespace WebPihare.Controllers
 
                     _context.Add(visitregistration);
                     await _context.SaveChangesAsync();
+                    await _hubContext.Clients.All.SendAsync("UpdateVisitGrid");
 
                     if (User.IsInRole("Admin"))
                     {
@@ -260,6 +270,7 @@ namespace WebPihare.Controllers
 
                     _context.Update(visitregistration);
                     await _context.SaveChangesAsync();
+                    await _hubContext.Clients.All.SendAsync("UpdateVisitGrid");
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -318,6 +329,7 @@ namespace WebPihare.Controllers
 
                     _context.Update(visitregistration);
                     await _context.SaveChangesAsync();
+                    await _hubContext.Clients.All.SendAsync("UpdateVisitGrid");
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -362,6 +374,7 @@ namespace WebPihare.Controllers
             var visitregistration = await _context.Visitregistration.FindAsync(id);
             _context.Visitregistration.Remove(visitregistration);
             await _context.SaveChangesAsync();
+            await _hubContext.Clients.All.SendAsync("UpdateVisitGrid");
             return RedirectToAction(nameof(Index));
         }
 
@@ -379,6 +392,7 @@ namespace WebPihare.Controllers
                 {
                     _context.Update(visit);
                     await _context.SaveChangesAsync();
+                    await _hubContext.Clients.All.SendAsync("UpdateVisitGrid");
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -405,15 +419,28 @@ namespace WebPihare.Controllers
             {
                 var idUser = int.Parse(User.Claims.FirstOrDefault(m => m.Type == "Id").Value);
                 var dateUTC4 = DateTime.UtcNow.AddHours(-4);
-
+               
                 data.CommisionerId = idUser;
-                data.MessageTime = dateUTC4.AddHours(-4);
+                data.MessageTime = dateUTC4;
 
                 if (ModelState.IsValid)
                 {
                     _context.Add(data);
                     await _context.SaveChangesAsync();
                     await _hubContext.Clients.All.SendAsync("Message");
+                    if (User.IsInRole("Comisionista"))
+                    {
+                        var visitregistration = await _context.Visitregistration.FindAsync(data.VisitId);
+                        if (visitregistration.NotificationState.Equals(0))
+                        {
+                            visitregistration.NotificationState = 1;
+                            _context.Update(visitregistration);
+                            await _context.SaveChangesAsync();
+                            
+                        }
+                        await _hubContext.Clients.All.SendAsync("UpdateVisitGrid");
+                    }
+
                     return Ok();
                 }
             }
@@ -423,8 +450,7 @@ namespace WebPihare.Controllers
         [HttpGet]
         public IActionResult ChatMessages(int visitId)
         {
-
-            var chats = _context.Chat.Include(v => v.Commisioner).Where(v => v.VisitId.Equals(visitId)).ToList();
+            var chats = _context.Chat.Include(v => v.Commisioner).Where(v => v.VisitId.Equals(visitId)).OrderBy(m => m.MessageTime).ToList();
 
             foreach (Chat item in chats)
             {
@@ -445,6 +471,17 @@ namespace WebPihare.Controllers
             });
 
             return Json(JsonContext);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CheckNotification(int visitId)
+        {
+            var visitregistration = await _context.Visitregistration.FindAsync(visitId);
+            visitregistration.NotificationState = 0;
+            _context.Update(visitregistration);
+            await _context.SaveChangesAsync();
+            await _hubContext.Clients.All.SendAsync("UpdateVisitGrid");
+            return Ok();
         }
 
 

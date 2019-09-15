@@ -47,6 +47,7 @@
     }
 </style>
 
+
 <h2>Horario de Visitas</h2>
 <h2>@TempData["ErrorMsg"]</h2>
 <p>
@@ -118,225 +119,254 @@
 </div>
 
 <script>
-    $.ajax({
-        url: '@Url.Action("LoadGrid", "Visitregistrations")',
-        type: "GET"
-    }).done(function (response) {
 
-        var datasource = JSON.parse(response);
-
-        $(function(){
-            $("#gridContainer").dxDataGrid({
-                dataSource: datasource,
-                allowColumnReordering: true,
-                allowColumnResizing: true,
-                columnAutoWidth: true,
-                showColumnLines: true,
-                showRowLines: true,
-                rowAlternationEnabled: true,
-                showBorders: true,
-                columnChooser: {
-                enabled: true
-                },
-                filterRow: {
-                    visible: true,
-                },
-                headerFilter: { visible: true },
-                paging: {
-                    pageSize: 10
-                },
-                pager: {
-                    showPageSizeSelector: true,
-                    allowedPageSizes: [10, 25, 50, 100]
-                },
-                selection: {
-                    mode: "single"
-                },
-                grouping: {
-                    autoExpandAll: true
-                },
-                headerFilter: {
-                    visible: true
-                },
-                groupPanel: {
-                    visible: false
-                },
-                "export": {
-                    enabled: true,
-                    fileName: "RegistroVisitas"+Date.now(),
-                    allowExportSelectedData: true
-                },
-                columns: [
-                    {
-                        dataField: "VisitRegistrationId",
-                        visible: false
-                    },
-                    {
-                        dataField: "ClientId",
-                        visible: false
-                    },
-                    {
-                        dataField: "DepartmentId",
-                        visible: false
-                    },
-                    {
-                        dataField: "CommisionerId",
-                        visible: false
-                    },
-
-                    {
-                        dataField: "VisitDay",
-                        caption: 'Fecha de Visita',
-                        dataType: "date",
-                        format: 'dd/MM/yyyy HH:mm:ss'
-                    },
-                    {
-                        dataField: "DepartmentCode",
-                        caption: 'Dpto.'
-                    },
-                    {
-                        dataField: "FullNameClient",
-                        caption: 'Nombre Cliente'
-                    },
-                    {
-                        dataField: "FullNameCommisioner",
-                        caption: 'Nombre Comisionista'
-                    },
-                    {
-                        dataField: "Observations",
-                        caption: 'Observación',
-                        width: 250
-                    },
-                    {
-                        dataField: "State",
-                        caption: 'Estado'
-                    },
-                    {
-                        dataField: "Acciones",
-                        caption: 'Acciones',
-                        cellTemplate: function (container, options) {
-                            var wrapper = $("<center>");
-                            var ChatContainer = $("<div>");
-                            var StateContainer = $("<div>");
-                            var DetailsContainer = $("<div>");
-                            var EditContainer = $("<div>");
-                            var DeleteContainer = $("<div>");
-
-                            container.append(wrapper.append(ChatContainer));
-
-                            ChatContainer.dxButton({
-                                hint: 'Mensajería',
-                                type: "default",
-                                icon: 'glyphicon glyphicon-comment',
-                                width: 50,
-                                onClick: function () {
-
-                                    chatModal(options.data.VisitRegistrationId)
-                                }
-                            });
-
-                            container.append(wrapper.append(StateContainer));
-
-                            StateContainer.dxButton({
-                                hint: 'Cambiar Estado',
-                                type: "success",
-                                icon: 'glyphicon glyphicon-cog',
-                                width: 50,
-                                onClick: function () {
-
-                                    stateModal(options.data.VisitRegistrationId)
-                                }
-                            });
-
-                            container.append(wrapper.append(DetailsContainer));
-
-                            DetailsContainer.dxButton({
-                                hint: 'Detalles',
-                                type: "default",
-                                icon: 'glyphicon glyphicon-list',
-                                width: 50,
-                                onClick: function () {
-                                    var url = "@Url.Action("Details","VisitRegistrations")/" + options.data.VisitRegistrationId;
-                                    window.location.href = url;
-                                }
-                            });
-
-                            container.append(wrapper.append(EditContainer));
-
-                            EditContainer.dxButton({
-                                hint: 'Editar',
-                                type: 'default',
-                                icon: 'glyphicon glyphicon-pencil',
-                                width: 50,
-                                onClick: function () {
-                                    var url = "@Url.Action("Edit","VisitRegistrations")/" + options.data.VisitRegistrationId;
-                                    window.location.href = url;
-                                }
-                            });
-
-                            container.append(wrapper.append(DeleteContainer));
-
-                            DeleteContainer.dxButton({
-                                hint: 'Eliminar',
-                                type: 'danger',
-                                icon: 'glyphicon glyphicon-trash',
-                                width: 50,
-                                onClick: function () {
-                                    var url = "@Url.Action("Delete","VisitRegistrations")/" + options.data.VisitRegistrationId;
-                                    window.location.href = url;
-                                }
-                            });
-
-                        }
-                    }
-                ]
-            });
-        });
-
-    });
-
-      
-</script>
-
-<script>
     var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
 
     connection.on("Message", function () {
         chatModalSignalr();
     });
 
+    connection.on("UpdateVisitGrid", function () {
+        getDataGridSource();
+    });
+
     connection.start().catch(function (err) {
         return console.error(err.toString());
     });
 
+    $(function () {
+        getDataGridSource();
+    });
+
+    function getDataGridSource() {
+        $.ajax({
+            url: '@Url.Action("LoadGrid", "Visitregistrations")',
+            type: "GET"
+        }).done(function (response) {
+
+            var datasource = JSON.parse(response);
+
+            $(function(){
+                $("#gridContainer").dxDataGrid({
+                    dataSource: datasource,
+                    allowColumnReordering: true,
+                    allowColumnResizing: true,
+                    columnAutoWidth: true,
+                    showColumnLines: true,
+                    showRowLines: true,
+                    rowAlternationEnabled: true,
+                    showBorders: true,
+                    columnChooser: {
+                    enabled: true
+                    },
+                    filterRow: {
+                        visible: true,
+                    },
+                    headerFilter: { visible: true },
+                    paging: {
+                        pageSize: 10
+                    },
+                    pager: {
+                        showPageSizeSelector: true,
+                        allowedPageSizes: [10, 25, 50, 100]
+                    },
+                    selection: {
+                        mode: "single"
+                    },
+                    grouping: {
+                        autoExpandAll: true
+                    },
+                    headerFilter: {
+                        visible: true
+                    },
+                    groupPanel: {
+                        visible: false
+                    },
+                    "export": {
+                        enabled: true,
+                        fileName: "RegistroVisitas"+Date.now(),
+                        allowExportSelectedData: true
+                    },
+                    columns: [
+                        {
+                            dataField: "VisitRegistrationId",
+                            visible: false
+                        },
+                        {
+                            dataField: "ClientId",
+                            visible: false
+                        },
+                        {
+                            dataField: "DepartmentId",
+                            visible: false
+                        },
+                        {
+                            dataField: "CommisionerId",
+                            visible: false
+                        },
+
+                        {
+                            dataField: "VisitDay",
+                            caption: 'Fecha de Visita',
+                            dataType: "date",
+                            format: 'dd/MM/yyyy HH:mm:ss'
+                        },
+                        {
+                            dataField: "DepartmentCode",
+                            caption: 'Dpto.'
+                        },
+                        {
+                            dataField: "FullNameClient",
+                            caption: 'Nombre Cliente'
+                        },
+                        {
+                            dataField: "FullNameCommisioner",
+                            caption: 'Nombre Comisionista'
+                        },
+                        {
+                            dataField: "Observations",
+                            caption: 'Observación',
+                            width: 250
+                        },
+                        {
+                            dataField: "State",
+                            caption: 'Estado'
+                        },
+                        {
+                            dataField: "NotificationState",
+                            visible: false
+                        },
+                        {
+                            dataField: "Acciones",
+                            caption: 'Acciones',
+                            cellTemplate: function (container, options) {
+                                var wrapper = $("<center>");
+                                if (options.data.NotificationState > 0) {
+                                    var ChatContainer = $('<div id="btnChat">');
+                                }
+                                else {
+                                    var ChatContainer = $('<div>');
+                                }
+                                var StateContainer = $("<div>");
+                                var DetailsContainer = $("<div>");
+                                var EditContainer = $("<div>");
+                                var DeleteContainer = $("<div>");
+
+                                container.append(wrapper.append(ChatContainer));
+
+                                ChatContainer.dxButton({
+                                    hint: 'Mensajería',
+                                    type: "default",
+                                    icon: 'glyphicon glyphicon-comment',
+                                    width: 50,
+                                    onClick: function () {
+                                        checkNotificacion(options.data.VisitRegistrationId);
+                                        chatModal(options.data.VisitRegistrationId);
+                                    }
+                                });
+
+                                container.append(wrapper.append(StateContainer));
+
+                                StateContainer.dxButton({
+                                    hint: 'Cambiar Estado',
+                                    type: "success",
+                                    icon: 'glyphicon glyphicon-cog',
+                                    width: 50,
+                                    onClick: function () {
+
+                                        stateModal(options.data.VisitRegistrationId)
+                                    }
+                                });
+
+                                container.append(wrapper.append(DetailsContainer));
+
+                                DetailsContainer.dxButton({
+                                    hint: 'Detalles',
+                                    type: "default",
+                                    icon: 'glyphicon glyphicon-list',
+                                    width: 50,
+                                    onClick: function () {
+                                        var url = "@Url.Action("Details","VisitRegistrations")/" + options.data.VisitRegistrationId;
+                                        window.location.href = url;
+                                    }
+                                });
+
+                                container.append(wrapper.append(EditContainer));
+
+                                EditContainer.dxButton({
+                                    hint: 'Editar',
+                                    type: 'default',
+                                    icon: 'glyphicon glyphicon-pencil',
+                                    width: 50,
+                                    onClick: function () {
+                                        var url = "@Url.Action("Edit","VisitRegistrations")/" + options.data.VisitRegistrationId;
+                                        window.location.href = url;
+                                    }
+                                });
+
+                                container.append(wrapper.append(DeleteContainer));
+
+                                DeleteContainer.dxButton({
+                                    hint: 'Eliminar',
+                                    type: 'danger',
+                                    icon: 'glyphicon glyphicon-trash',
+                                    width: 50,
+                                    onClick: function () {
+                                        var url = "@Url.Action("Delete","VisitRegistrations")/" + options.data.VisitRegistrationId;
+                                        window.location.href = url;
+                                    }
+                                });
+
+                            }
+                        }
+                    ]
+                });
+            });
+
+        });
+    }
+   
+    function checkNotificacion(data) {
+        $.ajax({
+            url: '@Url.Action("CheckNotification", "Visitregistrations")',
+            type: "POST",
+            data: {
+                VisitId: data
+            }
+        })
+    }
+
     $("#btn_chat").click(function() {
         var visitSeletedId = $("#visitChatSeletedId").val();
         var messsageText = $("#btn_input").val();
+        if (messsageText == "") {
+            alert("Error, El mensaje esta en blanco");
+        }
+        else {
+            $.ajax({
+                url: '@Url.Action("ChatMessages", "Visitregistrations")',
+                type: "POST",
+                data: {
+                    VisitId: visitSeletedId,
+                    Message: messsageText
+                }
+            }).done(function (response) {
 
-        console.log(visitSeletedId)
-        console.log(messsageText)
+                $("#btn_input").val("");
+                chatModalSignalr();
 
-        $.ajax({
-            url: '@Url.Action("ChatMessages", "Visitregistrations")',
-            type: "POST",
-            data: {
-                VisitId: visitSeletedId,
-                Message: messsageText
-            }
-        }).done(function (response) {
 
-            chatModalSignalr();
+            }).fail(function () {
 
-        }).fail( function() {
-
-            alert("Mensaje no enviado, error en la solicitud");
-        });
+                alert("Mensaje no enviado, error en la solicitud");
+            });
+        }
     });
 
     function cleanMessageBox() {
         var list = document.getElementById("chatBody");
 
-        while (list.hasChildNodes()) {   
+        while (list.hasChildNodes()) {
             list.removeChild(list.firstChild);
         }
     }
@@ -356,9 +386,10 @@
             type: "GET",
             data: {visitId: data}
         }).done(function (response) {
-            var dataMessages = JSON.parse(response);            
+            var dataMessages = JSON.parse(response);
             cleanMessageBox();
-            createChatMessage(dataMessages)
+            createChatMessage(dataMessages);
+            makeScrollBottom();
         });
     }
 
@@ -370,9 +401,10 @@
             type: "GET",
             data: {visitId: data}
         }).done(function (response) {
-            var dataMessages = JSON.parse(response);            
+            var dataMessages = JSON.parse(response);
             cleanMessageBox();
-            createChatMessage(dataMessages)
+            createChatMessage(dataMessages);
+            makeScrollBottom();
         });
     }
 
@@ -427,6 +459,9 @@
         liMessage.appendChild(divGeneral)
 
         body.appendChild(liMessage)
+    }
+    function makeScrollBottom() {
+        $("div.panel-body").scrollTop($("div.panel-body").prop("scrollHeight"));
     }
 
 </script>

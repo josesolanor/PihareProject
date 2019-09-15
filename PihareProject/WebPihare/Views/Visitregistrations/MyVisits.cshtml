@@ -234,25 +234,28 @@
     $("#btn_chat").click(function() {
         var visitSeletedId = $("#visitChatSeletedId").val();
         var messsageText = $("#btn_input").val();
+        if (messsageText == "") {
+            alert("Error, El mensaje esta en blanco");
+        }
+        else {
 
-        console.log(visitSeletedId)
-        console.log(messsageText)
+            $.ajax({
+                url: '@Url.Action("ChatMessages", "Visitregistrations")',
+                type: "POST",
+                data: {
+                    VisitId: visitSeletedId,
+                    Message: messsageText
+                }
+            }).done(function (response) {
 
-        $.ajax({
-            url: '@Url.Action("ChatMessages", "Visitregistrations")',
-            type: "POST",
-            data: {
-                VisitId: visitSeletedId,
-                Message: messsageText
-            }
-        }).done(function (response) {
+                $("#btn_input").val("");
+                chatModalSignalr();
 
-            chatModalSignalr();
+            }).fail(function () {
 
-        }).fail( function() {
-
-            alert("Mensaje no enviado, error en la solicitud");
-        });
+                alert("Mensaje no enviado, error en la solicitud");
+            });
+        }
     });
 
     function cleanMessageBox() {
@@ -280,7 +283,8 @@
         }).done(function (response) {
             var dataMessages = JSON.parse(response);
             cleanMessageBox();
-            createChatMessage(dataMessages)
+            createChatMessage(dataMessages);
+            makeScrollBottom();
         });
     }
 
@@ -294,7 +298,8 @@
         }).done(function (response) {
             var dataMessages = JSON.parse(response);            
             cleanMessageBox();
-            createChatMessage(dataMessages)
+            createChatMessage(dataMessages);
+            makeScrollBottom();
         });
     }
 
@@ -350,5 +355,7 @@
 
         body.appendChild(liMessage)
     }
-
+    function makeScrollBottom() {
+        $("div.panel-body").scrollTop($("div.panel-body").prop("scrollHeight"));
+    }
 </script>

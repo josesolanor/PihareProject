@@ -18,6 +18,8 @@ namespace WebPihare.Models
         public string FullNameCommisioner { get; set; }
         public int DepartmentCode { get; set; }
         public string State { get; set; }
+        
+        public int NotificationState { get; set; }
 
     }
 }
