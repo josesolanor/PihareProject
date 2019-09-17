@@ -20,6 +20,7 @@ namespace WebPihare.Models
         public string State { get; set; }
         
         public int NotificationState { get; set; }
+        public int NotificationStateCommisioner { get; set; }
 
     }
 }

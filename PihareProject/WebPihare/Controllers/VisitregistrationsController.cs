@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using WebPihare.Context;
+using WebPihare.Core;
 using WebPihare.Entities;
 using WebPihare.Hubs;
 using WebPihare.Models;
@@ -24,7 +25,7 @@ namespace WebPihare.Controllers
         private readonly IHubContext<ChatHub> _hubContext;
 
         List<RegisterViewModel> jsonList = new List<RegisterViewModel>();
-        List<ChatViewModel> jsonChats = new List<ChatViewModel>();
+        List<ChatViewModel> jsonChats = new List<ChatViewModel>();        
 
         public VisitregistrationsController(PihareiiContext context, IHubContext<ChatHub> hubContext)
         {
@@ -91,8 +92,10 @@ namespace WebPihare.Controllers
                 .Include(v => v.Commisioner)
                 .Include(v => v.Department)
                 .Include(v => v.StateVisitState)
+                .OrderByDescending(m => m.NotificationStateCommisioner)
+                .ThenByDescending(m => m.VisitDay)
                 .Where(m => m.CommisionerId == idUser)
-                .OrderByDescending(m => m.VisitDay).ToList();
+                .ToList();
 
             foreach (Visitregistration item in pihareiiContext)
             {
@@ -107,7 +110,8 @@ namespace WebPihare.Controllers
                     FullNameClient = $"{item.Client.FirstName} {item.Client.LastName} {item.Client.SecondLastName}",
                     FullNameCommisioner = $"{item.Commisioner.FirstName} {item.Commisioner.LastName} {item.Commisioner.SecondLastName}",
                     DepartmentCode = item.Department.DepartmentCode,
-                    State = item.StateVisitState.VisitStateValue
+                    State = item.StateVisitState.VisitStateValue,
+                    NotificationStateCommisioner = item.NotificationStateCommisioner
                 });
             }
 
@@ -436,7 +440,19 @@ namespace WebPihare.Controllers
                             visitregistration.NotificationState = 1;
                             _context.Update(visitregistration);
                             await _context.SaveChangesAsync();
-                            
+
+                        }
+                        await _hubContext.Clients.All.SendAsync("UpdateVisitGrid");
+                    }
+                    else
+                    {
+                        var visitregistration = await _context.Visitregistration.FindAsync(data.VisitId);
+                        if (visitregistration.NotificationStateCommisioner.Equals(0))
+                        {
+                            visitregistration.NotificationStateCommisioner = 1;
+                            _context.Update(visitregistration);
+                            await _context.SaveChangesAsync();
+
                         }
                         await _hubContext.Clients.All.SendAsync("UpdateVisitGrid");
                     }
@@ -478,6 +494,17 @@ namespace WebPihare.Controllers
         {
             var visitregistration = await _context.Visitregistration.FindAsync(visitId);
             visitregistration.NotificationState = 0;
+            _context.Update(visitregistration);
+            await _context.SaveChangesAsync();
+            await _hubContext.Clients.All.SendAsync("UpdateVisitGrid");
+            return Ok();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CheckNotificationCommisioner(int visitId)
+        {
+            var visitregistration = await _context.Visitregistration.FindAsync(visitId);
+            visitregistration.NotificationStateCommisioner = 0;
             _context.Update(visitregistration);
             await _context.SaveChangesAsync();
             await _hubContext.Clients.All.SendAsync("UpdateVisitGrid");

@@ -30,6 +30,7 @@ namespace WebPihare.Entities
         [DisplayName("Departamento")]
         public Department Department { get; set; }
         public int NotificationState { get; set; }
+        public int NotificationStateCommisioner { get; set; }
         public string ClientJson { get; set; }
         public string StringDate { get {
 
