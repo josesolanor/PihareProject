@@ -24,7 +24,7 @@ namespace WebPihare.Core
                 From = new MailAddress("postmaster@pihareii.com")
                 
             };
-            mailMessage.To.Add("jsolanor1994@gmail.com");
+            mailMessage.To.Add(commisioner.Email);
             mailMessage.IsBodyHtml = true;
             mailMessage.Body = $"<html><body><h2>Bienvenido nuevo comisionista!!</h2><div><h3>Credenciales del nuevo usuario</h3>" +
                 $"<dl><dt><b>Usuario:</b> {commisioner.Nic}</dt><dt><b>Password:</b> {password}</dt></dl></div></body></html>";
