@@ -64,8 +64,18 @@ namespace WebPihare.Controllers
                 };
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
 
+                if (RoleName.Equals("Admin"))
+                {
+                    return RedirectToAction("Index", "Visitregistrations");
+                }
+                else
+                {
+                    return RedirectToAction("Index", "Departments");
+                }
+
             }
-            return RedirectToAction("Index", "Departments");
+            model.ErrorMessage = "Error al Iniciar";
+            return View(model);
         }
 
         [HttpPost]

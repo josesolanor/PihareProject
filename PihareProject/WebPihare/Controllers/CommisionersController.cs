@@ -18,6 +18,8 @@ namespace WebPihare.Controllers
     {
         private readonly PihareiiContext _context;
         private readonly Hash _hash;
+        Email emailContext = new Email();
+        
 
         public CommisionersController(PihareiiContext context, Hash hash)
         {
@@ -84,10 +86,12 @@ namespace WebPihare.Controllers
         {
             if (ModelState.IsValid)
             {
+                var realPassword = commisioner.CommisionerPassword;
                 commisioner.CommisionerPassword = _hash.EncryptString(commisioner.CommisionerPassword);
                 _context.Add(commisioner);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                emailContext.SendEmail(commisioner, realPassword);
+                return RedirectToAction(nameof(Index));                             
             }
             return View(commisioner);
         }

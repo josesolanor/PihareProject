@@ -84,7 +84,7 @@
 
 <script>
 
-    var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
+    var connection = new signalR.HubConnectionBuilder().withUrl("/demo/chatHub").build();
 
     connection.on("Message", function () {
         chatModalSignalr();
