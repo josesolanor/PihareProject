@@ -58,6 +58,7 @@ namespace WebPihare.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
+            ViewData["Provenance"] = new SelectList(_context.Provenance, "ProvenanceValue", "ProvenanceValue");
             return View();
         }
 

@@ -30,6 +30,7 @@ namespace WebPihare.Controllers
             {
                 Departments = await _context.Department.Include(d => d.DepartmentState).Include(d => d.DepartmentType).ToListAsync()
             };
+            ViewData["Provenance"] = new SelectList(_context.Provenance, "ProvenanceValue", "ProvenanceValue");
             return View(model);
         }
 

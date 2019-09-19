@@ -132,8 +132,7 @@
                                         <div class="col-xs-3">
                                             <div class="form-group">
                                                 <label asp-for="Client.Provenance" class="control-label"></label>
-                                                <input asp-for="Client.Provenance" class="form-control" />
-                                                <span asp-validation-for="Client.Provenance" class="text-danger"></span>
+                                                <select asp-for="Client.Provenance" class="form-control" asp-items="ViewBag.Provenance"></select>
                                             </div>
                                         </div>
                                         <div class="col-xs-12">
