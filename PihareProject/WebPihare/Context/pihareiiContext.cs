@@ -25,6 +25,7 @@ namespace WebPihare.Context
         public virtual DbSet<Role> Role { get; set; }
         public virtual DbSet<VisitState> VisitState { get; set; }
         public virtual DbSet<Chat> Chat { get; set; }
+        public virtual DbSet<Provenance> Provenance { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -23,6 +23,7 @@
 
         var dataSourceMaster = response.master;
         var dataSourceDetail = response.detail;
+        var dataSourceDetail2 = response.detail2;
 
         $(function(){
             $("#clientGrid").dxDataGrid({
@@ -177,14 +178,60 @@
                                     caption: 'Precio'
                                 }
                                 ],
-                        dataSource: new DevExpress.data.DataSource({
-                            store: new DevExpress.data.ArrayStore({
-                                key: "departmentId",
-                                data: dataSourceDetail
-                            }),
-                            filter: ["clientId", "=", options.key]
-                        })
-                        }).appendTo(container);
+                                dataSource: new DevExpress.data.DataSource({
+                                    store: new DevExpress.data.ArrayStore({
+                                        key: "departmentId",
+                                        data: dataSourceDetail
+                                    }),
+                                    filter: ["clientId", "=", options.key]
+                                })
+                            }).appendTo(container);
+
+                        $("<div>")
+                            .addClass("master-detail-caption")
+                            .text("Visitas de " + currentClientData.firstName + " " + currentClientData.lastName)
+                            .appendTo(container);
+
+                        $("<div>")
+                            .dxDataGrid({
+                                columnAutoWidth: true,
+                                showBorders: true,
+                                columns: [
+                                {
+                                    dataField: "clientId",
+                                    visible: false
+                                },
+                                {
+                                    dataField: "visitRegistrationId",
+                                    visible: false
+                                },
+                                {
+                                    dataField: "visitDay",
+                                    caption: 'Fecha',
+                                    dataType: "date",
+                                    format: 'dd/MM/yyyy HH:mm:ss'
+                                },
+                                {
+                                    dataField: "departmentCode",
+                                    caption: 'Codigo Dpto'
+                                },
+                                {
+                                    dataField: "stateVisitStateValue",
+                                    caption: 'Estado'
+                                },                                
+                                {
+                                    dataField: "commisionerFullName",
+                                    caption: 'Comisionista Asignado'
+                                }
+                                ],
+                                dataSource: new DevExpress.data.DataSource({
+                                    store: new DevExpress.data.ArrayStore({
+                                        key: "visitRegistrationId",
+                                        data: dataSourceDetail2
+                                    }),
+                                    filter: ["clientId", "=", options.key]
+                                })
+                            }).appendTo(container);
                     }
                 }
             });

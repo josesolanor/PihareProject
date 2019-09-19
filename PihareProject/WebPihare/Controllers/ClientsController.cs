@@ -121,10 +121,13 @@ namespace WebPihare.Controllers
 
             List<DepartmentClientViewModel> departmentClient = new List<DepartmentClientViewModel>();
             List<ClientViewModel> clients = new List<ClientViewModel>();
+            List<VisitClientModel> visitClient = new List<VisitClientModel>();
 
             var client = _context.Client.Include(v => v.Commisioner).ToList();
             var visitregistration = _context.Visitregistration
                 .Include(v => v.Department)
+                .Include(v => v.StateVisitState)
+                .Include(v => v.Commisioner)
                 .Include(m => m.Department.DepartmentState)
                 .Include(m => m.Department.DepartmentType).ToList();
 
@@ -142,6 +145,16 @@ namespace WebPihare.Controllers
                     DepartmentTypeId = item.Department.DepartmentTypeId,
                     DepartmentState = item.Department.DepartmentState.DepartmentStateValue,
                     DepartmentType = item.Department.DepartmentType.DepartmentTypeValue
+                });
+
+                visitClient.Add(new VisitClientModel
+                {
+                    VisitRegistrationId = item.VisitRegistrationId,
+                    ClientId = item.ClientId,
+                    VisitDay = item.VisitDay,
+                    StateVisitStateValue = item.StateVisitState.VisitStateValue,
+                    DepartmentCode = item.Department.DepartmentCode,
+                    CommisionerFullName = item.Commisioner.FullName,
                 });
             }
 
@@ -161,7 +174,7 @@ namespace WebPihare.Controllers
                 });
             }
 
-            var result = new { Master = clients, Detail = departmentClient };
+            var result = new { Master = clients, Detail = departmentClient, Detail2 = visitClient };
             return Json(result);
         }
 
@@ -170,10 +183,13 @@ namespace WebPihare.Controllers
             var idUser = int.Parse(User.Claims.FirstOrDefault(m => m.Type == "Id").Value);
             List<DepartmentClientViewModel> departmentClient = new List<DepartmentClientViewModel>();
             List<ClientViewModel> clients = new List<ClientViewModel>();
+            List<VisitClientModel> visitClient = new List<VisitClientModel>();
 
             var client = _context.Client.Include(v => v.Commisioner).Where(v => v.CommisionerId.Equals(idUser)).ToList();
             var visitregistration = _context.Visitregistration
                 .Include(v => v.Department)
+                .Include(v => v.StateVisitState)
+                .Include(v => v.Commisioner)
                 .Include(m => m.Department.DepartmentState)
                 .Include(m => m.Department.DepartmentType)
                 .Where(m => m.CommisionerId.Equals(idUser))
@@ -194,6 +210,16 @@ namespace WebPihare.Controllers
                     DepartmentState = item.Department.DepartmentState.DepartmentStateValue,
                     DepartmentType = item.Department.DepartmentType.DepartmentTypeValue
                 });
+
+                visitClient.Add(new VisitClientModel
+                {
+                    VisitRegistrationId = item.VisitRegistrationId,
+                    ClientId = item.ClientId,
+                    VisitDay = item.VisitDay,
+                    StateVisitStateValue = item.StateVisitState.VisitStateValue,
+                    DepartmentCode = item.Department.DepartmentCode,
+                    CommisionerFullName = item.Commisioner.FullName,
+                });
             }
 
             foreach (var item in client)
@@ -212,7 +238,9 @@ namespace WebPihare.Controllers
                 });
             }
 
-            var result = new { Master = clients, Detail = departmentClient };
+
+
+            var result = new { Master = clients, Detail = departmentClient, Detail2 = visitClient };
             return Json(result);
         }
 
