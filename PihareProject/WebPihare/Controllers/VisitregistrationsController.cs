@@ -31,7 +31,6 @@ namespace WebPihare.Controllers
         {
             _context = context;
             _hubContext = hubContext;
-
             
         }
 
@@ -330,6 +329,7 @@ namespace WebPihare.Controllers
                           CultureInfo.InvariantCulture);
 
                     visitregistration.VisitDay = date;
+                    visitregistration.StateVisitStateId = 1;
 
                     _context.Update(visitregistration);
                     await _context.SaveChangesAsync();
