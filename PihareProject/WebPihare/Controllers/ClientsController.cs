@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 using WebPihare.Context;
 using WebPihare.Entities;
@@ -112,9 +113,18 @@ namespace WebPihare.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var client = await _context.Client.FindAsync(id);
-            _context.Client.Remove(client);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            try
+            {                
+                _context.Client.Remove(client);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMsg"] = $"Error, El cliente {client.FullName} no se puede eliminar, se encuentra siendo usado";
+                return RedirectToAction(nameof(Index));
+            }
+            
         }
 
         public IActionResult LoadGrid()

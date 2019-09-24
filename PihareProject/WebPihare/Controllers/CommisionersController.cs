@@ -10,6 +10,7 @@ using WebPihare.Context;
 using WebPihare.Entities;
 using WebPihare.Core;
 using WebPihare.Models;
+using MySql.Data.MySqlClient;
 
 namespace WebPihare.Controllers
 {
@@ -220,9 +221,18 @@ namespace WebPihare.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var commisioner = await _context.Commisioner.FindAsync(id);
-            _context.Commisioner.Remove(commisioner);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            
+            try
+            {
+                _context.Commisioner.Remove(commisioner);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMsg"] = $"Error, El comisionista {commisioner.FullName} no se puede eliminar, se encuentra siendo usado";
+                return RedirectToAction(nameof(Index));
+            }
         }
 
 

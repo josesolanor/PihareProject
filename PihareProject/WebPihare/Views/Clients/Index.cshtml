@@ -5,11 +5,10 @@
 }
 
 <h2>Clientes</h2>
-
 <p>
     <a asp-action="Create">Nuevo Cliente</a>
 </p>
-
+<h5 style="color: red">@TempData["ErrorMsg"]</h5>
 <div class="demo-container">
     <div id="clientGrid"></div>
 </div>

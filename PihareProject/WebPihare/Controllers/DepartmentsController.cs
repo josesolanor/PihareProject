@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 using WebPihare.Context;
 using WebPihare.Entities;
@@ -185,10 +186,18 @@ namespace WebPihare.Controllers
         [HttpPost, ActionName("Delete")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var department = await _context.Department.FindAsync(id);
-            _context.Department.Remove(department);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            var department = await _context.Department.FindAsync(id);            
+            try
+            {
+                _context.Department.Remove(department);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMsg"] = $"Error, El Departamento {department.DepartmentCode} no se puede eliminar, se encuentra siendo usado";
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         private bool DepartmentExists(int id)

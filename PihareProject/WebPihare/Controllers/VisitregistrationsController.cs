@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.EntityFrameworkCore;
+using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 using WebPihare.Context;
 using WebPihare.Core;
@@ -376,10 +377,19 @@ namespace WebPihare.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var visitregistration = await _context.Visitregistration.FindAsync(id);
-            _context.Visitregistration.Remove(visitregistration);
-            await _context.SaveChangesAsync();
-            await _hubContext.Clients.All.SendAsync("UpdateVisitGrid");
-            return RedirectToAction(nameof(Index));
+
+            try
+            {
+                _context.Visitregistration.Remove(visitregistration);
+                await _context.SaveChangesAsync();
+                await _hubContext.Clients.All.SendAsync("UpdateVisitGrid");
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMsg"] = $"Error, La visita no se puede eliminar, se encuentra siendo usado";
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         [HttpPost]
