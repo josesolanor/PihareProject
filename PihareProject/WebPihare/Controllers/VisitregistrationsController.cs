@@ -54,9 +54,10 @@ namespace WebPihare.Controllers
                 .Include(v => v.Commisioner)
                 .Include(v => v.Department)
                 .Include(v => v.StateVisitState)
-                .OrderByDescending(m => m.NotificationState)
-                .ThenByDescending(m => m.VisitDay)
                 .ToList();
+
+            var depart = _context.Department
+                .Include(v => v.Visitregistration).ToList();
 
             foreach (Visitregistration item in pihareiiContext)
             {
@@ -72,11 +73,14 @@ namespace WebPihare.Controllers
                     FullNameCommisioner = $"{item.Commisioner.FirstName} {item.Commisioner.LastName} {item.Commisioner.SecondLastName}",
                     DepartmentCode = item.Department.DepartmentCode,
                     State = item.StateVisitState.VisitStateValue,
-                    NotificationState = item.NotificationState
+                    NotificationState = item.NotificationState,
+                    LastChatMessage = _context.Chat.Where(v => v.VisitId.Equals(item.VisitRegistrationId)).OrderByDescending(m => m.MessageTime).Select(m => m.MessageTime).FirstOrDefault()
                 });
             }
 
-            string JsonContext = JsonConvert.SerializeObject(jsonList, Formatting.Indented, new JsonSerializerSettings()
+            var jsonOrder =  jsonList.OrderByDescending(m => m.LastChatMessage).ThenByDescending(m => m.VisitDay).ToList();
+
+            string JsonContext = JsonConvert.SerializeObject(jsonOrder, Formatting.Indented, new JsonSerializerSettings()
             {
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore
             });
@@ -198,14 +202,16 @@ namespace WebPihare.Controllers
 
             try
             {
-                visitregistration.StateVisitStateId = 1;
-
-                if (string.IsNullOrEmpty(visitregistration.VisitDay.ToString()) && string.IsNullOrEmpty(visitregistration.Observations))
+                if (User.IsInRole("Comisionista"))
                 {
-                    visitregistration.StateVisitStateId = 4;
+                    visitregistration.StateVisitStateId = 1;
+
+                    if (string.IsNullOrEmpty(visitregistration.VisitDay.ToString()) && string.IsNullOrEmpty(visitregistration.Observations))
+                    {
+                        visitregistration.StateVisitStateId = 4;
+                    }
                 }
-
-
+                
                 if (ModelState.IsValid)
                 {
 
@@ -295,63 +301,7 @@ namespace WebPihare.Controllers
             ViewData["StateVisitStateId"] = new SelectList(_context.VisitState, "VisitStateId", "VisitStateValue", visitregistration.StateVisitStateId);
             return View(visitregistration);
         }
-
-        public async Task<IActionResult> CommisionerEdit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var visitregistration = await _context.Visitregistration.FindAsync(id);
-            if (visitregistration == null)
-            {
-                return NotFound();
-            }
-            return View(visitregistration);
-        }
-
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CommisionerEdit(int id, Visitregistration visitregistration, string VisitDayDx)
-        {
-            if (id != visitregistration.VisitRegistrationId)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    var date = DateTime.ParseExact(VisitDayDx.Substring(0, 24),
-                          "ddd MMM dd yyyy HH:mm:ss",
-                          CultureInfo.InvariantCulture);
-
-                    visitregistration.VisitDay = date;
-                    visitregistration.StateVisitStateId = 1;
-
-                    _context.Update(visitregistration);
-                    await _context.SaveChangesAsync();
-                    await _hubContext.Clients.All.SendAsync("UpdateVisitGrid");
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!VisitregistrationExists(visitregistration.VisitRegistrationId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction("MyVisits");
-            }
-            return View(visitregistration);
-        }
-
+       
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)

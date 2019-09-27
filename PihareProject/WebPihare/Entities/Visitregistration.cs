@@ -7,6 +7,12 @@ namespace WebPihare.Entities
 {
     public partial class Visitregistration
     {
+
+        public Visitregistration()
+        {
+            Chat = new HashSet<Chat>();
+        }
+
         public int VisitRegistrationId { get; set; }
         [DisplayName("Fecha de visita")]
         public DateTime? VisitDay { get; set; }
@@ -36,6 +42,8 @@ namespace WebPihare.Entities
 
                 var dateString = this.VisitDay?.ToString("yyyy-MM-dd HH:mm:ss");
                 return dateString;
-            } }
+        } }
+
+        public ICollection<Chat> Chat { get; set; }
     }
 }

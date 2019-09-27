@@ -14,5 +14,6 @@ namespace WebPihare.Entities
         public DateTime MessageTime { get; set; }
         public Commisioner Commisioner { get; set; }
         public Visitregistration Visitregistration { get; set; }
+
     }
 }

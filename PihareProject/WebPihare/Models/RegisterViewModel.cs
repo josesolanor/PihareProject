@@ -22,5 +22,9 @@ namespace WebPihare.Models
         public int NotificationState { get; set; }
         public int NotificationStateCommisioner { get; set; }
 
+        public DateTime LastChatMessage { get; set; }
+
+        public List<Chat> Chat { get; set; }
+
     }
 }

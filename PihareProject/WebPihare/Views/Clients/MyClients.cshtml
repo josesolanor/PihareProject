@@ -19,7 +19,6 @@
 
         var dataSourceMaster = response.master;
         var dataSourceDetail = response.detail;
-        var dataSourceDetail2 = response.detail2;
 
         $(function(){
             $("#clientGrid").dxDataGrid({
@@ -99,51 +98,7 @@
                 enabled: true,
                     template: function (container, options)
                     {
-                    var currentClientData = options.data;
-                        $("<div>")
-                            .addClass("master-detail-caption")
-                            .text("Departamentos de " + currentClientData.firstName + " " + currentClientData.lastName)
-                            .appendTo(container);
-
-                        $("<div>")
-                            .dxDataGrid({
-                                columnAutoWidth: true,
-                                showBorders: true,
-                                columns: [
-                                {
-                                    dataField: "clientId",
-                                    visible: false
-                                },
-                                {
-                                    dataField: "departmentId",
-                                    visible: false
-                                },
-                                {
-                                    dataField: "departmentCode",
-                                    caption: 'Codigo Departamento'
-                                },
-                                {
-                                    dataField: "numberFloor",
-                                    caption: 'Piso'
-                                },
-                                {
-                                    dataField: "numberBedrooms",
-                                    caption: 'Dormitorios'
-                                },
-                                {
-                                    dataField: "deparmentPrice",
-                                    caption: 'Precio'
-                                }
-                                ],
-                                dataSource: new DevExpress.data.DataSource({
-                                    store: new DevExpress.data.ArrayStore({
-                                        key: "departmentId",
-                                        data: dataSourceDetail
-                                    }),
-                                    filter: ["clientId", "=", options.key]
-                                })
-                            }).appendTo(container);
-
+                    var currentClientData = options.data;                        
                         $("<div>")
                             .addClass("master-detail-caption")
                             .text("Visitas de " + currentClientData.firstName + " " + currentClientData.lastName)
@@ -184,7 +139,7 @@
                                 dataSource: new DevExpress.data.DataSource({
                                     store: new DevExpress.data.ArrayStore({
                                         key: "visitRegistrationId",
-                                        data: dataSourceDetail2
+                                        data: dataSourceDetail
                                     }),
                                     filter: ["clientId", "=", options.key]
                                 })

@@ -129,8 +129,6 @@ namespace WebPihare.Controllers
 
         public IActionResult LoadGrid()
         {
-
-            List<DepartmentClientViewModel> departmentClient = new List<DepartmentClientViewModel>();
             List<ClientViewModel> clients = new List<ClientViewModel>();
             List<VisitClientModel> visitClient = new List<VisitClientModel>();
 
@@ -144,20 +142,6 @@ namespace WebPihare.Controllers
 
             foreach (var item in visitregistration)
             {
-                departmentClient.Add(new DepartmentClientViewModel
-                {
-                    ClientId = item.ClientId,
-                    DepartmentId = item.DepartmentId,
-                    DeparmentPrice = item.Department.DeparmentPrice,
-                    DepartmentCode = item.Department.DepartmentCode,
-                    NumberBedrooms = item.Department.NumberBedrooms,
-                    NumberFloor = item.Department.NumberFloor,
-                    DepartmentStateId = item.Department.DepartmentStateId,
-                    DepartmentTypeId = item.Department.DepartmentTypeId,
-                    DepartmentState = item.Department.DepartmentState.DepartmentStateValue,
-                    DepartmentType = item.Department.DepartmentType.DepartmentTypeValue
-                });
-
                 visitClient.Add(new VisitClientModel
                 {
                     VisitRegistrationId = item.VisitRegistrationId,
@@ -185,14 +169,13 @@ namespace WebPihare.Controllers
                 });
             }
 
-            var result = new { Master = clients, Detail = departmentClient, Detail2 = visitClient };
+            var result = new { Master = clients, Detail = visitClient };
             return Json(result);
         }
 
         public IActionResult MyLoadGrid()
         {
             var idUser = int.Parse(User.Claims.FirstOrDefault(m => m.Type == "Id").Value);
-            List<DepartmentClientViewModel> departmentClient = new List<DepartmentClientViewModel>();
             List<ClientViewModel> clients = new List<ClientViewModel>();
             List<VisitClientModel> visitClient = new List<VisitClientModel>();
 
@@ -208,20 +191,6 @@ namespace WebPihare.Controllers
 
             foreach (var item in visitregistration)
             {
-                departmentClient.Add(new DepartmentClientViewModel
-                {
-                    ClientId = item.ClientId,
-                    DepartmentId = item.DepartmentId,
-                    DeparmentPrice = item.Department.DeparmentPrice,
-                    DepartmentCode = item.Department.DepartmentCode,
-                    NumberBedrooms = item.Department.NumberBedrooms,
-                    NumberFloor = item.Department.NumberFloor,
-                    DepartmentStateId = item.Department.DepartmentStateId,
-                    DepartmentTypeId = item.Department.DepartmentTypeId,
-                    DepartmentState = item.Department.DepartmentState.DepartmentStateValue,
-                    DepartmentType = item.Department.DepartmentType.DepartmentTypeValue
-                });
-
                 visitClient.Add(new VisitClientModel
                 {
                     VisitRegistrationId = item.VisitRegistrationId,
@@ -251,7 +220,7 @@ namespace WebPihare.Controllers
 
 
 
-            var result = new { Master = clients, Detail = departmentClient, Detail2 = visitClient };
+            var result = new { Master = clients, Detail = visitClient };
             return Json(result);
         }
 

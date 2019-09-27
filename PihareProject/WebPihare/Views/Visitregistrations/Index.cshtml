@@ -146,6 +146,8 @@
 
             var datasource = JSON.parse(response);
 
+            console.table(datasource);
+
             $(function(){
                 $("#gridContainer").dxDataGrid({
                     dataSource: datasource,
@@ -235,6 +237,12 @@
                         {
                             dataField: "NotificationState",
                             visible: false
+                        },
+                        {
+                            dataField: "LastChatMessage",
+                            visible: false,
+                            dataType: "date",
+                            format: 'dd/MM/yyyy HH:mm:ss'
                         },
                         {
                             dataField: "Acciones",
