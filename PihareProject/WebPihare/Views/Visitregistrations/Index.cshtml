@@ -240,6 +240,7 @@
                         },
                         {
                             dataField: "LastChatMessage",
+                            caption: 'Ultimo Mensaje Recibido',
                             visible: false,
                             dataType: "date",
                             format: 'dd/MM/yyyy HH:mm:ss'
@@ -327,13 +328,33 @@
 
                             }
                         }
-                    ]
+                    ],
+                    onCellPrepared: function (e) {
+                        if (e.rowType == 'data') {
+                            if(e.data.State == "Pendiente") {
+                                if(e.column.dataField === "State") {
+                                    e.cellElement.css({ "background-color": "#FFEB3B", "color": "#000" });
+                                }
+                            }
+                            if(e.data.State == "Aprobado") {
+                                if(e.column.dataField === "State") {
+                                    e.cellElement.css({ "background-color": "#8bc34a", "color": "#000" });
+                                }
+                            }
+                            if(e.data.State == "Rechazado") {
+                                if(e.column.dataField === "State") {
+                                    e.cellElement.css({ "background-color": "#f44336", "color": "#000" });
+                                }
+                            }
+
+                        }
+                    }
                 });
             });
 
         });
     }
-   
+
     function checkNotificacion(data) {
         $.ajax({
             url: '@Url.Action("CheckNotification", "Visitregistrations")',
